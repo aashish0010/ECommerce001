@@ -1,0 +1,14 @@
+using System.Text.Json.Serialization;
+
+namespace BookManagementSystem.Domain.Entities.Product
+{
+    public class ProductColor
+    {
+        public int ProductId { get; set; }
+        [JsonIgnore]
+        public Product Product { get; set; }
+
+        public int ColorId { get; set; }
+        public Color Color { get; set; }
+    }
+}

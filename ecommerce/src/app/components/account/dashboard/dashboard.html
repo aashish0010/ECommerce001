@@ -1,0 +1,178 @@
+<div class="user-dashboard">
+
+  @if(user$ | async; as user) {
+
+  <!-- Profile Hero -->
+  <div class="profile-hero">
+    <div class="avatar-wrap">
+      @if(user.profile_image?.original_url) {
+      <img [src]="user.profile_image!.original_url" class="avatar-img" alt="profile" />
+      } @else {
+      <div class="avatar-initials">{{ getInitials(user) }}</div>
+      }
+    </div>
+    <div class="hero-info">
+      <h2 class="hero-name">{{ getFullName(user) || user.userName || 'Welcome' }}</h2>
+      <div class="hero-sub">
+        @if(user.email) {
+        <span><i class="ri-mail-line"></i>{{ user.email }}</span>
+        }
+        @if(user.phone || user.phoneNumber) {
+        <span><i class="ri-smartphone-line"></i>{{ user.phone || user.phoneNumber }}</span>
+        }
+      </div>
+      <div class="hero-badges">
+        <span class="badge role-badge">
+          <i class="ri-shield-user-line"></i>{{ getRoleName(user) | titlecase }}
+        </span>
+        @if(user.created) {
+        <span class="badge since-badge">
+          <i class="ri-calendar-check-line"></i>Member since {{ user.created | date:'MMM yyyy' }}
+        </span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <a class="action-card" routerLink="/collections">
+      <div class="action-icon ai-green"><i class="ri-store-2-line"></i></div>
+      <div class="action-body">
+        <h5>Shop Products</h5>
+        <p>Browse our catalogue</p>
+      </div>
+      <i class="ri-arrow-right-s-line action-arrow"></i>
+    </a>
+    <a class="action-card" routerLink="/account/order">
+      <div class="action-icon ai-blue"><i class="ri-file-list-3-line"></i></div>
+      <div class="action-body">
+        <h5>My Orders</h5>
+        <p>Track your purchases</p>
+      </div>
+      <i class="ri-arrow-right-s-line action-arrow"></i>
+    </a>
+    <a class="action-card" routerLink="/account/addresses">
+      <div class="action-icon ai-sky"><i class="ri-map-pin-line"></i></div>
+      <div class="action-body">
+        <h5>Saved Addresses</h5>
+        <p>Manage delivery locations</p>
+      </div>
+      <i class="ri-arrow-right-s-line action-arrow"></i>
+    </a>
+    <a class="action-card" routerLink="/account/refund">
+      <div class="action-icon ai-orange"><i class="ri-money-dollar-circle-line"></i></div>
+      <div class="action-body">
+        <h5>Refund History</h5>
+        <p>Track your refunds</p>
+      </div>
+      <i class="ri-arrow-right-s-line action-arrow"></i>
+    </a>
+  </div>
+
+  <!-- Info Grid -->
+  <div class="info-grid">
+
+    <!-- Personal Details -->
+    <div class="info-card">
+      <div class="card-title">
+        <i class="ri-user-3-line"></i> Personal Details
+      </div>
+      <div class="detail-list">
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-user-line"></i>Full Name</span>
+          <strong class="detail-value">{{ getFullName(user) || '—' }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-at-line"></i>Username</span>
+          <strong class="detail-value">{{ user.userName || '—' }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-mail-line"></i>Email</span>
+          <strong class="detail-value">{{ user.email || '—' }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-smartphone-line"></i>Phone</span>
+          <strong class="detail-value">{{ user.phone || user.phoneNumber || '—' }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-shield-user-line"></i>Role</span>
+          <strong class="detail-value">{{ getRoleName(user) | titlecase }}</strong>
+        </div>
+        @if(user.created) {
+        <div class="detail-row">
+          <span class="detail-label"><i class="ri-calendar-line"></i>Member Since</span>
+          <strong class="detail-value">{{ user.created | date:'dd MMM yyyy' }}</strong>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Account Settings -->
+    <div class="info-card">
+      <div class="card-title">
+        <i class="ri-settings-3-line"></i> Account Settings
+      </div>
+      <div class="settings-list">
+        <a class="settings-item" routerLink="/account/addresses">
+          <div class="settings-icon si-blue"><i class="ri-map-pin-line"></i></div>
+          <div class="settings-body">
+            <h5>Manage Addresses</h5>
+            <p>Add or update delivery addresses</p>
+          </div>
+          <i class="ri-arrow-right-s-line"></i>
+        </a>
+        <a class="settings-item" routerLink="/account/order">
+          <div class="settings-icon si-green"><i class="ri-file-list-3-line"></i></div>
+          <div class="settings-body">
+            <h5>Order History</h5>
+            <p>View all past orders</p>
+          </div>
+          <i class="ri-arrow-right-s-line"></i>
+        </a>
+        <a class="settings-item" routerLink="/account/point">
+          <div class="settings-icon si-amber"><i class="ri-coin-line"></i></div>
+          <div class="settings-body">
+            <h5>Earning Points</h5>
+            <p>Check your loyalty points</p>
+          </div>
+          <i class="ri-arrow-right-s-line"></i>
+        </a>
+        <a class="settings-item" routerLink="/account/refund">
+          <div class="settings-icon si-red"><i class="ri-money-dollar-circle-line"></i></div>
+          <div class="settings-body">
+            <h5>Refund History</h5>
+            <p>Track your refund requests</p>
+          </div>
+          <i class="ri-arrow-right-s-line"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading skeleton -->
+  } @else {
+  <div class="dashboard-state loading">
+    <div class="skeleton-hero-wrap">
+      <div class="skeleton skeleton-avatar"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton skeleton-name"></div>
+        <div class="skeleton skeleton-sub"></div>
+        <div class="skeleton skeleton-badges"></div>
+      </div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton skeleton-action"></div>
+      <div class="skeleton skeleton-action"></div>
+      <div class="skeleton skeleton-action"></div>
+      <div class="skeleton skeleton-action"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+    </div>
+  </div>
+  }
+
+</div>

@@ -1,0 +1,117 @@
+<!-- Home Section Start -->
+<section class="p-0">
+  <div class="home-slider">
+    <app-theme-home-slider [banners]="data()?.content?.home_banner" />
+  </div>
+</section>
+<!-- Home Section End -->
+
+<!-- Banner Section Start -->
+<section class="pb-0 ratio2_1 banner-section">
+  <div class="container">
+    <div class="row g-sm-4 g-3">
+      @if(data()?.content?.offer_banner?.banner_1?.status){
+      <div [ngClass]="data()?.content?.offer_banner?.banner_2?.status ? 'col-6' : 'col-md-12'">
+        <div class="position-relative">
+          <app-image-link
+            [image]="data()?.content?.offer_banner?.banner_1"
+            [placeholder]="'assets/images/placeholder/two_column_banner.png'"
+            [bgImage]="true"
+          />
+          <div class="banner-skeleton">
+            <div class="skeleton-content">
+              <p class="card-text placeholder-glow row g-lg-3 g-0">
+                <span class="col-lg-7 col-9">
+                  <span class="placeholder"></span>
+                </span>
+                <span class="col-lg-9 col-12">
+                  <span class="placeholder"></span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      } @if(data()?.content?.offer_banner?.banner_2?.status){
+      <div [ngClass]="data()?.content?.offer_banner?.banner_1?.status ? 'col-6' : 'col-md-12'">
+        <div class="position-relative">
+          <app-image-link
+            [image]="data()?.content?.offer_banner?.banner_2"
+            [placeholder]="'assets/images/placeholder/two_column_banner.png'"
+            [bgImage]="true"
+          />
+          <div class="banner-skeleton">
+            <div class="skeleton-content">
+              <p class="card-text placeholder-glow row g-lg-3 g-0">
+                <span class="col-lg-7 col-9">
+                  <span class="placeholder"></span>
+                </span>
+                <span class="col-lg-9 col-12">
+                  <span class="placeholder"></span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+<!-- Banner Section End -->
+
+<!-- Products Section Start -->
+@if(categoriesReady){
+<app-theme-title [title]="{ title: 'Products', tag: 'our products' }" [type]="'basic'" />
+<section class="section-b-space pt-0">
+  <div class="container">
+    <app-theme-product-tab-section
+      [style]="'vertical'"
+      [slider]="false"
+      [showItems]="8"
+      [class]="'row row-cols-xxl-5 row-cols-xl-4 row-cols-md-3 row-cols-2 g-sm-4 g-3'"
+    />
+  </div>
+</section>
+}
+<!-- Products Section End -->
+
+<!-- Service Start -->
+@if(companyServices$ | async; as services){ @if(services.length){
+<section class="company-services-section section-b-space">
+  <div class="container">
+    <div class="services-section-header">
+      <span class="services-eyebrow">What We Offer</span>
+      <h2 class="services-heading">Our Services</h2>
+      <p class="services-subheading">Everything you need, all in one place</p>
+    </div>
+    <div class="services-grid">
+      @for(service of services; track service.id){
+      <div class="service-card" [ngClass]="getServiceAccent(service.name)">
+        <div class="service-icon-wrap">
+          <i [class]="getServiceIcon(service.name)"></i>
+        </div>
+        <h4 class="service-name">{{ service.name }}</h4>
+        <p class="service-desc">{{ getServiceDescription(service.name) }}</p>
+        <div class="service-line"></div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+} }
+<!-- Service End -->
+
+
+<!-- Social Media Section Start -->
+@if(data()?.content?.social_media?.banners?.length && data()?.content?.social_media?.status){
+<section class="instagram ratio_square">
+  <app-theme-social-media
+    [media]="data()?.content?.social_media || []"
+    [class]="'container-fluid'"
+    [type]="'borderless'"
+  />
+</section>
+}
+<!-- Social Media Section End -->
+

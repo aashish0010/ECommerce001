@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(head:*)",
+      "Bash(grep:*)",
+      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\\\\ecommerce\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"C:/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2\" && dotnet ef migrations add \"brand-color-product\" --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(dotnet tool install --global dotnet-ef 2>&1 || dotnet tool update --global dotnet-ef 2>&1)",
+      "Bash(where dotnet-ef:*)",
+      "Bash(cd \"C:/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2\" && \"C:/Users/pudas/.dotnet/tools/dotnet-ef.exe\" migrations add \"brand-color-product\" --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(cd \"C:/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2\" && \"C:/Users/pudas/.dotnet/tools/dotnet-ef.exe\" database update --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(tail:*)",
+      "Bash(cd \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2\" && dotnet ef migrations add add-order-tables --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(cd \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2\" && dotnet tool install --global dotnet-ef 2>&1 && dotnet ef migrations add add-order-tables --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef migrations add add-order-tables --project \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/BookManagementSystem.Infrastructure\" --startup-project \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/BookManagementSystem\" 2>&1)",
+      "Bash(export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet build \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/BookManagementSystem.sln\" 2>&1)",
+      "Bash(dotnet run:*)",
+      "Bash(export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef database update --project \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/BookManagementSystem.Infrastructure\" --startup-project \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/BookManagementSystem\" 2>&1)",
+      "Bash(cd \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/ecommerce\" && npx ng build --configuration development 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\" && export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef migrations add add-address-table --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\" && export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef database update --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\\\\ecommerce\" && npx ng build 2>&1)"
+    ]
+  }
+}

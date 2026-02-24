@@ -1,0 +1,25 @@
+@if(colors && colors.length){
+<div class="color-filter-wrap">
+  <ul class="color-swatch-list">
+    @for(color of colors; track color.id){
+    <li
+      class="color-swatch-item"
+      [class.selected]="isSelected(color.slug)"
+      (click)="toggleColor(color.slug)"
+      [title]="color.name"
+    >
+      <span
+        class="color-swatch"
+        [ngStyle]="{ 'background-color': color.hex_code || '#ccc' }"
+        [class.light-color]="isLightColor(color.hex_code || '')"
+      ></span>
+      <span class="color-name">{{ color.name }}</span>
+    </li>
+    }
+  </ul>
+</div>
+}
+
+@if(colors && !colors.length){
+<app-no-data [class]="'no-data-added'" [text]="'no_colors_available' | translate" />
+}

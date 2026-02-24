@@ -1,0 +1,138 @@
+<div class="auth-title">
+  <h3>{{ 'create_account' | translate }}</h3>
+  <p>Fill in your details to create a new account</p>
+</div>
+<app-alert />
+<form class="auth-form-box" [formGroup]="form" (ngSubmit)="submit()">
+
+  <div class="auth-box mb-3 form-box">
+    <label for="name" class="form-label">{{ 'name' | translate }}</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      formControlName="name"
+      placeholder="Enter your full name"
+    />
+    @if(form.controls['name'].touched && form.controls['name'].errors?.['required']){
+    <div class="invalid-feedback">{{ 'name_is_required' | translate }}</div>
+    }
+  </div>
+
+  <div class="auth-box form-box mb-3">
+    <label for="reg-email" class="form-label">{{ 'email' | translate }}</label>
+    <input
+      type="email"
+      class="form-control"
+      id="reg-email"
+      placeholder="{{ 'email' | translate }}"
+      formControlName="email"
+    />
+    @if(form.controls['email'].touched && form.controls['email'].errors?.['required']){
+    <div class="invalid-feedback">{{ 'email_is_required' | translate }}</div>
+    } @if(form.controls['email'].touched && form.controls['email'].errors?.['email']){
+    <div class="invalid-feedback">{{ 'invalid_email' | translate }}</div>
+    }
+  </div>
+
+  <div class="col-12 phone-field mb-3">
+    <div class="form-box">
+      <label class="form-label">Phone Number <span class="text-muted">(used as login ID)</span></label>
+      <select2
+        class="custom-select intl-tel-input"
+        [templates]="template"
+        [data]="codes"
+        formControlName="country_code"
+      >
+        <ng-template #template let-data="data">
+          <div class="country">
+            <div class="flag-box">
+              <div class="iti-flag {{ data?.class }}"></div>
+            </div>
+            <span class="dial-code">{{ data.code }}</span>
+          </div>
+        </ng-template>
+      </select2>
+      <input
+        type="tel"
+        class="form-control intl-input-padding"
+        formControlName="phone"
+        placeholder="{{ 'enter_phone' | translate }}"
+      />
+      @if(form.controls['phone'].touched && form.controls['phone'].errors?.['required']){
+      <div class="invalid-feedback">{{ 'phone_number_is_required' | translate }}</div>
+      } @if(form.controls['phone'].touched && form.controls['phone'].errors?.['pattern']){
+      <div class="invalid-feedback">Enter a valid phone number (7–15 digits)</div>
+      }
+    </div>
+  </div>
+
+  <div class="auth-box form-box mb-3">
+    <label for="reg-password" class="form-label">{{ 'password' | translate }}</label>
+    <input
+      type="password"
+      class="form-control"
+      id="reg-password"
+      formControlName="password"
+      placeholder="{{ 'enter_password' | translate }}"
+    />
+    @if(form.controls['password'].touched && form.controls['password'].errors?.['required']){
+    <div class="invalid-feedback">{{ 'password_is_required' | translate }}</div>
+    } @if(form.controls['password'].touched && form.controls['password'].errors?.['minlength']){
+    <div class="invalid-feedback">Password must be at least 6 characters</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <div class="form-box">
+      <label for="password_confirmation" class="form-label">{{ 'confirm_password' | translate }}</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password_confirmation"
+        formControlName="password_confirmation"
+        placeholder="{{ 'password_confirmation' | translate }}"
+      />
+      @if(form.controls['password_confirmation'].touched &&
+      form.controls['password_confirmation'].errors?.['required']){
+      <div class="invalid-feedback">{{ 'confirm_password_is_required' | translate }}</div>
+      } @else if(passwordMatchError){
+      <div class="invalid-feedback">{{ 'confirm_password_does_not_matched' | translate }}</div>
+      }
+    </div>
+  </div>
+
+  <div class="auth-box form-box mb-3">
+    <div class="forgot-box">
+      <div class="form-check ps-0 m-0 custom-check-box">
+        <input
+          class="checkbox_animated check-box"
+          type="checkbox"
+          id="flexCheckDefault"
+          [formControl]="tnc"
+        />
+        <label
+          class="form-check-label"
+          for="flexCheckDefault"
+          [class.text-red]="tnc.touched && tnc.errors?.['required']"
+          >{{ 'i_agree_with' | translate }} <span>{{ 'terms' | translate }}</span>
+          {{ 'and' | translate }} <span>{{ 'privacy' | translate }}</span></label
+        >
+      </div>
+    </div>
+  </div>
+
+  <app-button
+    [class]="'btn'"
+    [id]="'sign_up_btn'"
+    [spinner]="true"
+    >{{ 'create_account' | translate }}</app-button
+  >
+</form>
+<div class="divider">
+  <span>{{ 'or' | translate }}</span>
+</div>
+<p class="create">
+  {{ 'have_account' | translate }}?
+  <a href="javascript:void(0)" (click)="action('login')">{{ 'login_here' | translate }}</a>
+</p>

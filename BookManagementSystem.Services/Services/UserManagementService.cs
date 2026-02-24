@@ -1,0 +1,500 @@
+﻿using AutoMapper;
+using BookManagementSystem.Domain.DTO;
+using BookManagementSystem.Domain.Entities;
+using BookManagementSystem.Infrastructure;
+using BookManagementSystem.Service.Function;
+using BookManagementSystem.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using System.Data;
+
+namespace BookManagementSystem.Service.Services
+{
+    public class UserManagementService : IUserManagementService
+    {
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
+        private readonly ITokenService _token;
+        private readonly IEmailManagerService _emailManagerService;
+        private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _identityRole;
+        private readonly ILogger<User> _logger;
+        private readonly ICommonService _commonService;
+        public UserManagementService(UserManager<User> userManager,
+            IMapper mapper, ITokenService token,
+            IEmailManagerService emailManagerService,
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> identityRole,
+            ILogger<User> logger,
+            ICommonService commonService
+            )
+        {
+            _userManager = userManager;
+            _mapper = mapper;
+            _token = token;
+            _emailManagerService = emailManagerService;
+            _context = context;
+            _identityRole = identityRole;
+            _logger = logger;
+            _commonService = commonService;
+        }
+        public async Task<LoginResponse> Login(LoginRequest login)
+        {
+            LoginResponse response = new LoginResponse();
+            User user = await _userManager.FindByNameAsync(login.UserName);
+            if (user == null)
+            {
+                _logger.LogInformation("Unable to Find User");
+                response.Code = StatusCodes.Status404NotFound;
+                response.Status = Level.Failed;
+                response.Message = "Unable to Find User";
+            }
+            else if (await _userManager.CheckPasswordAsync(user, login.Password))
+            {
+                var role = await _userManager.GetRolesAsync(user);
+                response.Code = StatusCodes.Status200OK;
+                response.Status = Level.Success;
+                response.Message = "Login SuccessFully";
+                response.UserName = login.UserName;
+                response.Token = _token.TokenGenerate(user, role.FirstOrDefault());
+
+            }
+            else
+            {
+                response.Code = StatusCodes.Status401Unauthorized;
+                response.Status = Level.Failed;
+                response.Message = "Password Not Match";
+            }
+            return response;
+        }
+
+        public async Task<OptResponse> SendEmailVerification(string email)
+        {
+            MailRequest mail = new MailRequest();
+            mail.Subject = "Email Verification";
+            string otp = Random.Shared.Next(100000, 1000000).ToString();
+            mail.Body = Helper.EmailHelper("Book Management System", otp, email);
+            mail.ToEmail = email;
+            string processid = Guid.NewGuid().ToString();
+            OtpHandler handler = new OtpHandler()
+            {
+                ProcessId = processid,
+                Email = email,
+                Otp = otp,
+                CreateDate = DateTime.UtcNow,
+                IsVerify = "p"
+            };
+            await _context.OtpManagers.AddAsync(handler);
+            int issave = await _context.SaveChangesAsync();
+            if (issave > 0)
+            {
+                await _emailManagerService.SendEmail(mail);
+                return new OptResponse()
+                {
+                    ProcessId = processid,
+                    Email = email,
+                    Message = "Verification OTP sent to your email",
+                    Code = StatusCodes.Status200OK,
+                    Status = Level.Success
+                };
+            }
+            return new OptResponse()
+            {
+                Message = "Failed to send verification OTP",
+                Code = StatusCodes.Status400BadRequest,
+                Status = Level.Failed
+            };
+        }
+
+        public async Task<Common> VerifyEmailOtp(VerifyEmailOtpRequest request)
+        {
+            var isvalid = _context.OtpManagers.Where(x =>
+                x.Email.Equals(request.Email)
+                && x.IsVerify.Equals("p")
+                && x.CreateDate.AddMinutes(20) > DateTime.UtcNow
+                && x.ProcessId.Equals(request.ProcessId)
+                && x.Otp.Equals(request.Otp)
+            ).FirstOrDefault();
+
+            if (isvalid != null)
+            {
+                isvalid.IsVerify = "y";
+                isvalid.ConfirmDate = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                return new Common
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = Level.Success,
+                    Message = "Email verified successfully"
+                };
+            }
+            return new Common
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Status = Level.Failed,
+                Message = "Invalid or expired OTP"
+            };
+        }
+
+        public async Task<OptResponse> OtpManager(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return new OptResponse()
+                {
+
+                    Message = email + " doesnot exist..!!",
+                    Code = StatusCodes.Status404NotFound
+
+                };
+            }
+            MailRequest mail = new MailRequest();
+            mail.Subject = "Forget Password";
+            string otp = Random.Shared.Next(100000, 1000000).ToString();
+            mail.Body = Helper.EmailHelper("Book Management System",
+                otp, user.UserName);
+
+
+
+            mail.ToEmail = email;
+            string processid = Guid.NewGuid().ToString();
+            OtpHandler handler = new OtpHandler()
+            {
+                ProcessId = processid,
+                Email = email,
+                Otp = otp,
+                CreateDate = DateTime.UtcNow,
+                IsVerify = "p"
+            };
+
+            await _context.OtpManagers.AddAsync(handler);
+            int issave = await _context.SaveChangesAsync();
+            if (issave > 0)
+            {
+                await _emailManagerService.SendEmail(mail);
+                return new OptResponse()
+                {
+                    ProcessId = processid,
+                    Email = email,
+                    Message = "Opt Obtained Successfully",
+                    Code = StatusCodes.Status200OK
+
+                };
+            }
+            else
+            {
+                return new OptResponse()
+                {
+                    Message = "Opt Obtained Fail",
+                    Code = StatusCodes.Status400BadRequest
+
+                };
+            }
+
+
+        }
+        public async Task<Common> Register(RegisterRequest register)
+        {
+
+            var ifuserexits = await _userManager.FindByNameAsync(register.UserName);
+
+            if (ifuserexits != null)
+            {
+                return new Common()
+                {
+                    Code = StatusCodes.Status201Created,
+                    Status = Level.Failed,
+                    Message = "User Already Exists"
+                };
+            }
+            User user = new User();
+            var companyDetail = await _commonService.FindCompanyByCompanyCode(register.CompanyCode);
+            if (companyDetail == null)
+            {
+                return new Common()
+                {
+                    Code = StatusCodes.Status201Created,
+                    Status = Level.Failed,
+                    Message = "Company Doesnot Exists"
+                };
+            }
+            user.CompanyInfo = companyDetail.CompanyDetailRes.CompanyDetail;
+            user = _mapper.Map(register, user);
+            user.FirstName = register.FirstName;
+            user.MiddleName = register.MiddleName;
+            user.LastName = register.LastName;
+            var isregister = await _userManager.CreateAsync(user, register.Password);
+            if (isregister.Succeeded)
+            {
+                var userrole = await _identityRole.FindByNameAsync("user");
+                if (userrole == null)
+                {
+
+                    await _identityRole.CreateAsync(new IdentityRole
+                    {
+                        Name = "user",
+                        ConcurrencyStamp = DateTime.Now.Millisecond.ToString(),
+                        NormalizedName = "user".ToUpper(),
+                    });
+
+                }
+                await _userManager.AddToRoleAsync(user, "user");
+                return new Common()
+                {
+                    Code = StatusCodes.Status100Continue,
+                    Status = Level.Success,
+                    Message = "Register Succesfully"
+                };
+            }
+            else
+            {
+                return new Common()
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = Level.Failed,
+                    Message = isregister.Errors.FirstOrDefault().Description.ToString()
+                };
+            }
+        }
+
+        public async Task<Common> ResitPassword(ChangePassword changePassword)
+        {
+            var isemailexits = await _userManager.FindByEmailAsync(changePassword.Email);
+            if (isemailexits != null)
+            {
+                var isvalid = _context.OtpManagers.Where(x => x.Email.Equals(isemailexits.Email)
+                && x.IsVerify.Equals("p") && x.CreateDate.AddMinutes(20) > DateTime.UtcNow
+                && x.ProcessId.Equals(changePassword.ProcessId)
+                ).FirstOrDefault();
+                if (isvalid != null)
+                {
+
+                    var ispasswordchange = await _userManager.ChangePasswordAsync(isemailexits, changePassword.NewPassword, changePassword.OldPassword);
+                    if (ispasswordchange.Succeeded)
+                    {
+                        return new Common
+                        {
+                            Code = StatusCodes.Status200OK,
+                            Status = Level.Success,
+                            Message = "Password Reset Successfully"
+                        };
+                    }
+                    else
+                    {
+                        return new Common
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Status = Level.Failed,
+                            Message = "Password Not Matched"
+                        };
+                    }
+
+
+                }
+                else
+                {
+                    return new Common
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = Level.Failed,
+                        Message = "Opt Doesnot Match"
+
+                    };
+                }
+            }
+            else
+            {
+                return new Common
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = Level.Failed,
+                    Message = "Unable to find email"
+                };
+            }
+        }
+
+        public async Task<LoginResponse> ThirdPartyUserManager(ThirdPartyAuth thirdParty)
+        {
+            ThirdPartyAuth logindetail = _context.ThirdPartyLoginHandlers.Where(x => x.UserId == thirdParty.UserId && x.Provider == thirdParty.Provider).FirstOrDefault();
+            User user = new User();
+            user.UserName = thirdParty.Username;
+            user.Email = thirdParty.UserEmail;
+            string role = "user";
+            var names = Helper.SplitStringBySpace(thirdParty.Username);
+            if (names != null)
+            {
+                Parallel.ForEach(names, name =>
+                {
+                    if (name.Item1 == "FirstName")
+                        user.FirstName = name.Item2;
+                    else if (name.Item1 == "MiddleName")
+                        user.MiddleName = name.Item2;
+                    else
+                        user.LastName = name.Item2;
+                });
+            }
+
+            if (logindetail != null)
+            {
+                user.Updated = DateTime.UtcNow;
+                thirdParty = await _context.ThirdPartyLoginHandlers.FindAsync(logindetail.Id);
+                thirdParty.UpdateDate = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var items = Helper.RandomPassword();
+                user.IsActive = "t";
+                user.UserName = thirdParty.Username.Replace(" ", "");
+                user.ThirdPartyId = thirdParty.UserId;
+                user.Created = DateTime.UtcNow;
+                var isscucess = await _userManager.CreateAsync(user, items);
+                thirdParty.Id = Guid.NewGuid();
+                await _context.ThirdPartyLoginHandlers.AddAsync(thirdParty);
+                await _userManager.AddToRoleAsync(user, "user");
+                await _context.SaveChangesAsync();
+            }
+
+            return new LoginResponse()
+            {
+                UserName = user.UserName,
+                Code = StatusCodes.Status100Continue,
+                Status = Level.Success,
+                Message = "Login Succefully",
+                Token = _token.TokenGenerate(user, role)
+            };
+        }
+
+        public async Task<UserProfileDto> GetUserProfile(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) return null;
+            var roles = await _userManager.GetRolesAsync(user);
+            return new UserProfileDto
+            {
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = roles.FirstOrDefault() ?? "user",
+                Created = user.Created,
+            };
+        }
+
+        public async Task<Common> UpdateUserProfile(string userName, UpdateProfileRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return new Common { Code = StatusCodes.Status404NotFound, Status = Level.Failed, Message = "User not found" };
+
+            if (!string.IsNullOrWhiteSpace(request.FirstName)) user.FirstName = request.FirstName;
+            if (request.MiddleName != null) user.MiddleName = request.MiddleName;
+            if (!string.IsNullOrWhiteSpace(request.LastName)) user.LastName = request.LastName;
+            if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
+            {
+                user.PhoneNumber = request.PhoneNumber;
+                user.UserName = request.PhoneNumber;
+            }
+            user.Updated = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return new Common { Code = StatusCodes.Status200OK, Status = Level.Success, Message = "Profile updated successfully" };
+
+            return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = result.Errors.FirstOrDefault()?.Description ?? "Failed to update profile" };
+        }
+
+        public async Task<Common> ChangeUserPassword(string userName, ChangePasswordRequest request)
+        {
+            if (request.NewPassword != request.ConfirmPassword)
+                return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = "New passwords do not match" };
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return new Common { Code = StatusCodes.Status404NotFound, Status = Level.Failed, Message = "User not found" };
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (result.Succeeded)
+                return new Common { Code = StatusCodes.Status200OK, Status = Level.Success, Message = "Password changed successfully" };
+
+            return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = result.Errors.FirstOrDefault()?.Description ?? "Failed to change password" };
+        }
+
+        public async Task<Common> UpdatePassword(OptValidateRequest validateRequest)
+        {
+            var isemailexits = await _userManager.FindByEmailAsync(validateRequest.Email);
+            if (isemailexits != null)
+            {
+                var isvalid = _context.OtpManagers.Where(x => x.Email.Equals(isemailexits.Email)
+                && x.CreateDate.AddMinutes(20) > DateTime.UtcNow
+                && x.ProcessId.Equals(validateRequest.ProcessId)
+                ).FirstOrDefault();
+                if (isvalid != null && isvalid.IsVerify.Equals("p"))
+                {
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(isemailexits);
+                    var ispasswordchange = await _userManager.ResetPasswordAsync(isemailexits, code, validateRequest.NewPassword);
+                    if (ispasswordchange.Succeeded)
+                    {
+                        isvalid.IsVerify = "y";
+                        isvalid.ConfirmDate = DateTime.UtcNow;
+                        await _context.SaveChangesAsync();
+
+                        return new Common
+                        {
+                            Code = StatusCodes.Status200OK,
+                            Status = Level.Success,
+                            Message = "Password Reset Successfully"
+                        };
+                    }
+                    else
+                    {
+                        isvalid.IsVerify = "n";
+                        await _context.SaveChangesAsync();
+                        return new Common
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Status = Level.Failed,
+                            Message = "Password Reset Failed"
+                        };
+                    }
+
+
+                }
+                else
+                {
+                    if (isvalid.IsVerify.Equals("y"))
+                    {
+                        return new Common
+                        {
+                            Code = StatusCodes.Status404NotFound,
+                            Status = Level.Failed,
+                            Message = "Opt Is Already Verified"
+
+                        };
+                    }
+                    return new Common
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = Level.Failed,
+                        Message = "Opt Doesnot Match"
+
+                    };
+                }
+            }
+            else
+            {
+                return new Common
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = Level.Failed,
+                    Message = "Unable to find email"
+                };
+            }
+        }
+
+    }
+}

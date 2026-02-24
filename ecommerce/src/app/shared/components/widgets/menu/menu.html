@@ -1,0 +1,87 @@
+<div [class]="class() ? class() : 'main-navbar'">
+  <div id="mainnav">
+    <div class="header-nav-middle">
+      <div class="main-nav navbar navbar-expand-xl navbar-light navbar-sticky">
+        <div
+          class="offcanvas offcanvas-collapse order-xl-2"
+          [class.show]="menuService.mainMenuToggle"
+        >
+          <div class="offcanvas-header navbar-shadow">
+            <h5>{{ 'menu' | translate }}</h5>
+            <button
+              class="btn-close lead"
+              id="toggle_menu_btn"
+              type="button"
+              (click)="mainMenuClose()"
+            >
+              <div>
+                <i class="ri-close-fill"></i>
+              </div>
+            </button>
+          </div>
+          <div class="offcanvas-body">
+            @if(skeletonLoader){
+            <ul class="skeleton-menu navbar-nav">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+            } @else {
+            <ul class="navbar-nav">
+              <!-- Home -->
+              <li class="nav-item">
+                <a class="dropdown-item" (click)="redirect('/')">Home</a>
+              </li>
+
+              <!-- Products with dynamic category dropdown -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" (click)="productsOpen = !productsOpen">
+                  Products
+                </a>
+                @if(getCategoryChildren().length){
+                <ul class="dropdown-menu" [class.show]="productsOpen">
+                  @for(cat of getCategoryChildren(); track cat.id){
+                  <li class="nav-item">
+                    <a class="dropdown-item" (click)="redirect(cat.path); productsOpen = false">
+                      {{ cat.title }}
+                    </a>
+                    @if(cat.child?.length){
+                    <ul class="dropdown-menu">
+                      @for(sub of cat.child; track sub.id){
+                      <li>
+                        <a class="dropdown-item" (click)="redirect(sub.path); productsOpen = false">
+                          {{ sub.title }}
+                        </a>
+                      </li>
+                      }
+                    </ul>
+                    }
+                  </li>
+                  }
+                  <li class="nav-item">
+                    <a class="dropdown-item" (click)="redirect('/collections'); productsOpen = false">
+                      All Products
+                    </a>
+                  </li>
+                </ul>
+                }
+              </li>
+
+              <!-- About Us -->
+              <li class="nav-item">
+                <a class="dropdown-item" (click)="redirect('/about-us')">About Us</a>
+              </li>
+
+              <!-- Contact Us -->
+              <li class="nav-item">
+                <a class="dropdown-item" (click)="redirect('/contact-us')">Contact Us</a>
+              </li>
+            </ul>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

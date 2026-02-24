@@ -1,0 +1,56 @@
+<div class="theme-settings" (click)="openSetting(true)">
+  <i class="ri-sound-module-line"></i> {{'customize' | translate}}
+</div>
+<div class="scroll-setting-box">
+  <div id="product_box" class="setting-box" [class.open-setting]="open">
+    <a href="javascript:void(0)" class="overlay" (click)="openSetting(false)"></a>
+    <div class="setting_box_body">
+      <div class="setting-title">
+        <h4>{{'theme_setting' | translate}}</h4>
+        <div class="close-icon" (click)="openSetting(false)">
+          <i class="ri-close-large-line"></i>
+        </div>
+      </div>
+      <div class="setting-body">
+        <div class="setting-section">
+          <div class="setting-inner-title">
+            <h5>{{'rtl_mode' | translate}}</h5>
+            <p>{{'change_language_direction' | translate}}</p>
+          </div>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="languageDirection"
+              (click)="layoutType()"
+              role="switch"
+              id="rtlmode"
+            />
+          </div>
+        </div>
+        <div class="setting-section">
+          <div class="setting-inner-title">
+            <h5>{{"dark_mode" | translate}}</h5>
+            <p>{{'light_dark_mode' | translate}}</p>
+          </div>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              [(ngModel)]="mode"
+              (click)="layoutMode()"
+              id="darkmode"
+            />
+          </div>
+        </div>
+        <div class="setting-section">
+          <div class="setting-inner-title">
+            <a target="_blank" href="javascript:void(0)">{{ 'admin' | translate }}</a>
+            <p>{{"backend_admin_panel" | translate}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

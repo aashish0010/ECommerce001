@@ -1,0 +1,71 @@
+<ng-template #loginModal let-modal>
+  <div class="modal-body">
+    <div class="modal-content open">
+      <div class="d-flex">
+        <div class="right-content w-lg-50 w-100">
+          @if(activeForm === 'login'){
+          <app-login (activeForm)="nextForm($event)" />
+          } @if(activeForm === 'email'){
+          <app-forgot-password (activeForm)="nextForm($event)" />
+          } @if(activeForm === 'otp'){
+          <app-otp (activeForm)="nextForm($event)" [type]="'email'" />
+          } @if(activeForm === 'updatePassword'){
+          <app-update-password (activeForm)="nextForm($event)" />
+          } @if(activeForm === 'register'){
+          <app-register (activeForm)="nextForm($event)" />
+          } @if(activeForm === 'registerOtp'){
+          <app-otp (activeForm)="nextForm($event)" [type]="'register'" />
+          } @if(activeForm === 'withNumber'){
+          <app-login-with-number (activeForm)="nextForm($event)" />
+          } @if(activeForm === 'numberOtp'){
+          <app-otp (activeForm)="nextForm($event)" [type]="'number'" />
+          }
+        </div>
+        <div class="left-img w-lg-50 d-lg-block d-none">
+          <div class="auth-side-panel">
+            <div class="auth-panel-circles">
+              <div class="circle c1"></div>
+              <div class="circle c2"></div>
+              <div class="circle c3"></div>
+            </div>
+            <div class="auth-panel-content">
+              <div class="auth-panel-icon">
+                <i class="ri-store-2-line"></i>
+              </div>
+              <h2>
+                @if(activeForm === 'register' || activeForm === 'registerOtp'){
+                  Create Account
+                } @else if(activeForm === 'email' || activeForm === 'otp' || activeForm === 'updatePassword'){
+                  Reset Password
+                } @else {
+                  Welcome Back
+                }
+              </h2>
+              <p>
+                @if(activeForm === 'register' || activeForm === 'registerOtp'){
+                  Join us today and enjoy exclusive deals, fast delivery, and a seamless shopping experience.
+                } @else {
+                  Sign in to access your orders, wishlist, and personalised recommendations.
+                }
+              </p>
+              <div class="auth-panel-features">
+                <div class="feature-item">
+                  <i class="ri-truck-line"></i>
+                  <span>Fast Delivery</span>
+                </div>
+                <div class="feature-item">
+                  <i class="ri-shield-check-line"></i>
+                  <span>Secure Payments</span>
+                </div>
+                <div class="feature-item">
+                  <i class="ri-customer-service-2-line"></i>
+                  <span>24/7 Support</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

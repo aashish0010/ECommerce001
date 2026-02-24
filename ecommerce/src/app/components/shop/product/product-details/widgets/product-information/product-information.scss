@@ -1,0 +1,44 @@
+.brand-badge {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--theme-color, #0d6efd);
+  letter-spacing: 0.3px;
+}
+
+.product-colors-info {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .color-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+  }
+}
+
+.product-color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.product-color-dot {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: default;
+  transition: transform 0.15s ease;
+
+  &.light-dot {
+    border-color: #ccc;
+  }
+
+  &:hover {
+    transform: scale(1.15);
+  }
+}

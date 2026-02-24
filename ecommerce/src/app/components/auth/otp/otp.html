@@ -1,0 +1,45 @@
+<div class="auth-title">
+  <h3>{{ 'otp' | translate }}</h3>
+  @if(type() === 'register') {
+  <p>A 6-digit verification code has been sent to <strong>{{ email }}</strong></p>
+  } @if(type() === 'email') {
+  <p>{{ 'verify_email_otp_text' | translate }}</p>
+  } @if(type() === 'number') {
+  <p>{{ 'verify_number_otp_text' | translate }}</p>
+  }
+</div>
+<app-alert />
+<div class="log-in-title">
+  <h5>
+    {{ 'otp_code' | translate }}
+    @if(type() === 'email' || type() === 'register'){
+    <span>{{ email }}</span>
+    } @if(type() === 'number') {
+    <span>{{ number?.phone }}</span>
+    }
+  </h5>
+</div>
+<form class="auth-form-box" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="auth-box mb-3 outer-otp">
+    <div id="otp" class="inner-otp">
+      <input
+        type="text"
+        formControlName="otp"
+        maxlength="6"
+        oninput="this.value = this.value?.replace(/[^0-9]/g, '');"
+        onKeyPress="if(this.value.length==6) return false;"
+      />
+    </div>
+  </div>
+  @if(form.controls['otp'].touched && form.controls['otp'].errors?.['required']){
+  <div class="invalid-feedback d-block mb-2">OTP is required</div>
+  } @if(form.controls['otp'].touched && (form.controls['otp'].errors?.['minlength'] || form.controls['otp'].errors?.['maxlength'])){
+  <div class="invalid-feedback d-block mb-2">OTP must be 6 digits</div>
+  }
+  <app-button [class]="'btn'" [type]="'submit'" [id]="'otp_btn'" [spinner]="true"
+    >{{ 'verify' | translate }}</app-button
+  >
+  <a href="javascript:void(0)" class="modal-back" (click)="backForm()">
+    <i class="ri-arrow-left-line"></i>
+  </a>
+</form>
