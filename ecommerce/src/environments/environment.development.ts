@@ -4,6 +4,6 @@ export const environment = {
   siteURL: '/',
   URL: '/assets/data',
   storageURL: '/assets',
-  companyCode: 'Wo100',
+  companyCode: 'WOW001',
   companyInfoId: 3,
 };
