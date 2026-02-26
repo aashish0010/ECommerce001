@@ -211,7 +211,7 @@ namespace BookManagementSystem.Service.Services
             }
             User user = new User();
             var companyDetail = await _commonService.FindCompanyByCompanyCode(register.CompanyCode);
-            if (companyDetail == null)
+            if (companyDetail?.CompanyDetailRes?.CompanyDetail == null)
             {
                 return new Common()
                 {
