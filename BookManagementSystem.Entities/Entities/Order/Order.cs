@@ -12,6 +12,8 @@ namespace BookManagementSystem.Domain.Entities.Order
 
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+        public string CouponCode { get; set; }
+        public decimal DiscountAmount { get; set; } = 0;
 
         public string DeliveryDescription { get; set; }
         public string DeliveryInterval { get; set; }

@@ -46,6 +46,30 @@ namespace BookManagementSystem.Service.Services
                 }
             }
 
+            // Apply coupon if provided
+            decimal discountAmount = 0;
+            string appliedCouponCode = null;
+            if (!string.IsNullOrWhiteSpace(dto.CouponCode))
+            {
+                var now = DateTime.UtcNow;
+                var coupon = await _context.Coupons.FirstOrDefaultAsync(c =>
+                    c.Code == dto.CouponCode.Trim().ToUpper()
+                    && c.IsActive
+                    && (c.ExpiresAt == null || c.ExpiresAt > now)
+                    && (c.UsageLimit == null || c.UsageCount < c.UsageLimit));
+
+                if (coupon != null
+                    && (coupon.MinSpend == null || subTotal >= coupon.MinSpend.Value)
+                    && (coupon.MaxSpend == null || subTotal <= coupon.MaxSpend.Value))
+                {
+                    discountAmount = coupon.DiscountType == "percentage"
+                        ? Math.Round(subTotal * coupon.Amount / 100, 2)
+                        : Math.Min(coupon.Amount, subTotal);
+                    appliedCouponCode = coupon.Code;
+                    coupon.UsageCount += 1;
+                }
+            }
+
             var billingAddr = (dto.BillingAddress?.SameShipping == true)
                 ? dto.ShippingAddress
                 : dto.BillingAddress;
@@ -58,7 +82,9 @@ namespace BookManagementSystem.Service.Services
                 PaymentStatus = "pending",
                 Status = "pending",
                 SubTotal = subTotal,
-                Total = subTotal,
+                Total = subTotal - discountAmount,
+                CouponCode = appliedCouponCode,
+                DiscountAmount = discountAmount,
                 DeliveryDescription = dto.DeliveryDescription,
                 DeliveryInterval = dto.DeliveryInterval,
                 BillingSameAsShipping = dto.BillingAddress?.SameShipping == true,
@@ -88,7 +114,8 @@ namespace BookManagementSystem.Service.Services
                 OrderNumber = order.OrderNumber,
                 Status = order.Status,
                 Total = order.Total,
-                PaymentMethod = order.PaymentMethod
+                PaymentMethod = order.PaymentMethod,
+                DiscountAmount = order.DiscountAmount
             };
         }
 

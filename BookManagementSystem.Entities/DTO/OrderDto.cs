@@ -21,6 +21,9 @@ namespace BookManagementSystem.Domain.DTO
 
         [JsonPropertyName("billing_address")]
         public AddressDto BillingAddress { get; set; }
+
+        [JsonPropertyName("coupon")]
+        public string CouponCode { get; set; }
     }
 
     public class AddressDto
@@ -78,6 +81,9 @@ namespace BookManagementSystem.Domain.DTO
 
         [JsonPropertyName("payment_method")]
         public string PaymentMethod { get; set; }
+
+        [JsonPropertyName("discount_amount")]
+        public decimal DiscountAmount { get; set; }
     }
 
     public class OrderSummaryDto

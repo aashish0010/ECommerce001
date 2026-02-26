@@ -15,5 +15,6 @@ namespace BookManagementSystem.Service.Interfaces
 		ColorService colorService { get; }
 		OrderService orderService { get; }
 		AddressService addressService { get; }
+		CouponService couponService { get; }
     }
 }

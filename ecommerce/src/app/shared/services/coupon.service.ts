@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Params } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { ICouponModel } from '../interface/coupon.interface';
+import { IApplyCouponResponse, ICouponListResponse } from '../interface/coupon.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +12,15 @@ import { ICouponModel } from '../interface/coupon.interface';
 export class CouponService {
   private http = inject(HttpClient);
 
-  public skeletonLoader: boolean = false;
+  getCoupons(): Observable<ICouponListResponse> {
+    return this.http.get<ICouponListResponse>(`${environment.baseURL}coupon`);
+  }
 
-  getCoupons(payload?: Params): Observable<ICouponModel> {
-    return this.http.get<ICouponModel>(`${environment.URL}/coupon.json`, { params: payload });
+  applyCoupon(code: string, subtotal: number): Observable<IApplyCouponResponse> {
+    return this.http.post<IApplyCouponResponse>(`${environment.baseURL}coupon/apply`, {
+      code,
+      subtotal,
+      company_info_id: 1,
+    });
   }
 }

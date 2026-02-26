@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import {
   FormBuilder,
@@ -12,19 +11,16 @@ import {
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { Select2Data, Select2Module, Select2UpdateEvent } from 'ng-select2-component';
-import { map, Observable } from 'rxjs';
+import { Select2Module } from 'ng-select2-component';
 
 import { countryCodes } from '../../../../data/country-code';
-import { IUserAddress } from '../../../../interface/user.interface';
+import { ISavedAddress } from '../../../../interface/user.interface';
 import { CreateAddressAction, UpdateAddressAction } from '../../../../store/action/account.action';
-import { CountryState } from '../../../../store/state/country.state';
-import { StateState } from '../../../../store/state/state.state';
 import { Button } from '../../button/button';
 
 @Component({
   selector: 'app-address-modal',
-  imports: [TranslateModule, FormsModule, ReactiveFormsModule, Select2Module, Button, AsyncPipe],
+  imports: [TranslateModule, FormsModule, ReactiveFormsModule, Select2Module, Button],
   templateUrl: './address-modal.html',
   styleUrl: './address-modal.scss',
 })
@@ -33,84 +29,55 @@ export class AddressModal {
   private store = inject(Store);
   private formBuilder = inject(FormBuilder);
 
-  countries$: Observable<Select2Data> = inject(Store).select(CountryState.countries);
-
-  @Input() userAddress: IUserAddress;
+  @Input() userAddress: ISavedAddress;
 
   public form: FormGroup;
-  public states$: Observable<Select2Data>;
-  public address: IUserAddress | null;
+  public address: ISavedAddress | null;
   public codes = countryCodes;
 
   constructor() {
     this.form = this.formBuilder.group({
       title: new FormControl('', [Validators.required]),
       street: new FormControl('', [Validators.required]),
-      state_id: new FormControl('', [Validators.required]),
-      country_id: new FormControl('', [Validators.required]),
+      country_name: new FormControl(''),
+      state_name: new FormControl(''),
       city: new FormControl('', [Validators.required]),
       pincode: new FormControl('', [Validators.required]),
-      country_code: new FormControl('91', [Validators.required]),
+      country_code: new FormControl('977', [Validators.required]),
       phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)]),
     });
   }
 
   ngOnInit() {
-    const userAddress = this.userAddress;
-    if (userAddress) {
-      this.patchForm(userAddress);
-    }
-  }
-  countryChange(data: Select2UpdateEvent) {
-    if (data && data?.value) {
-      this.states$ = this.store
-        .select(StateState.states)
-        .pipe(map(filterFn => filterFn(+data?.value)));
-      if (!this.address) this.form.controls['state_id'].setValue('');
-    } else {
-      this.form.controls['state_id'].setValue('');
+    if (this.userAddress) {
+      this.patchForm(this.userAddress);
     }
   }
 
-  patchForm(value?: IUserAddress) {
-    if (value) {
-      this.address = value;
-      this.form.patchValue({
-        user_id: value?.user_id,
-        title: value?.title,
-        street: value?.street,
-        country_id: value?.country_id,
-        state_id: value?.state_id,
-        city: value?.city,
-        pincode: value?.pincode,
-        country_code: value?.country_code,
-        phone: value?.phone,
-      });
-    } else {
-      this.address = null;
-      this.form.reset();
-      this.form?.controls?.['country_code'].setValue('91');
-    }
+  patchForm(value: ISavedAddress) {
+    this.address = value;
+    this.form.patchValue({
+      title: value.title,
+      street: value.street,
+      country_name: value.country_name ?? '',
+      state_name: value.state_name ?? '',
+      city: value.city,
+      pincode: value.pincode,
+      country_code: value.country_code ?? '977',
+      phone: String(value.phone ?? ''),
+    });
   }
 
   submit() {
     this.form.markAllAsTouched();
+    if (!this.form.valid) return;
 
-    let action = new CreateAddressAction(this.form.value);
+    const action = this.address
+      ? new UpdateAddressAction(this.form.value, this.address.id)
+      : new CreateAddressAction(this.form.value);
 
-    if (this.address) {
-      action = new UpdateAddressAction(this.form.value, this.address.id);
-    }
-
-    if (this.form.valid) {
-      this.store.dispatch(action).subscribe({
-        complete: () => {
-          this.form.reset();
-          if (!this.address) {
-            this.form?.controls?.['country_code'].setValue('91');
-          }
-        },
-      });
-    }
+    this.store.dispatch(action).subscribe({
+      complete: () => this.modal.close('saved'),
+    });
   }
 }

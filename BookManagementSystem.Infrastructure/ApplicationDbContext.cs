@@ -30,6 +30,7 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Coupon> Coupons { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -248,6 +249,8 @@ namespace BookManagementSystem.Infrastructure
             builder.Entity<Order>().Property(x => x.Status).HasMaxLength(20);
             builder.Entity<Order>().Property(x => x.SubTotal).HasColumnType("decimal(18,2)");
             builder.Entity<Order>().Property(x => x.Total).HasColumnType("decimal(18,2)");
+            builder.Entity<Order>().Property(x => x.CouponCode).HasMaxLength(50);
+            builder.Entity<Order>().Property(x => x.DiscountAmount).HasColumnType("decimal(18,2)");
             builder.Entity<Order>().Property(x => x.DeliveryDescription).HasMaxLength(200);
             builder.Entity<Order>().Property(x => x.DeliveryInterval).HasMaxLength(100);
             builder.Entity<Order>().Property(x => x.ShippingTitle).HasMaxLength(100);
@@ -280,6 +283,26 @@ namespace BookManagementSystem.Infrastructure
                 .WithMany()
                 .HasForeignKey(x => x.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            #endregion
+
+            #region Coupon
+
+            builder.Entity<Coupon>().HasKey(x => x.Id);
+            builder.Entity<Coupon>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<Coupon>().Property(x => x.Code).HasMaxLength(50).IsRequired();
+            builder.Entity<Coupon>().Property(x => x.Title).HasMaxLength(200).IsRequired();
+            builder.Entity<Coupon>().Property(x => x.Description).HasMaxLength(500);
+            builder.Entity<Coupon>().Property(x => x.DiscountType).HasMaxLength(20).IsRequired();
+            builder.Entity<Coupon>().Property(x => x.Amount).HasColumnType("decimal(18,2)");
+            builder.Entity<Coupon>().Property(x => x.MinSpend).HasColumnType("decimal(18,2)");
+            builder.Entity<Coupon>().Property(x => x.MaxSpend).HasColumnType("decimal(18,2)");
+            builder.Entity<Coupon>().HasIndex(x => new { x.Code, x.CompanyInfoId }).IsUnique();
+            builder.Entity<Coupon>()
+                .HasOne(x => x.CompanyInfo)
+                .WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 

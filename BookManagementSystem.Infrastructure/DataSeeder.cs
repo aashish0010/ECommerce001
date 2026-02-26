@@ -1,4 +1,5 @@
 using BookManagementSystem.Domain.Entities.Company;
+using BookManagementSystem.Domain.Entities.Order;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,6 +85,82 @@ namespace BookManagementSystem.Infrastructure
                         var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                         logger.LogError("Failed to seed admin user: {Errors}", errors);
                     }
+                }
+
+                // --- 4. Seed Coupons ------------------------------------------------
+                if (!await context.Coupons.AnyAsync())
+                {
+                    var coupons = new List<Coupon>
+                    {
+                        new Coupon
+                        {
+                            Code          = "WELCOME10",
+                            Title         = "Welcome 10% Off",
+                            Description   = "Get 10% off on your first order",
+                            DiscountType  = "percentage",
+                            Amount        = 10,
+                            MinSpend      = null,
+                            MaxSpend      = null,
+                            ExpiresAt     = DateTime.UtcNow.AddYears(1),
+                            IsActive      = true,
+                            UsageLimit    = null,
+                            UsageCount    = 0,
+                            CompanyInfoId = company.Id,
+                            CreatedAt     = DateTime.UtcNow
+                        },
+                        new Coupon
+                        {
+                            Code          = "SAVE50",
+                            Title         = "Flat Rs. 50 Off",
+                            Description   = "Flat Rs. 50 discount on orders above Rs. 300",
+                            DiscountType  = "flat",
+                            Amount        = 50,
+                            MinSpend      = 300,
+                            MaxSpend      = null,
+                            ExpiresAt     = DateTime.UtcNow.AddYears(1),
+                            IsActive      = true,
+                            UsageLimit    = null,
+                            UsageCount    = 0,
+                            CompanyInfoId = company.Id,
+                            CreatedAt     = DateTime.UtcNow
+                        },
+                        new Coupon
+                        {
+                            Code          = "MEGA20",
+                            Title         = "Mega 20% Off",
+                            Description   = "20% off on orders between Rs. 500 and Rs. 5000",
+                            DiscountType  = "percentage",
+                            Amount        = 20,
+                            MinSpend      = 500,
+                            MaxSpend      = 5000,
+                            ExpiresAt     = DateTime.UtcNow.AddMonths(6),
+                            IsActive      = true,
+                            UsageLimit    = 100,
+                            UsageCount    = 0,
+                            CompanyInfoId = company.Id,
+                            CreatedAt     = DateTime.UtcNow
+                        },
+                        new Coupon
+                        {
+                            Code          = "FLAT100",
+                            Title         = "Flat Rs. 100 Off",
+                            Description   = "Rs. 100 off on orders above Rs. 800",
+                            DiscountType  = "flat",
+                            Amount        = 100,
+                            MinSpend      = 800,
+                            MaxSpend      = null,
+                            ExpiresAt     = DateTime.UtcNow.AddMonths(3),
+                            IsActive      = true,
+                            UsageLimit    = 50,
+                            UsageCount    = 0,
+                            CompanyInfoId = company.Id,
+                            CreatedAt     = DateTime.UtcNow
+                        }
+                    };
+
+                    context.Coupons.AddRange(coupons);
+                    await context.SaveChangesAsync();
+                    logger.LogInformation("Seeded {Count} test coupons", coupons.Count);
                 }
             }
             catch (Exception ex)

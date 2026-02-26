@@ -29,7 +29,12 @@
       "Bash(\"$USERPROFILE/.dotnet/tools/dotnet-ef.exe\" migrations add InitialPostgres --startup-project ../BookManagementSystem)",
       "Bash(dotnet build BookManagementSystem.sln)",
       "Bash(\"$USERPROFILE/.dotnet/tools/dotnet-ef.exe\" database update --startup-project ../BookManagementSystem)",
-      "Bash(PGPASSWORD=\"WowApp@2026\" \"C:/Program Files/PostgreSQL/18/bin/psql.exe\" -U wow_user -h localhost -d wowcommerce -c \"\\\\dt\")"
+      "Bash(PGPASSWORD=\"WowApp@2026\" \"C:/Program Files/PostgreSQL/18/bin/psql.exe\" -U wow_user -h localhost -d wowcommerce -c \"\\\\dt\")",
+      "Bash(npx tsc --noEmit)",
+      "Bash(dotnet ef migrations add add-coupon-system --startup-project ../BookManagementSystem)",
+      "Bash(~/.dotnet/tools/dotnet-ef migrations add add-coupon-system --startup-project ../BookManagementSystem)",
+      "Bash(~/.dotnet/tools/dotnet-ef database update --startup-project ../BookManagementSystem)",
+      "Bash(dotnet build BookManagementSystem.sln --no-restore -v quiet)"
     ]
   }
 }

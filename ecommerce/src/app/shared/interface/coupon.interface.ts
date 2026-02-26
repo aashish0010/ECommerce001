@@ -1,32 +1,27 @@
-import { IPaginateModel } from './core.interface';
-import { IProduct } from './product.interface';
+export interface ICoupon {
+  id: number;
+  code: string;
+  title: string;
+  description: string;
+  discount_type: string;  // "flat" | "percentage"
+  amount: number;
+  min_spend: number | null;
+  max_spend: number | null;
+  expires_at: string | null;
+  is_active: boolean;
+}
 
-export interface ICouponModel extends IPaginateModel {
+export interface ICouponListResponse {
+  status: number;
+  code: number;
+  message: string;
   data: ICoupon[];
 }
 
-export interface ICoupon {
-  id: number;
-  title: string;
-  description: string;
+export interface IApplyCouponResponse {
   code: string;
-  type: string;
+  title: string;
+  discount_type: string;
   amount: number;
-  min_spend: number;
-  max_spend: number;
-  is_unlimited: boolean;
-  usage_per_coupon: number;
-  usage_per_customer: number;
-  is_expired: boolean;
-  start_date: string;
-  end_date: string;
-  is_apply_all: boolean;
-  exclude_products: IProduct[];
-  products: IProduct[];
-  is_first_order: boolean;
-  status: boolean;
-  created_by_id: number;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  discount_amount: number;
 }

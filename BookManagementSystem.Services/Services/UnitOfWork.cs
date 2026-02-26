@@ -63,5 +63,7 @@ namespace BookManagementSystem.Service.Services
         public OrderService orderService => new OrderService(_context);
 
         public AddressService addressService => new AddressService(_context);
+
+        public CouponService couponService => new CouponService(_context);
     }
 }
