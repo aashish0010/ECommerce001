@@ -14,6 +14,7 @@ COPY BookManagementSystem/BookManagementSystem.csproj                           
 COPY BookManagementSystem.Entities/BookManagementSystem.Domain.csproj               BookManagementSystem.Entities/
 COPY BookManagementSystem.Infrastructure/BookManagementSystem.Infrastructure.csproj BookManagementSystem.Infrastructure/
 COPY BookManagementSystem.Services/BookManagementSystem.Service.csproj              BookManagementSystem.Services/
+COPY BookManagementSystem.Test/BookManagementSystem.Test.csproj                     BookManagementSystem.Test/
 
 RUN dotnet restore BookManagementSystem.sln
 
