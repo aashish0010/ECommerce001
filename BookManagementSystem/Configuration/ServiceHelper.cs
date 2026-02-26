@@ -1,9 +1,8 @@
-﻿using BookManagementSystem.Domain.Entities;
+using BookManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.Generation.Processors.Security;
-using StackExchange.Profiling.Storage;
 using System.Text;
 
 namespace BookManagementSystem.Configuration
@@ -19,32 +18,13 @@ namespace BookManagementSystem.Configuration
 			{
 				options.RouteBasePath = "/profiler";
 				options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
-				options.Storage = new SqlServerStorage(configuration.GetConnectionString("DefaultConnection"));
-				options.IgnoredPaths.Add("/css");
+options.IgnoredPaths.Add("/css");
 				options.IgnoredPaths.Add("/js");
 				options.IgnoredPaths.Add("/index.html");
-				options.TrackConnectionOpenClose = true;// (Optional) You can disable "Connection Open()", "Connection Close()" (and async variant) tracking.
-														// (defaults to true, and connection opening/closing is tracked)
-
 				options.TrackConnectionOpenClose = false;
 				options.ShouldProfile = request => BookManagementSystem.Service.Function.Helper.ShouldProfile(request);
 			}).AddEntityFramework();
 			services.AddControllers();
-
-
-
-
-
-
-			var storage = new SqlServerStorage(configuration.GetConnectionString("DefaultConnection"));
-
-
-			foreach (var cs in storage.TableCreationScripts)
-			{
-				Console.WriteLine(cs);
-			}
-
-
 
 
 			services.AddAuthentication(options =>

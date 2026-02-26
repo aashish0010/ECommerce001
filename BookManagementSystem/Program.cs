@@ -4,6 +4,7 @@ using BookManagementSystem.Service;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 using System.Threading.RateLimiting;
+using DataSeeder = BookManagementSystem.Infrastructure.DataSeeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,10 @@ builder.Services.AddRateLimiter(options =>
 
 
 var app = builder.Build();
+
+// Seed database (runs migrations + inserts seed data)
+await DataSeeder.SeedAsync(app.Services);
+
 app.UseOpenApi();
 app.UseCors("AllowAllOrigins");
 
@@ -74,7 +79,8 @@ app.UseMiddleware<ErrorHandlerMiddleWare>();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
 app.MapControllers();
 
 app.MapFallback("/api/{**slug}", () => Results.NotFound(new { message = "API endpoint not found" }));

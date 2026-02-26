@@ -19,7 +19,17 @@
       "Bash(cd \"/c/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/ecommerce\" && npx ng build --configuration development 2>&1)",
       "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\" && export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef migrations add add-address-table --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
       "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\" && export PATH=\"$PATH:$HOME/.dotnet/tools\" && dotnet ef database update --project BookManagementSystem.Infrastructure --startup-project BookManagementSystem 2>&1)",
-      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\\\\ecommerce\" && npx ng build 2>&1)"
+      "Bash(cd \"C:\\\\Users\\\\pudas\\\\OneDrive\\\\Desktop\\\\Projects\\\\BookManagementSystemV2\\\\ecommerce\" && npx ng build 2>&1)",
+      "Bash(ls:*)",
+      "Bash(dotnet restore)",
+      "Bash(PGPASSWORD=\"Aashish@12\" \"C:/Program Files/PostgreSQL/18/bin/psql.exe\" -U postgres -h localhost -f \"c:/Users/pudas/OneDrive/Desktop/Projects/BookManagementSystemV2/postgres_setup.sql\")",
+      "Bash(dotnet ef migrations add InitialPostgres --startup-project ../BookManagementSystem)",
+      "Bash(dotnet tool install --global dotnet-ef)",
+      "Bash(dotnet-ef --version)",
+      "Bash(\"$USERPROFILE/.dotnet/tools/dotnet-ef.exe\" migrations add InitialPostgres --startup-project ../BookManagementSystem)",
+      "Bash(dotnet build BookManagementSystem.sln)",
+      "Bash(\"$USERPROFILE/.dotnet/tools/dotnet-ef.exe\" database update --startup-project ../BookManagementSystem)",
+      "Bash(PGPASSWORD=\"WowApp@2026\" \"C:/Program Files/PostgreSQL/18/bin/psql.exe\" -U wow_user -h localhost -d wowcommerce -c \"\\\\dt\")"
     ]
   }
 }

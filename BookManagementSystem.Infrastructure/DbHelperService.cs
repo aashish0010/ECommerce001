@@ -1,6 +1,6 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
+using Dapper;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 using StackExchange.Profiling;
 using System.Data;
 using System.Data.Common;
@@ -16,16 +16,9 @@ namespace BookManagementSystem.Infrastructure
         }
         private DbConnection GetConn()
         {
-            DbConnection connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            DbConnection connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             return new StackExchange.Profiling.Data.ProfiledDbConnection(connection, MiniProfiler.Current);
         }
-        //private SqlConnection GetConn()
-        //{
-        //    SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        //    return new StackExchange.Profiling.Data.ProfiledDbConnection(conn, MiniProfiler.Current);
-        //    //conn.Open();
-        //    //return conn;
-        //}
         public async Task<IEnumerable<T>> ExecuteQuery<T>(string sql,DynamicParameters param=null,bool isproc=false)
         {
             DbConnection conn = GetConn();
