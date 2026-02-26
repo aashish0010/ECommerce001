@@ -67,7 +67,7 @@ app.UseCors("AllowAllOrigins");
 app.UseSerilogRequestLogging();
 app.UseMiniProfiler();
 
-app.UseSwaggerUi3(x =>
+app.UseSwaggerUi(x =>
 	{
 		x.Path = "/swagger";
 	});
