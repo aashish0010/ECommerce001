@@ -33,8 +33,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Railway injects PORT at runtime; ASP.NET Core reads ASPNETCORE_HTTP_PORTS
-ENV ASPNETCORE_HTTP_PORTS=8080
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "BookManagementSystem.dll"]
+# Use shell form CMD so $PORT is expanded at runtime from Railway's injected env var
+CMD ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet BookManagementSystem.dll
