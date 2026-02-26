@@ -21,13 +21,15 @@ namespace BookManagementSystem.Service.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<User> _logger;
         private readonly ICommonService _commonService;
+        private readonly IHttpClientFactory _httpClientFactory;
         public UnitOfWork(UserManager<User> userManager, IOptions<MailSettings> mailSettings,
             IHttpContextAccessor httpContextAccessor, IMapper mapper
             , IConfiguration configuration,
             ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
             ILogger<User> logger,
-            ICommonService commonService)
+            ICommonService commonService,
+            IHttpClientFactory httpClientFactory)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -38,6 +40,7 @@ namespace BookManagementSystem.Service.Services
             _roleManager = roleManager;
             _logger = logger;
             _commonService = commonService;
+            _httpClientFactory = httpClientFactory;
         }
         public TokenService tokenService => new TokenService(_configuration, _httpContextAccessor);
 
@@ -45,7 +48,7 @@ namespace BookManagementSystem.Service.Services
             new UserManagementService(_userManager, _mapper,
                 tokenService, mailService, _context, _roleManager, _logger, _commonService);
 
-        public EmailManagerService mailService => new EmailManagerService(_mailSettings);
+        public EmailManagerService mailService => new EmailManagerService(_mailSettings, _httpClientFactory);
 
         public DbHelperService dbHelperService => new DbHelperService(_configuration);
 
