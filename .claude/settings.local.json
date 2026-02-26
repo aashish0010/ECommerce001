@@ -34,7 +34,8 @@
       "Bash(dotnet ef migrations add add-coupon-system --startup-project ../BookManagementSystem)",
       "Bash(~/.dotnet/tools/dotnet-ef migrations add add-coupon-system --startup-project ../BookManagementSystem)",
       "Bash(~/.dotnet/tools/dotnet-ef database update --startup-project ../BookManagementSystem)",
-      "Bash(dotnet build BookManagementSystem.sln --no-restore -v quiet)"
+      "Bash(dotnet build BookManagementSystem.sln --no-restore -v quiet)",
+      "Bash(npm run build:csr)"
     ]
   }
 }

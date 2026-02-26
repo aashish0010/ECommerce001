@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/services/cart.service.ts"],
+  "sourcesContent": ["import { Injectable } from '@angular/core';\n\nimport { Observable, Subject } from 'rxjs';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class CartService {\n  private subjectQty = new Subject<boolean>();\n\n  updateQty() {\n    this.subjectQty.next(true);\n  }\n\n  getUpdateQtyClickEvent(): Observable<boolean> {\n    return this.subjectQty.asObservable();\n  }\n}\n"],
+  "mappings": ";;;;;;;;AAOM,IAAO,cAAP,MAAO,aAAW;EAHxB,cAAA;AAIU,SAAA,aAAa,IAAI,QAAO;;EAEhC,YAAS;AACP,SAAK,WAAW,KAAK,IAAI;EAC3B;EAEA,yBAAsB;AACpB,WAAO,KAAK,WAAW,aAAY;EACrC;;;uCATW,cAAW;IAAA;EAAA;;4EAAX,cAAW,SAAX,aAAW,WAAA,YAFV,OAAM,CAAA;EAAA;;;sEAEP,aAAW,CAAA;UAHvB;WAAW;MACV,YAAY;KACb;;;",
+  "names": []
+}

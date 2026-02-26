@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/auth/otp/otp.scss"],
+  "sourcesContent": [".outer-otp {\n  width: 235px;\n  overflow: hidden;\n  margin-bottom: 40px;\n\n  .inner-otp {\n    left: 0;\n    position: sticky;\n\n    input {\n      padding-left: 15px;\n      letter-spacing: 45px;\n      border: 0;\n      background-image: linear-gradient(to left, rgb(189, 189, 189) 70%, rgba(255, 255, 255, 0) 0%);\n      background-position: bottom;\n      background-size: 50px 1px;\n      background-repeat: repeat-x;\n      background-position-x: 35px;\n      width: 300px;\n      min-width: 300px;\n      background-color: transparent;\n    }\n  }\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,SAAA;AACA,YAAA;AACA,iBAAA;;AAEA,CALF,UAKE,CAAA;AACE,QAAA;AACA,YAAA;;AAEA,CATJ,UASI,CAJF,UAIE;AACE,gBAAA;AACA,kBAAA;AACA,UAAA;AACA;IAAA;MAAA,GAAA,IAAA;MAAA,IAAA,GAAA,EAAA,GAAA,EAAA,KAAA,GAAA;MAAA,KAAA,GAAA,EAAA,GAAA,EAAA,GAAA,EAAA,GAAA;AACA,uBAAA;AACA,mBAAA,KAAA;AACA,qBAAA;AACA,yBAAA;AACA,SAAA;AACA,aAAA;AACA,oBAAA;;",
+  "names": []
+}

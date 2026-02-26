@@ -1,0 +1,219 @@
+import {
+  CollectionProducts,
+  Sidebar
+} from "./chunk-SBKJFXDT.js";
+import "./chunk-RJJQ4UVE.js";
+import "./chunk-V3KVJNBA.js";
+import "./chunk-TKFREGUT.js";
+import "./chunk-WOF3B67E.js";
+import "./chunk-6UZMREAA.js";
+import "./chunk-HUS46LWS.js";
+import "./chunk-6TUVHBKM.js";
+import "./chunk-FG7W7B2L.js";
+import {
+  CategoryState
+} from "./chunk-OTOM272R.js";
+import "./chunk-XVI6NDZ3.js";
+import "./chunk-PM45JHZH.js";
+import "./chunk-P35J2TJJ.js";
+import "./chunk-AULHPBT7.js";
+import "./chunk-D2VJHFAS.js";
+import "./chunk-724FIW3X.js";
+import "./chunk-EMOFCU5M.js";
+import "./chunk-XRL72XRK.js";
+import "./chunk-HD3MPZTG.js";
+import {
+  Breadcrumb
+} from "./chunk-LBV5SDPN.js";
+import "./chunk-LEE25DCS.js";
+import "./chunk-RJ7FCDYY.js";
+import {
+  ProductState
+} from "./chunk-OOCN6Z4U.js";
+import {
+  GetProductsAction
+} from "./chunk-RWFLVE5E.js";
+import "./chunk-LZFLFOAY.js";
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router
+} from "./chunk-6347PIFH.js";
+import "./chunk-MUAYKWHK.js";
+import "./chunk-2K52HGL6.js";
+import "./chunk-QQXAO3XE.js";
+import "./chunk-JLWO6B35.js";
+import "./chunk-RZHEXDEF.js";
+import "./chunk-XK2M6X6K.js";
+import "./chunk-QSTIS5AN.js";
+import "./chunk-XTPJ5TZK.js";
+import "./chunk-7XQQRBBN.js";
+import "./chunk-L6CMOIIK.js";
+import {
+  Component,
+  Store,
+  filter,
+  inject,
+  setClassMetadata,
+  switchMap,
+  ɵsetClassDebugInfo,
+  ɵɵadvance,
+  ɵɵdefineComponent,
+  ɵɵelement,
+  ɵɵelementEnd,
+  ɵɵelementStart,
+  ɵɵproperty,
+  ɵɵpureFunction0
+} from "./chunk-3KEERULZ.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-WDMUDEB6.js";
+
+// src/app/components/shop/category/category.ts
+var _c0 = () => ["category"];
+var Category = class _Category {
+  constructor() {
+    this.route = inject(ActivatedRoute);
+    this.router = inject(Router);
+    this.store = inject(Store);
+    this.product$ = inject(Store).select(ProductState.product);
+    this.category$ = inject(Store).select(CategoryState.selectedCategory);
+    this.breadcrumb = {
+      title: "Category",
+      items: [{ label: "", active: false }]
+    };
+    this.layout = "collection_category_slider";
+    this.skeleton = true;
+    this.filter = {
+      page: 1,
+      // Current page number
+      paginate: 40,
+      // Display per page,
+      status: 1,
+      field: "created_at",
+      price: "",
+      category: "",
+      tag: "",
+      sort: "asc",
+      // ASC, DSC
+      sortBy: "asc",
+      rating: "",
+      attribute: ""
+    };
+    this.totalItems = 0;
+    this.category$.subscribe((category2) => {
+      this.category = category2;
+      this.breadcrumb.title = `Category: ${this.category?.name}`;
+      this.breadcrumb.items[0].label = this.category?.name;
+    });
+    const category = this.route.snapshot.paramMap.get("slug");
+    this.filter = __spreadProps(__spreadValues({}, this.filter), {
+      category
+    });
+    this.store.dispatch(new GetProductsAction(this.filter));
+  }
+  ngOnInit() {
+    this.routerEventsSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationEnd), switchMap(() => {
+      const category = this.route.snapshot.paramMap.get("slug");
+      return this.route.queryParams.pipe(switchMap((params) => {
+        this.filter = {
+          page: params["page"] ? params["page"] : 1,
+          paginate: 40,
+          status: 1,
+          category: params["category"] ? params["category"] : category,
+          price: params["price"] ? params["price"] : "",
+          brand: params["brand"] ? params["brand"] : "",
+          tag: params["tag"] ? params["tag"] : "",
+          field: params["field"] ? params["field"] : this.filter["field"],
+          sortBy: params["sortBy"] ? params["sortBy"] : this.filter["sortBy"],
+          rating: params["rating"] ? params["rating"] : "",
+          attribute: params["attribute"] ? params["attribute"] : ""
+        };
+        this.store.dispatch(new GetProductsAction(this.filter));
+        return [];
+      }));
+    })).subscribe();
+  }
+  updateFilterAndFetchProducts() {
+    if (this.category) {
+      this.filter["category"] = this.category.slug;
+    }
+    this.store.dispatch(new GetProductsAction(this.filter));
+  }
+  changePage(page) {
+    this.filter["category"] = page;
+    this.updateFilterAndFetchProducts();
+  }
+  changePaginate(paginate) {
+    this.filter["paginate"] = paginate;
+    this.updateFilterAndFetchProducts();
+  }
+  ngOnDestroy() {
+    if (this.routerEventsSubscription) {
+      this.routerEventsSubscription.unsubscribe();
+    }
+  }
+  static {
+    this.\u0275fac = function Category_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _Category)();
+    };
+  }
+  static {
+    this.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _Category, selectors: [["app-category"]], decls: 13, vars: 5, consts: [[3, "breadcrumb"], [1, "section-b-space"], [1, "collection-wrapper"], [1, "container"], [1, "row"], [1, "col-sm-3", "collection-filter"], [3, "filter", "hideFilter"], [1, "collection-content", "col-lg-9"], [1, "page-main-content"], [1, "col-sm-12"], [1, "collection-product-wrapper"], [3, "filter"]], template: function Category_Template(rf, ctx) {
+      if (rf & 1) {
+        \u0275\u0275element(0, "app-breadcrumb", 0);
+        \u0275\u0275elementStart(1, "section", 1)(2, "div", 2)(3, "div", 3)(4, "div", 4)(5, "div", 5);
+        \u0275\u0275element(6, "app-collection-sidebar", 6);
+        \u0275\u0275elementEnd();
+        \u0275\u0275elementStart(7, "div", 7)(8, "div", 8)(9, "div", 4)(10, "div", 9)(11, "div", 10);
+        \u0275\u0275element(12, "app-collection-products", 11);
+        \u0275\u0275elementEnd()()()()()()()()();
+      }
+      if (rf & 2) {
+        \u0275\u0275property("breadcrumb", ctx.breadcrumb);
+        \u0275\u0275advance(6);
+        \u0275\u0275property("filter", ctx.filter)("hideFilter", \u0275\u0275pureFunction0(4, _c0));
+        \u0275\u0275advance(6);
+        \u0275\u0275property("filter", ctx.filter);
+      }
+    }, dependencies: [Breadcrumb, Sidebar, CollectionProducts], encapsulation: 2 });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Category, [{
+    type: Component,
+    args: [{ selector: "app-category", imports: [Breadcrumb, Sidebar, CollectionProducts], template: `<app-breadcrumb [breadcrumb]="breadcrumb" />
+
+<section class="section-b-space">
+  <div class="collection-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3 collection-filter">
+          <app-collection-sidebar [filter]="filter" [hideFilter]="['category']" />
+        </div>
+        <div class="collection-content col-lg-9">
+          <div class="page-main-content">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="collection-product-wrapper">
+                  <app-collection-products [filter]="filter" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+` }]
+  }], () => [], null);
+})();
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(Category, { className: "Category", filePath: "src/app/components/shop/category/category.ts", lineNumber: 23 });
+})();
+export {
+  Category
+};
+//# sourceMappingURL=chunk-XX3LZJJE.js.map

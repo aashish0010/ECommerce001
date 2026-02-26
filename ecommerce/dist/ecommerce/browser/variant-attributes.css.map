@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/widgets/variant-attributes/variant-attributes.scss"],
+  "sourcesContent": [".box {\n  height: 100px;\n  overflow: hidden;\n  image {\n    height: 100%;\n  }\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,UAAA;AACA,YAAA;;AACA,CAHF,IAGE;AACE,UAAA;;",
+  "names": []
+}

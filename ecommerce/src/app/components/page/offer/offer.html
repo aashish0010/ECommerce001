@@ -3,11 +3,11 @@
 <div class="section-b-space section-t-space offer-section">
   <div class="container">
     <div class="row g-md-4 g-3">
-      @if(couponService.skeletonLoader){ @for(item of skeletonItems; track item){
+      @if(loading){ @for(item of skeletonItems; track item){
       <div class="col-xxl-4 col-lg-4 col-sm-6">
         <app-skeleton-offer />
       </div>
-      } } @else { @for(coupon of (coupon$ |async)?.data; track coupon.id){
+      } } @else { @for(coupon of (coupon$ | async) ?? []; track coupon.id){
       <div class="col-xxl-4 col-lg-4 col-sm-6">
         <div class="coupon-box">
           <div class="coupon-name">

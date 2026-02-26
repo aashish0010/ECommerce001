@@ -8,7 +8,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { Categories } from '../../../shared/components/widgets/categories/categories';
 import { ImageLink } from '../../../shared/components/widgets/image-link/image-link';
 import { blogSlider4, productSlider5 } from '../../../shared/data/owl-carousel';
-import { ICouponModel } from '../../../shared/interface/coupon.interface';
+import { ICoupon } from '../../../shared/interface/coupon.interface';
 import { IBanners, IGradient } from '../../../shared/interface/theme.interface';
 import { ThemeOptionService } from '../../../shared/services/theme-option.service';
 import { GetBlogsAction } from '../../../shared/store/action/blog.action';
@@ -54,7 +54,7 @@ export class Gradient {
   readonly slug = input<string>();
   private platformId: boolean;
 
-  coupon$: Observable<ICouponModel> = inject(Store).select(CouponState.coupon);
+  coupon$: Observable<ICoupon[]> = inject(Store).select(CouponState.coupons);
 
   public productSlider5 = productSlider5;
   public blogSlider4 = blogSlider4;
@@ -105,7 +105,7 @@ export class Gradient {
   ngOnInit() {
     const data = this.data();
     if (data?.slug == this.slug()) {
-      this.store.dispatch(new GetCouponsAction({ status: 1 }));
+      this.store.dispatch(new GetCouponsAction());
 
       let categoryIds = data?.content?.category_product?.category_ids.concat(
         data?.content?.categories_1?.category_ids,

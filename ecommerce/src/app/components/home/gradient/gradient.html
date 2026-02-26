@@ -125,7 +125,7 @@
 <section class="section-b-space">
   <div class="container-lg container">
     <owl-carousel-o [options]="options">
-      @for(coupon of (coupon$ |async)?.data; track coupon.id; let i = $index){
+      @for(coupon of (coupon$ | async) ?? []; track coupon.id; let i = $index){
       <ng-template carouselSlide>
         <a href="javascript:void(0)">
           <div class="deal-category">
