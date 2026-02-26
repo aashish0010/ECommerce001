@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://bookmanagementsyste.iis",
+    "target": "https://ecommerce001-production.up.railway.app",
     "secure": false,
     "changeOrigin": true
   }

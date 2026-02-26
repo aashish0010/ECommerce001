@@ -34,11 +34,11 @@ namespace BookManagementSystem.Domain.DTO
         [JsonPropertyName("city")]
         public string City { get; set; }
 
-        [JsonPropertyName("state_id")]
-        public string StateId { get; set; }
+        [JsonPropertyName("state_name")]
+        public string StateName { get; set; }
 
-        [JsonPropertyName("country_id")]
-        public string CountryId { get; set; }
+        [JsonPropertyName("country_name")]
+        public string CountryName { get; set; }
 
         [JsonPropertyName("pincode")]
         public string Pincode { get; set; }

@@ -13,8 +13,8 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { Select2Data, Select2Module, Select2UpdateEvent } from 'ng-select2-component';
-import { map, Observable, of } from 'rxjs';
+import { Select2Module } from 'ng-select2-component';
+import { Observable } from 'rxjs';
 
 import { DeliveryBlock } from './delivery-block/delivery-block';
 import { PaymentBlock } from './payment-block/payment-block';
@@ -41,11 +41,9 @@ import { CreateAddressAction, GetAddressesAction } from '../../../shared/store/a
 import { AccountState } from '../../../shared/store/state/account.state';
 import { AuthState } from '../../../shared/store/state/auth.state';
 import { CartState } from '../../../shared/store/state/cart.state';
-import { CountryState } from '../../../shared/store/state/country.state';
 import { CouponState } from '../../../shared/store/state/coupon.state';
 import { OrderState } from '../../../shared/store/state/order.state';
 import { SettingState } from '../../../shared/store/state/setting.state';
-import { StateState } from '../../../shared/store/state/state.state';
 
 @Component({
   selector: 'app-checkout',
@@ -92,7 +90,6 @@ export class Checkout {
   cartDigital$: Observable<boolean | number> = inject(Store).select(
     CartState.cartHasDigital,
   ) as Observable<boolean | number>;
-  countries$: Observable<Select2Data> = inject(Store).select(CountryState.countries);
   coupon$: Observable<ICouponModel> = inject(Store).select(CouponState.coupon);
   addresses$: Observable<ISavedAddress[]> = inject(Store).select(
     AccountState.addresses,
@@ -108,8 +105,6 @@ export class Checkout {
   public checkoutTotal: IOrderCheckout;
   public loading: boolean = false;
 
-  public shippingStates$: Observable<Select2Data>;
-  public billingStates$: Observable<Select2Data>;
   public codes = countryCodes;
   public isBrowser: boolean;
 
@@ -150,8 +145,8 @@ export class Checkout {
         phone: new FormControl('', [Validators.required]),
         pincode: new FormControl('', [Validators.required]),
         country_code: new FormControl('977', [Validators.required]),
-        country_id: new FormControl('', [Validators.required]),
-        state_id: new FormControl('', [Validators.required]),
+        state_name: new FormControl(''),
+        country_name: new FormControl(''),
       }),
       billing_address: new FormGroup({
         same_shipping: new FormControl(false),
@@ -161,8 +156,8 @@ export class Checkout {
         phone: new FormControl('', [Validators.required]),
         pincode: new FormControl('', [Validators.required]),
         country_code: new FormControl('977', [Validators.required]),
-        country_id: new FormControl('', [Validators.required]),
-        state_id: new FormControl('', [Validators.required]),
+        state_name: new FormControl(''),
+        country_name: new FormControl(''),
       }),
     });
 
@@ -225,11 +220,11 @@ export class Checkout {
           .get('billing_address.street')
           ?.setValue(this.form.get('shipping_address.street')?.value);
         this.form
-          .get('billing_address.country_id')
-          ?.setValue(this.form.get('shipping_address.country_id')?.value);
+          .get('billing_address.country_name')
+          ?.setValue(this.form.get('shipping_address.country_name')?.value);
         this.form
-          .get('billing_address.state_id')
-          ?.setValue(this.form.get('shipping_address.state_id')?.value);
+          .get('billing_address.state_name')
+          ?.setValue(this.form.get('shipping_address.state_name')?.value);
         this.form
           .get('billing_address.city')
           ?.setValue(this.form.get('shipping_address.city')?.value);
@@ -245,8 +240,8 @@ export class Checkout {
       } else {
         this.form.get('billing_address.title')?.setValue('');
         this.form.get('billing_address.street')?.setValue('');
-        this.form.get('billing_address.country_id')?.setValue('');
-        this.form.get('billing_address.state_id')?.setValue('');
+        this.form.get('billing_address.country_name')?.setValue('');
+        this.form.get('billing_address.state_name')?.setValue('');
         this.form.get('billing_address.city')?.setValue('');
         this.form.get('billing_address.pincode')?.setValue('');
         this.form.get('billing_address.country_code')?.setValue('');
@@ -291,22 +286,17 @@ export class Checkout {
   selectSavedShippingAddress(addr: ISavedAddress) {
     this.selectedShippingAddress = addr;
     this.showNewShippingForm = false;
-    this.shippingStates$ = this.store
-      .select(StateState.states)
-      .pipe(map(filterFn => filterFn(+addr.country_id)));
-    setTimeout(() => {
-      this.form.get('shipping_address')?.patchValue({
-        title: addr.title,
-        street: addr.street,
-        city: addr.city,
-        pincode: addr.pincode,
-        phone: addr.phone,
-        country_code: addr.country_code,
-        country_id: addr.country_id,
-        state_id: addr.state_id,
-      });
-      this.checkout();
-    }, 200);
+    this.form.get('shipping_address')?.patchValue({
+      title: addr.title,
+      street: addr.street,
+      city: addr.city,
+      pincode: addr.pincode,
+      phone: addr.phone,
+      country_code: addr.country_code,
+      country_name: addr.country_name ?? '',
+      state_name: addr.state_name ?? '',
+    });
+    this.checkout();
   }
 
   useNewShippingAddress() {
@@ -319,23 +309,18 @@ export class Checkout {
   selectSavedBillingAddress(addr: ISavedAddress) {
     this.selectedBillingAddress = addr;
     this.showNewBillingForm = false;
-    this.billingStates$ = this.store
-      .select(StateState.states)
-      .pipe(map(filterFn => filterFn(+addr.country_id)));
-    setTimeout(() => {
-      this.form.get('billing_address')?.patchValue({
-        same_shipping: false,
-        title: addr.title,
-        street: addr.street,
-        city: addr.city,
-        pincode: addr.pincode,
-        phone: addr.phone,
-        country_code: addr.country_code,
-        country_id: addr.country_id,
-        state_id: addr.state_id,
-      });
-      this.checkout();
-    }, 200);
+    this.form.get('billing_address')?.patchValue({
+      same_shipping: false,
+      title: addr.title,
+      street: addr.street,
+      city: addr.city,
+      pincode: addr.pincode,
+      phone: addr.phone,
+      country_code: addr.country_code,
+      country_name: addr.country_name ?? '',
+      state_name: addr.state_name ?? '',
+    });
+    this.checkout();
   }
 
   useNewBillingAddress() {
@@ -389,35 +374,6 @@ export class Checkout {
 
   couponRemove() {
     this.setCoupon();
-  }
-
-  shippingCountryChange(data: Select2UpdateEvent) {
-    if (data && data?.value) {
-      this.shippingStates$ = this.store
-        .select(StateState.states)
-        .pipe(map(filterFn => filterFn(+data?.value)));
-    } else {
-      this.form.get('shipping_address.state_id')?.setValue('');
-      this.shippingStates$ = of();
-    }
-  }
-
-  billingCountryChange(data: Select2UpdateEvent) {
-    if (data && data?.value) {
-      this.billingStates$ = this.store
-        .select(StateState.states)
-        .pipe(map(filterFn => filterFn(+data?.value)));
-      if (this.form.get('billing_address.same_shipping')?.value) {
-        setTimeout(() => {
-          this.form
-            .get('billing_address.state_id')
-            ?.setValue(this.form.get('shipping_address.state_id')?.value);
-        }, 200);
-      }
-    } else {
-      this.form.get('billing_address.state_id')?.setValue('');
-      this.billingStates$ = of();
-    }
   }
 
   checkout() {

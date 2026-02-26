@@ -5,7 +5,7 @@ const httpsPort = process.env['ASPNETCORE_HTTPS_PORT'] || 7141;
 
 module.exports = {
   '/api': {
-    target: `https://localhost:${httpsPort}`,
+    target: `https://ecommerce001-production.up.railway.app`,
     secure: false,
     changeOrigin: true
   }

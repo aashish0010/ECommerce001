@@ -5,5 +5,5 @@ export const environment = {
   URL: '/assets/data',
   storageURL: '/assets',
   companyCode: 'WOW001',
-  companyInfoId: 3,
+  companyInfoId: 1,
 };
