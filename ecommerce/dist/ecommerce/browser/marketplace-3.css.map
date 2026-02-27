@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/home/marketplace/marketplace-3/marketplace-3.scss"],
-  "sourcesContent": [".sidebar-banner-list {\n  display: grid;\n  gap: 12px;\n}\n\n.sidebar-banner-list img {\n  width: 100%;\n  height: auto;\n  display: block;\n}\n\n:host ::ng-deep .banner-section .collection-banner .bg-size {\n  min-height: clamp(180px, 20vw, 280px);\n  background-size: cover;\n  background-position: center;\n}\n\n:host ::ng-deep .banner-section .collection-banner {\n  display: block;\n  overflow: hidden;\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,OAAA;;AAGF,CALA,oBAKA;AACE,SAAA;AACA,UAAA;AACA,WAAA;;AAGF,MAAA,UAAA,CAAA,eAAA,CAAA,kBAAA,CAAA;AACE,cAAA,MAAA,KAAA,EAAA,IAAA,EAAA;AACA,mBAAA;AACA,uBAAA;;AAGF,MAAA,UAAA,CANA,eAMA,CANA;AAOE,WAAA;AACA,YAAA;;",
-  "names": []
-}

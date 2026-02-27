@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/components/widgets/product-box/product-box-two/product-box-two.scss"],
-  "sourcesContent": [".marquee {\n  position: relative;\n  width: 100vw;\n  max-width: 100%;\n  height: 200px;\n  overflow-x: hidden;\n}\n\n.track {\n  position: absolute;\n  white-space: nowrap;\n  will-change: transform;\n  animation: marquee 20s linear infinite;\n}\n\n@keyframes marquee {\n  0% {\n    transform: translateX(100%);\n  }\n\n  100% {\n    transform: translateX(-100%);\n  }\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,YAAA;AACA,SAAA;AACA,aAAA;AACA,UAAA;AACA,cAAA;;AAGF,CAAA;AACE,YAAA;AACA,eAAA;AACA,eAAA;AACA,aAAA,QAAA,IAAA,OAAA;;AAGF,WAfA;AAgBE;AACE,eAAA,WAAA;;AAGF;AACE,eAAA,WAAA;;;",
-  "names": []
-}

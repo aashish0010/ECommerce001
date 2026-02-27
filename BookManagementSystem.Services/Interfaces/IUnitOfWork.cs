@@ -16,5 +16,7 @@ namespace BookManagementSystem.Service.Interfaces
 		OrderService orderService { get; }
 		AddressService addressService { get; }
 		CouponService couponService { get; }
+		WishlistService wishlistService { get; }
+		CompareService compareService { get; }
     }
 }

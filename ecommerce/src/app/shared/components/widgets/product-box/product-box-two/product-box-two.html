@@ -67,20 +67,14 @@
           }
         </h4>
       </div>
+      @if(product()?.discount){
       <ul class="offer-panel">
         <li>
           <span class="offer-icon"><i class="ri-discount-percent-fill"></i></span> {{
           'limited_time_offer' | translate }}: {{ product()?.discount }}% {{ 'off' | translate }}
         </li>
-        <li>
-          <span class="offer-icon"><i class="ri-discount-percent-fill"></i></span> {{
-          'limited_time_offer' | translate }}: {{ product()?.discount }}% {{ 'off' | translate }}
-        </li>
-        <li>
-          <span class="offer-icon"><i class="ri-discount-percent-fill"></i></span> {{
-          'limited_time_offer' | translate }}: {{ product()?.discount }}% {{ 'off' | translate }}
-        </li>
       </ul>
+      }
     </div>
   </div>
 </div>

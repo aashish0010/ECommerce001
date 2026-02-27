@@ -5,7 +5,6 @@ import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { tap } from 'rxjs';
 
 import { IProduct } from '../../interface/product.interface';
-import { AuthService } from '../../services/auth.service';
 import { CompareService } from '../../services/compare.service';
 import { NotificationService } from '../../services/notification.service';
 import {
@@ -33,7 +32,6 @@ export class CompareState {
   private store = inject(Store);
   router = inject(Router);
   private notificationService = inject(NotificationService);
-  authService = inject(AuthService);
   private compareService = inject(CompareService);
 
   @Selector()
@@ -52,7 +50,7 @@ export class CompareState {
   }
 
   @Action(GetCompareAction)
-  getCompareItems(ctx: StateContext<GetCompareAction>) {
+  getCompareItems(ctx: StateContext<CompareStateModel>) {
     if (!this.store.selectSnapshot(state => state.auth && state.auth.access_token)) {
       return;
     }
@@ -60,10 +58,11 @@ export class CompareState {
     return this.compareService.getComparItems().pipe(
       tap({
         next: result => {
-          let ids = result.data.map(product => product.id);
+          const data = Array.isArray(result) ? result : result.data || [];
+          const ids = data.map((product: IProduct) => product.id);
           ctx.patchState({
-            items: result.data,
-            total: result?.total ? result?.total : result.data?.length,
+            items: data,
+            total: result?.total ? result.total : data.length,
             comparIds: ids,
           });
         },
@@ -71,6 +70,7 @@ export class CompareState {
           this.compareService.skeletonLoader = false;
         },
         error: err => {
+          this.compareService.skeletonLoader = false;
           throw new Error(err?.error?.message);
         },
       }),
@@ -78,12 +78,54 @@ export class CompareState {
   }
 
   @Action(AddToCompareAction)
-  add(_ctx: StateContext<CompareStateModel>, _action: AddToCompareAction) {
-    // Add compare Logic Here
+  add(ctx: StateContext<CompareStateModel>, action: AddToCompareAction) {
+    if (!this.store.selectSnapshot(state => state.auth && state.auth.access_token)) {
+      this.notificationService.showError('Please login to compare products.');
+      return;
+    }
+    const productId = action.payload?.['product_id'];
+    if (!productId) return;
+
+    return this.compareService.addToCompare(productId).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          if (!state.comparIds.includes(productId)) {
+            ctx.patchState({
+              comparIds: [...state.comparIds, productId],
+            });
+          }
+          this.notificationService.showSuccess('Added to compare.');
+          this.store.dispatch(new GetCompareAction());
+        },
+        error: err => {
+          this.notificationService.showError(
+            err?.error?.message || 'Failed to add to compare.',
+          );
+        },
+      }),
+    );
   }
 
   @Action(DeleteCompareAction)
-  delete(_ctx: StateContext<CompareStateModel>, { id: _id }: DeleteCompareAction) {
-    // Delete compare Logic Here
+  delete(ctx: StateContext<CompareStateModel>, { id }: DeleteCompareAction) {
+    return this.compareService.removeFromCompare(id).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          ctx.patchState({
+            items: state.items.filter(item => item.id !== id),
+            total: state.total - 1,
+            comparIds: state.comparIds.filter(cId => cId !== id),
+          });
+          this.notificationService.showSuccess('Removed from compare.');
+        },
+        error: err => {
+          this.notificationService.showError(
+            err?.error?.message || 'Failed to remove from compare.',
+          );
+        },
+      }),
+    );
   }
 }

@@ -2,11 +2,11 @@
     "values": {
         "general": {
             "mode": "light-only",
-            "site_url": "https://angular.pixelstrap.net/multikart-rest/",
-            "copyright": "Copyright 2024 © Multikart theme by pixelstrap",
-            "site_name": "Multikart",
-            "site_title": "Multikart Marketplace: Where Vendors Shine Together",
-            "site_tagline": "Shop Unique, Sell Exceptional – Multikart's Multi-Vendor Universe.",
+            "site_url": "https://www.wowebazaar.com/",
+            "copyright": "Copyright 2025 © WoWeBazaar",
+            "site_name": "WoWeBazaar",
+            "site_title": "WoWeBazaar — Cargo, Flights & Marketplace",
+            "site_tagline": "Connecting Nepal & Cyprus — Cargo, Flights, and Online Shopping.",
             "default_timezone": "Asia/Kolkata",
             "favicon_image_id": 10,
             "min_order_amount": 0,

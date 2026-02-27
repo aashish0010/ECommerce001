@@ -15,6 +15,18 @@ export class WishlistService {
   public skeletonLoader: boolean = false;
 
   getWishlistItems(): Observable<IWishlistModel> {
-    return this.http.get<IWishlistModel>(`${environment.URL}/wishlist.json`);
+    return this.http.get<IWishlistModel>(`${environment.baseURL}wishlist`);
+  }
+
+  addToWishlist(productId: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${environment.baseURL}wishlist`, {
+      product_id: productId,
+    });
+  }
+
+  removeFromWishlist(productId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${environment.baseURL}wishlist/${productId}`,
+    );
   }
 }

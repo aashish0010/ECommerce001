@@ -13,7 +13,7 @@
     },
     "banner": {
       "status": true,
-      "image_url": "/images/theme/fashion_one/fashion_one_5.png",
+      "image_url": "/images/branded/hero.png",
       "redirect_link": {
         "link": 19,
         "link_type": "product",
@@ -23,22 +23,22 @@
     "services": {
       "banners": [
         {
-          "title": "free shipping",
+          "title": "International Parcel",
           "status": true,
-          "image_url": "/images/theme/fashion_one/service.png",
-          "description": "free shipping world wide"
+          "image_url": "/images/branded/parcel.png",
+          "description": "Fast & Safe delivery between Nepal and Cyprus."
         },
         {
-          "title": "24 X 7 service",
+          "title": "Flight Booking",
           "status": true,
-          "image_url": "/images/theme/fashion_one/service.png",
-          "description": "online service for new customer"
+          "image_url": "/images/branded/hero.png",
+          "description": "Affordable tickets to Larnaca, Kathmandu & more."
         },
         {
-          "title": "festival offer",
+          "title": "Online Marketplace",
           "status": true,
-          "image_url": "/images/theme/fashion_one/service.png",
-          "description": "new online special festival offer"
+          "image_url": "assets/images/branded/logo.png",
+          "description": "Shop the latest products from local sellers."
         }
       ]
     },
@@ -46,7 +46,7 @@
       "banners": [
         {
           "status": true,
-          "image_url": "/images/company/slide_1.png",
+          "image_url": "/images/branded/hero.png",
           "redirect_link": {
             "link": "",
             "link_type": "external_url"
@@ -54,7 +54,7 @@
         },
         {
           "status": true,
-          "image_url": "/images/company/slide_2.png",
+          "image_url": "/images/branded/parcel.png",
           "redirect_link": {
             "link": "",
             "link_type": "external_url"

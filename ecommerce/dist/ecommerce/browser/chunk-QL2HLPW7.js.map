@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/store/action/page.action.ts"],
-  "sourcesContent": ["import { Params } from '../../interface/core.interface';\nimport { IContactUsModel } from '../../interface/page.interface';\n\nexport class GetPagesAction {\n  static readonly type = '[Page] Get';\n  constructor(public payload?: Params) {}\n}\n\nexport class GetPageBySlugAction {\n  static readonly type = '[Page] By Slug';\n  constructor(public slug: string) {}\n}\n\nexport class GetFaqsAction {\n  static readonly type = '[Faq] Get';\n}\n\nexport class ContactUsAction {\n  static readonly type = '[ContactUs] Post';\n  constructor(public payload: IContactUsModel) {}\n}\n"],
-  "mappings": ";AAGM,IAAO,iBAAP,MAAqB;;AACT,SAAA,OAAO;EAAa;EACpC,YAAmB,SAAgB;AAAhB,SAAA,UAAA;EAAmB;;AAGlC,IAAO,sBAAP,MAA0B;;AACd,SAAA,OAAO;EAAiB;EACxC,YAAmB,MAAY;AAAZ,SAAA,OAAA;EAAe;;AAG9B,IAAO,gBAAP,MAAoB;;AACR,SAAA,OAAO;EAAY;;AAG/B,IAAO,kBAAP,MAAsB;;AACV,SAAA,OAAO;EAAmB;EAC1C,YAAmB,SAAwB;AAAxB,SAAA,UAAA;EAA2B;;",
-  "names": []
-}

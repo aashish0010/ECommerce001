@@ -17,7 +17,7 @@ namespace BookManagementSystem.Service.Services
             _context = context;
         }
 
-        private static ProductDetailDto MapToDto(Product p)
+        internal static ProductDetailDto MapToDto(Product p)
         {
             var thumbnail = AttachmentDto.FromUrl(p.ImageUrl, p.Id, p.Slug ?? "product");
             return new ProductDetailDto

@@ -116,6 +116,35 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.ToTable("CompanySocialInfos");
                 });
 
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.CompareItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserName", "ProductId")
+                        .IsUnique();
+
+                    b.ToTable("CompareItems");
+                });
+
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.Order.Coupon", b =>
                 {
                     b.Property<int>("Id")
@@ -693,6 +722,35 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.ToTable("ThirdPartyLoginHandlers");
                 });
 
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.WishlistItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserName", "ProductId")
+                        .IsUnique();
+
+                    b.ToTable("WishlistItems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -966,6 +1024,17 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.Navigation("CompanyInfo");
                 });
 
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.CompareItem", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Product.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.Order.Coupon", b =>
                 {
                     b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyInfo")
@@ -1090,6 +1159,17 @@ namespace BookManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("CompanyInfo");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.WishlistItem", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Product.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

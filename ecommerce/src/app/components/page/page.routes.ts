@@ -24,6 +24,14 @@ export const page: Routes = [
     loadComponent: () => import('./offer/offer').then(m => m.Offer),
   },
   {
+    path: 'flights',
+    loadComponent: () => import('./flight-booking/flight-booking.component').then(m => m.FlightBookingComponent),
+  },
+  {
+    path: 'parcel-service',
+    loadComponent: () => import('./parcel-service/parcel-service.component').then(m => m.ParcelServiceComponent),
+  },
+  {
     path: '404',
     loadComponent: () => import('./error404/error404').then(m => m.Error404),
   },

@@ -31,6 +31,8 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<WishlistItem> WishlistItems { get; set; }
+        public DbSet<CompareItem> CompareItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -324,6 +326,37 @@ namespace BookManagementSystem.Infrastructure
 
             #endregion
 
+            #region WishlistItem
+
+            builder.Entity<WishlistItem>().HasKey(x => x.Id);
+            builder.Entity<WishlistItem>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<WishlistItem>().Property(x => x.UserName).HasMaxLength(256).IsRequired();
+            builder.Entity<WishlistItem>()
+                .HasOne(x => x.Product)
+                .WithMany()
+                .HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<WishlistItem>()
+                .HasIndex(x => new { x.UserName, x.ProductId })
+                .IsUnique();
+
+            #endregion
+
+            #region CompareItem
+
+            builder.Entity<CompareItem>().HasKey(x => x.Id);
+            builder.Entity<CompareItem>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<CompareItem>().Property(x => x.UserName).HasMaxLength(256).IsRequired();
+            builder.Entity<CompareItem>()
+                .HasOne(x => x.Product)
+                .WithMany()
+                .HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<CompareItem>()
+                .HasIndex(x => new { x.UserName, x.ProductId })
+                .IsUnique();
+
+            #endregion
 
         }
     }

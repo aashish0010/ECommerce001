@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/home/widgets/theme-home-slider/theme-home-slider.scss"],
-  "sourcesContent": [":host ::ng-deep .bg-img {\n  width: 100%;\n  height: clamp(260px, 32vw, 520px);\n  object-fit: cover;\n  object-position: center;\n  display: block;\n}\n\n:host ::ng-deep .bg-size {\n  min-height: clamp(260px, 32vw, 520px);\n  background-size: cover;\n  background-position: center;\n}\n\n:host ::ng-deep .banner-contain {\n  display: block;\n  height: clamp(260px, 32vw, 520px);\n}\n"],
-  "mappings": ";AAAA,MAAA,UAAA,CAAA;AACE,SAAA;AACA,UAAA,MAAA,KAAA,EAAA,IAAA,EAAA;AACA,cAAA;AACA,mBAAA;AACA,WAAA;;AAGF,MAAA,UAAA,CAAA;AACE,cAAA,MAAA,KAAA,EAAA,IAAA,EAAA;AACA,mBAAA;AACA,uBAAA;;AAGF,MAAA,UAAA,CAAA;AACE,WAAA;AACA,UAAA,MAAA,KAAA,EAAA,IAAA,EAAA;;",
-  "names": []
-}

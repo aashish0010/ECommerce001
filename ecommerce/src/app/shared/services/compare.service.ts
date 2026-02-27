@@ -15,6 +15,18 @@ export class CompareService {
   public skeletonLoader: boolean = false;
 
   getComparItems(): Observable<ICompareModel> {
-    return this.http.get<ICompareModel>(`${environment.URL}/compare.json`);
+    return this.http.get<ICompareModel>(`${environment.baseURL}compare`);
+  }
+
+  addToCompare(productId: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${environment.baseURL}compare`, {
+      product_id: productId,
+    });
+  }
+
+  removeFromCompare(productId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${environment.baseURL}compare/${productId}`,
+    );
   }
 }
