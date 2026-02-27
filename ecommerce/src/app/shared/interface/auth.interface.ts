@@ -55,3 +55,8 @@ export interface IVerifyEmailOtpState {
   otp: string;
   processId: string;
 }
+
+export interface IRefreshTokenRequest {
+  accessToken: string;
+  refreshToken: string;
+}

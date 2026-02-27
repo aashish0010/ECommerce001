@@ -14,6 +14,8 @@ import { ThemeHomeSlider } from '../../widgets/theme-home-slider/theme-home-slid
 import { ThemeProductTabSection } from '../../widgets/theme-product-tab-section/theme-product-tab-section';
 import { ThemeSocialMedia } from '../../widgets/theme-social-media/theme-social-media';
 import { ThemeTitle } from '../../widgets/theme-title/theme-title';
+import { FlightSearchWidgetComponent } from '../../../../shared/components/widgets/flight-search-widget/flight-search-widget';
+import { ParcelTrackingWidgetComponent } from '../../../../shared/components/widgets/parcel-tracking-widget/parcel-tracking-widget';
 
 @Component({
   selector: 'app-fashion-1',
@@ -22,6 +24,8 @@ import { ThemeTitle } from '../../widgets/theme-title/theme-title';
     ThemeTitle,
     ThemeProductTabSection,
     ThemeSocialMedia,
+    FlightSearchWidgetComponent,
+    ParcelTrackingWidgetComponent,
     ImageLink,
     NgClass,
     AsyncPipe,

@@ -1,8 +1,7 @@
-<div class="row g-sm-4 g-3">
+<div class="row g-sm-4 g-3 vertical-stack-mobile">
   @for(service of filteredServices; track service.title){ @if(type() === 'simple'){
   <div
-    [ngClass]="filteredServices.length === 4 ? 'col-xl-3 col-sm-6' : filteredServices.length === 3 ? 'col-lg-4 col-sm-6' : filteredServices.length === 2 ? 'col-sm-6' : 'col-12'"
-  >
+    [ngClass]="filteredServices.length === 4 ? 'col-xl-3 col-md-6 col-12' : filteredServices.length === 3 ? 'col-md-4 col-12' : 'col-12'">
     <div class="service-block1">
       <img [src]="StorageURL+service.image_url" [alt]="service.title" />
       <div class="service-skeleton-img"></div>
@@ -14,8 +13,7 @@
   </div>
   }@else {
   <div
-    [ngClass]="filteredServices.length === 4 ? 'col-xl-3 col-sm-6' : filteredServices.length === 3 ? 'col-lg-4 col-sm-6' : filteredServices.length === 2 ? 'col-sm-6' : 'col-12'"
-  >
+    [ngClass]="filteredServices.length === 4 ? 'col-xl-3 col-md-6 col-12' : filteredServices.length === 3 ? 'col-md-4 col-12' : 'col-12'">
     <div class="service-block">
       <div class="media">
         <img [src]="StorageURL+service.image_url" [alt]="service.title" />

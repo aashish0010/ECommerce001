@@ -38,7 +38,9 @@
       "Bash(npm run build:csr)",
       "Bash(export PATH=\"$PATH:$HOME/.dotnet/tools\")",
       "Bash(dotnet ef migrations add AddWishlistAndCompare --startup-project ../BookManagementSystem)",
-      "Bash(dotnet ef database update --startup-project ../BookManagementSystem)"
+      "Bash(dotnet ef database update --startup-project ../BookManagementSystem)",
+      "Bash(dotnet ef migrations add AddRefreshToken --startup-project ../BookManagementSystem)",
+      "Bash(export PATH=\"$HOME/.dotnet/tools:$PATH\")"
     ]
   }
 }

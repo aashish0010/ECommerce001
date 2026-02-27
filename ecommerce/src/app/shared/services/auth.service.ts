@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { IRegisterModal, IVerifyEmailOtpState } from '../interface/auth.interface';
+import { IRefreshTokenRequest, IRegisterModal, IVerifyEmailOtpState } from '../interface/auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +70,9 @@ export class AuthService {
       processId: payload.processId,
       newPassword: payload.newPassword,
     });
+  }
+
+  refreshToken(payload: IRefreshTokenRequest): Observable<any> {
+    return this.http.post(`${environment.baseURL}auth/refresh`, payload);
   }
 }

@@ -7,7 +7,10 @@ using BookManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace BookManagementSystem.Service.Services
 {
@@ -59,6 +62,17 @@ namespace BookManagementSystem.Service.Services
                 response.UserName = login.UserName;
                 response.Token = _token.TokenGenerate(user, role.FirstOrDefault());
 
+                var refreshTokenString = _token.GenerateRefreshToken();
+                var refreshTokenEntity = new RefreshToken
+                {
+                    UserName = login.UserName,
+                    Token = refreshTokenString,
+                    ExpiresAt = DateTime.UtcNow.AddDays(7),
+                    CreatedAt = DateTime.UtcNow,
+                };
+                await _context.RefreshTokens.AddAsync(refreshTokenEntity);
+                await _context.SaveChangesAsync();
+                response.RefreshToken = refreshTokenString;
             }
             else
             {
@@ -357,13 +371,25 @@ namespace BookManagementSystem.Service.Services
                 await _context.SaveChangesAsync();
             }
 
+            var refreshTokenString = _token.GenerateRefreshToken();
+            var refreshTokenEntity = new RefreshToken
+            {
+                UserName = user.UserName,
+                Token = refreshTokenString,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                CreatedAt = DateTime.UtcNow,
+            };
+            await _context.RefreshTokens.AddAsync(refreshTokenEntity);
+            await _context.SaveChangesAsync();
+
             return new LoginResponse()
             {
                 UserName = user.UserName,
                 Code = StatusCodes.Status100Continue,
                 Status = Level.Success,
                 Message = "Login Succefully",
-                Token = _token.TokenGenerate(user, role)
+                Token = _token.TokenGenerate(user, role),
+                RefreshToken = refreshTokenString
             };
         }
 
@@ -422,6 +448,80 @@ namespace BookManagementSystem.Service.Services
                 return new Common { Code = StatusCodes.Status200OK, Status = Level.Success, Message = "Password changed successfully" };
 
             return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = result.Errors.FirstOrDefault()?.Description ?? "Failed to change password" };
+        }
+
+        public async Task<LoginResponse> RefreshToken(RefreshTokenRequest request)
+        {
+            var response = new LoginResponse();
+
+            ClaimsPrincipal principal;
+            try
+            {
+                principal = _token.GetPrincipalFromExpiredToken(request.AccessToken);
+            }
+            catch
+            {
+                response.Code = StatusCodes.Status401Unauthorized;
+                response.Status = Level.Failed;
+                response.Message = "Invalid access token";
+                return response;
+            }
+
+            var userName = principal.FindFirstValue(JwtRegisteredClaimNames.Name);
+            if (string.IsNullOrEmpty(userName))
+            {
+                response.Code = StatusCodes.Status401Unauthorized;
+                response.Status = Level.Failed;
+                response.Message = "Invalid token claims";
+                return response;
+            }
+
+            var storedToken = await _context.RefreshTokens
+                .Where(x => x.Token == request.RefreshToken && x.UserName == userName)
+                .FirstOrDefaultAsync();
+
+            if (storedToken == null || !storedToken.IsActive)
+            {
+                response.Code = StatusCodes.Status401Unauthorized;
+                response.Status = Level.Failed;
+                response.Message = "Invalid or expired refresh token";
+                return response;
+            }
+
+            storedToken.RevokedAt = DateTime.UtcNow;
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                response.Code = StatusCodes.Status401Unauthorized;
+                response.Status = Level.Failed;
+                response.Message = "User not found";
+                return response;
+            }
+
+            var role = await _userManager.GetRolesAsync(user);
+            var newAccessToken = _token.TokenGenerate(user, role.FirstOrDefault());
+            var newRefreshTokenString = _token.GenerateRefreshToken();
+
+            storedToken.ReplacedByToken = newRefreshTokenString;
+            var newRefreshTokenEntity = new RefreshToken
+            {
+                UserName = userName,
+                Token = newRefreshTokenString,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                CreatedAt = DateTime.UtcNow,
+            };
+            await _context.RefreshTokens.AddAsync(newRefreshTokenEntity);
+            await _context.SaveChangesAsync();
+
+            response.Code = StatusCodes.Status200OK;
+            response.Status = Level.Success;
+            response.Message = "Token refreshed successfully";
+            response.UserName = userName;
+            response.Token = newAccessToken;
+            response.RefreshToken = newRefreshTokenString;
+
+            return response;
         }
 
         public async Task<Common> UpdatePassword(OptValidateRequest validateRequest)

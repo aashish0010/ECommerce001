@@ -59,6 +59,12 @@ export class Cart {
     this.themeOption$.subscribe(option => {
       this.cartStyle = option?.general?.cart_style;
       this.cart = this.cartStyle;
+
+      if (typeof window !== 'undefined') {
+        if (this.cartStyle == 'cart_mini' && window.innerWidth <= 767) {
+          this.cart = 'cart_sidebar';
+        }
+      }
     });
 
     // Calculation

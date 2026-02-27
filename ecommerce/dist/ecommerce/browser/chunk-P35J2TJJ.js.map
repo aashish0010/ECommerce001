@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/store/action/questions-answers.action.ts"],
+  "sourcesContent": ["import { Params } from '../../interface/core.interface';\n\nexport class GetQuestionAnswersAction {\n  static readonly type = '[Question] Get';\n  constructor(public slug: Params) {}\n}\n\nexport class SendQuestionAction {\n  static readonly type = '[Question] Post';\n  constructor(public payload: Params) {}\n}\n\nexport class UpdateQuestionAnswersAction {\n  static readonly type = '[Question] put';\n  constructor(\n    public payload: Params,\n    public id: number,\n  ) {}\n}\n\nexport class FeedbackAction {\n  static readonly type = '[Question] Feedback Post';\n  constructor(\n    public payload: Params,\n    public type?: string,\n  ) {}\n}\n"],
+  "mappings": ";AAEM,IAAO,2BAAP,MAA+B;;AACnB,SAAA,OAAO;EAAiB;EACxC,YAAmB,MAAY;AAAZ,SAAA,OAAA;EAAe;;AAG9B,IAAO,qBAAP,MAAyB;;AACb,SAAA,OAAO;EAAkB;EACzC,YAAmB,SAAe;AAAf,SAAA,UAAA;EAAkB;;AAGjC,IAAO,8BAAP,MAAkC;;AACtB,SAAA,OAAO;EAAiB;EACxC,YACS,SACA,IAAU;AADV,SAAA,UAAA;AACA,SAAA,KAAA;EACN;;AAGC,IAAO,iBAAP,MAAqB;;AACT,SAAA,OAAO;EAA2B;EAClD,YACS,SACA,MAAa;AADb,SAAA,UAAA;AACA,SAAA,OAAA;EACN;;",
+  "names": []
+}

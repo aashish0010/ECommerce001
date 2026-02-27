@@ -47,6 +47,16 @@ namespace BookManagementSystem.Controller
             return BadRequest(result);
         }
 
+        [HttpPost("refresh")]
+        [EnableRateLimiting("auth")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
+        {
+            var result = await _unitOfWork.userManagementService.RefreshToken(request);
+            if (result.Status == Level.Success)
+                return Ok(result);
+            return Unauthorized(result);
+        }
+
         [HttpGet("getecho")]
         public IActionResult Test()
         {

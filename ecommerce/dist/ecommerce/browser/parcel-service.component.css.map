@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/page/parcel-service/parcel-service.component.scss"],
+  "sourcesContent": [".parcel-form-container {\r\n    border-top: 3px solid var(--theme-color);\r\n}\r\n\r\n.btn-solid {\r\n    padding: 13px 29px;\r\n    color: #fff;\r\n    letter-spacing: 0.05em;\r\n    border: 2px solid var(--theme-color);\r\n    background-image: linear-gradient(30deg, var(--theme-color) 50%, transparent 50%);\r\n    background-size: 500px;\r\n    background-repeat: no-repeat;\r\n    background-position: 0%;\r\n    transition: background 300ms ease-in-out;\r\n\r\n    &:hover {\r\n        background-position: 100%;\r\n        color: var(--theme-color);\r\n    }\r\n}"],
+  "mappings": ";AAAA,CAAA;AACI,cAAA,IAAA,MAAA,IAAA;;AAGJ,CAAA;AACI,WAAA,KAAA;AACA,SAAA;AACA,kBAAA;AACA,UAAA,IAAA,MAAA,IAAA;AACA;IAAA;MAAA,KAAA;MAAA,IAAA,eAAA,GAAA;MAAA,YAAA;AACA,mBAAA;AACA,qBAAA;AACA,uBAAA;AACA,cAAA,WAAA,MAAA;;AAEA,CAXJ,SAWI;AACI,uBAAA;AACA,SAAA,IAAA;;",
+  "names": []
+}

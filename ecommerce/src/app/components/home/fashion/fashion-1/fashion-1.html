@@ -6,6 +6,22 @@
 </section>
 <!-- Home Section End -->
 
+<!-- Dashboard Core Features Start -->
+<section class="section-b-space pt-5 pb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <app-flight-search-widget />
+      </div>
+      <div class="col-lg-6">
+        <app-parcel-tracking-widget />
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Dashboard Core Features End -->
+
+
 <!-- Banner Section Start -->
 <section class="pb-0 ratio2_1 banner-section">
   <div class="container">
@@ -13,11 +29,8 @@
       @if(data()?.content?.offer_banner?.banner_1?.status){
       <div [ngClass]="data()?.content?.offer_banner?.banner_2?.status ? 'col-6' : 'col-md-12'">
         <div class="position-relative">
-          <app-image-link
-            [image]="data()?.content?.offer_banner?.banner_1"
-            [placeholder]="'assets/images/placeholder/two_column_banner.png'"
-            [bgImage]="true"
-          />
+          <app-image-link [image]="data()?.content?.offer_banner?.banner_1"
+            [placeholder]="'assets/images/placeholder/two_column_banner.png'" [bgImage]="true" />
           <div class="banner-skeleton">
             <div class="skeleton-content">
               <p class="card-text placeholder-glow row g-lg-3 g-0">
@@ -35,11 +48,8 @@
       } @if(data()?.content?.offer_banner?.banner_2?.status){
       <div [ngClass]="data()?.content?.offer_banner?.banner_1?.status ? 'col-6' : 'col-md-12'">
         <div class="position-relative">
-          <app-image-link
-            [image]="data()?.content?.offer_banner?.banner_2"
-            [placeholder]="'assets/images/placeholder/two_column_banner.png'"
-            [bgImage]="true"
-          />
+          <app-image-link [image]="data()?.content?.offer_banner?.banner_2"
+            [placeholder]="'assets/images/placeholder/two_column_banner.png'" [bgImage]="true" />
           <div class="banner-skeleton">
             <div class="skeleton-content">
               <p class="card-text placeholder-glow row g-lg-3 g-0">
@@ -65,12 +75,8 @@
 <app-theme-title [title]="{ title: 'Products', tag: 'our products' }" [type]="'basic'" />
 <section class="section-b-space pt-0">
   <div class="container">
-    <app-theme-product-tab-section
-      [style]="'vertical'"
-      [slider]="false"
-      [showItems]="8"
-      [class]="'row row-cols-xxl-5 row-cols-xl-4 row-cols-md-3 row-cols-2 g-sm-4 g-3'"
-    />
+    <app-theme-product-tab-section [style]="'vertical'" [slider]="false" [showItems]="8"
+      [class]="'row row-cols-xxl-5 row-cols-xl-4 row-cols-md-3 row-cols-2 g-sm-4 g-3'" />
   </div>
 </section>
 }
@@ -106,12 +112,8 @@
 <!-- Social Media Section Start -->
 @if(data()?.content?.social_media?.banners?.length && data()?.content?.social_media?.status){
 <section class="instagram ratio_square">
-  <app-theme-social-media
-    [media]="data()?.content?.social_media || []"
-    [class]="'container-fluid'"
-    [type]="'borderless'"
-  />
+  <app-theme-social-media [media]="data()?.content?.social_media || []" [class]="'container-fluid'"
+    [type]="'borderless'" />
 </section>
 }
 <!-- Social Media Section End -->
-

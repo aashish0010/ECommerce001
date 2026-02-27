@@ -89,6 +89,14 @@
     border-radius: 0;
     overflow: hidden;
     margin-top: 30px;
+    height: calc(250px + (450 - 250) * ((100vw - 320px) / (1920 - 320)));
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
   h3 {
@@ -333,7 +341,7 @@
     border: unset;
     color: variables.$dark-font;
 
-    + .accordion-item {
+    +.accordion-item {
       margin-top: 13px;
       padding-top: 13px;
       border-top: 1px solid variables.$white-dark;
@@ -383,7 +391,7 @@
     .accordion-body {
       padding: 15px 0 10px;
 
-      .custom-sidebar-height > * {
+      .custom-sidebar-height>* {
         display: grid;
         gap: calc(10px + 0.00375 * (100vw - 320px));
       }
@@ -439,7 +447,7 @@
         display: grid;
         gap: calc(10px + 0.00375 * (100vw - 320px));
 
-        > li {
+        >li {
           .sub-category-list {
             margin-left: 14px;
             margin-top: -1px;
@@ -447,7 +455,7 @@
             gap: 12px;
           }
 
-          > a {
+          >a {
             margin: 0;
             font-size: calc(14px + 2 * (100vw - 320px) / 1600);
             font-weight: 500;
@@ -517,14 +525,14 @@
 
           &:checked,
           &:hover {
-            ~ .form-check-label {
+            ~.form-check-label {
               color: var(--theme-color);
 
               &::before {
                 width: 100%;
               }
 
-              > span {
+              >span {
                 color: var(--theme-color);
               }
             }
@@ -544,7 +552,7 @@
           gap: 6px;
           color: variables.$grey;
 
-          > span {
+          >span {
             font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
             font-weight: 500;
           }
@@ -559,7 +567,7 @@
   top: 120px;
   left: 0;
 
-  > * {
+  >* {
     display: grid;
     gap: 24px;
   }
@@ -617,7 +625,7 @@
       overflow: hidden;
       border: 1px solid variables.$white-dark;
 
-      > * {
+      >* {
         width: 100%;
       }
 
@@ -715,7 +723,7 @@
     p {
       line-height: 1.5;
       color: color.scale(variables.$black, $lightness: 46.5%);
-      margin-bottom: 0; 
+      margin-bottom: 0;
       font-size: 16px;
       letter-spacing: 0.05em;
     }
@@ -735,8 +743,8 @@
     .product-box {
       padding-bottom: 0;
 
-      > * {
-        > * {
+      >* {
+        >* {
           display: flex;
         }
       }
@@ -790,7 +798,7 @@
         width: calc(70% - 25px);
         margin: 0;
 
-        > div {
+        >div {
           border-bottom: none;
         }
 
@@ -956,7 +964,7 @@
                 padding: 0;
                 line-height: 1.4;
 
-                > span {
+                >span {
                   line-height: 1;
                 }
               }
@@ -1099,8 +1107,7 @@
         display: flex;
         flex-wrap: nowrap;
         gap: calc(10px + (17 - 10) * ((100vw - 320px) / (992 - 320)));
-        padding: calc(9px + (12 - 9) * ((100vw - 320px) / (992 - 320)))
-          calc(11px + (16 - 11) * ((100vw - 320px) / (992 - 320)));
+        padding: calc(9px + (12 - 9) * ((100vw - 320px) / (992 - 320))) calc(11px + (16 - 11) * ((100vw - 320px) / (992 - 320)));
         background-color: variables.$top-header;
         border: 1px solid variables.$white-dark;
       }
@@ -1284,8 +1291,7 @@
   display: none;
   margin-bottom: calc(9px + (20 - 9) * ((100vw - 320px) / (1920 - 320)));
   background-color: var(--theme-color);
-  padding: calc(6px + (10 - 6) * ((100vw - 320px) / (1920 - 320)))
-    calc(11px + (22 - 11) * ((100vw - 320px) / (1920 - 320)));
+  padding: calc(6px + (10 - 6) * ((100vw - 320px) / (1920 - 320))) calc(11px + (22 - 11) * ((100vw - 320px) / (1920 - 320)));
   color: variables.$white;
   font-size: calc(15px + (20 - 15) * ((100vw - 320px) / (1920 - 320)));
   border: 1px solid transparent;
@@ -1327,7 +1333,7 @@
 }
 
 .page-link.disabled,
-.disabled > .page-link {
+.disabled>.page-link {
   background-color: white;
   cursor: not-allowed;
   border-color: variables.$white-dark;
@@ -1343,6 +1349,7 @@
   margin-top: calc(25px + (50 - 25) * ((100vw - 320px) / (1920 - 320)));
 
   .disabled {
+
     &::after,
     &::before {
       content: unset;
@@ -1485,7 +1492,7 @@
         border-radius: 0;
       }
 
-      + .img-box {
+      +.img-box {
         &:before {
           content: '\ea13';
           @include variables.font;
@@ -1517,7 +1524,7 @@
       position: relative;
       text-align: left;
 
-      + .bundle-box {
+      +.bundle-box {
         border-top: 1px solid variables.$white-dark;
       }
 
@@ -1623,8 +1630,7 @@
 
   .bundle-btn {
     text-transform: capitalize;
-    padding: calc(9px + (13 - 9) * ((100vw - 320px) / (1920 - 320)))
-      calc(18px + (23 - 18) * ((100vw - 320px) / (1920 - 320)));
+    padding: calc(9px + (13 - 9) * ((100vw - 320px) / (1920 - 320))) calc(18px + (23 - 18) * ((100vw - 320px) / (1920 - 320)));
     font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 600;
   }
@@ -1706,7 +1712,7 @@
 .search-product {
   margin-bottom: -30px;
 
-  > div {
+  >div {
     margin-bottom: 30px;
   }
 }
@@ -1716,7 +1722,7 @@
   gap: 24px;
   flex-wrap: wrap;
 
-  > div {
+  >div {
     width: calc(50% - 12px);
 
     @media (max-width: 400px) {
@@ -1734,7 +1740,7 @@
       overflow: hidden;
       background-color: transparent;
 
-      + .accordion-item {
+      +.accordion-item {
         margin-top: 25px;
       }
 
@@ -1785,8 +1791,7 @@
       }
 
       .card-body {
-        padding: calc(10px + (15 - 10) * ((100vw - 320px) / (1920 - 320)))
-          calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
+        padding: calc(10px + (15 - 10) * ((100vw - 320px) / (1920 - 320))) calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
 
         p {
           margin-bottom: 0;
@@ -1929,8 +1934,7 @@
 
   .contact-form {
     background-color: variables.$top-header;
-    padding: calc(20px + (44 - 20) * ((100vw - 320px) / (1920 - 320)))
-      calc(16px + (44 - 16) * ((100vw - 320px) / (1920 - 320)));
+    padding: calc(20px + (44 - 20) * ((100vw - 320px) / (1920 - 320))) calc(16px + (44 - 16) * ((100vw - 320px) / (1920 - 320)));
     border-radius: 0;
     border: 1px solid variables.$white-dark;
 
@@ -2057,7 +2061,7 @@
 .wishlist-section {
   .table {
     tbody {
-      + tbody {
+      +tbody {
         border-top: none;
       }
     }
@@ -2066,7 +2070,7 @@
   .cart-buttons {
     padding-top: 35px;
 
-    > div {
+    >div {
       &:last-child {
         text-align: right;
       }
@@ -2318,7 +2322,7 @@
       font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
       font-weight: 500;
 
-      + p {
+      +p {
         margin-top: calc(10px + (15 - 10) * ((100vw - 320px) / (1920 - 320)));
       }
     }
@@ -2355,7 +2359,7 @@
         font-weight: 500;
         color: variables.$grey;
 
-        + li {
+        +li {
           padding-left: 11px;
           margin-left: 11px;
           border-left: 1px solid variables.$white-dark;
@@ -2365,7 +2369,7 @@
   }
 
   .blog-advance {
-    > div {
+    >div {
       &:last-child {
         p {
           &:last-child {
@@ -2497,13 +2501,13 @@
     }
 
     .theme-card {
-      + .theme-card {
+      +.theme-card {
         margin-top: calc(24px + (45 - 24) * ((100vw - 320px) / (1920 - 320)));
       }
 
       .recent-blog {
         li {
-          + li {
+          +li {
             margin-top: calc(21px + (30 - 21) * ((100vw - 320px) / (1920 - 320)));
           }
 
@@ -2620,7 +2624,7 @@
             }
           }
 
-          + li {
+          +li {
             margin-top: 30px;
           }
 
@@ -2672,7 +2676,7 @@
           font-size: 14px;
           line-height: 1.5;
 
-          + li {
+          +li {
             padding-left: 15px;
             margin-left: 15px;
             border-left: 1px solid variables.$round-border;
@@ -2756,11 +2760,10 @@
       .blog-label {
         display: flex;
         flex-wrap: wrap;
-        margin-block: calc(6px + (12 - 6) * ((100vw - 320px) / (1920 - 320)))
-          calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320)));
+        margin-block: calc(6px + (12 - 6) * ((100vw - 320px) / (1920 - 320))) calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320)));
         align-items: center;
 
-        > span {
+        >span {
           display: flex;
           align-items: center;
           gap: 5px;
@@ -2768,7 +2771,7 @@
           font-weight: 500;
           color: variables.$dark-font;
 
-          + span {
+          +span {
             margin-left: 10px;
             padding-left: 10px;
             border-left: 1px solid variables.$white-dark;
@@ -2926,7 +2929,7 @@
           display: block;
         }
 
-        > span {
+        >span {
           display: flex;
           align-items: center;
           gap: 5px;
@@ -2934,7 +2937,7 @@
           font-weight: 500;
           color: variables.$grey;
 
-          + span {
+          +span {
             margin-left: 10px;
             padding-left: 10px;
             border-left: 1px solid variables.$white-dark;
@@ -3074,6 +3077,7 @@
 .product-slick,
 .product-right-slick {
   &:hover {
+
     .owl-prev,
     .owl-next {
       opacity: 1;
@@ -3168,7 +3172,7 @@
 
 .image-scroll {
   div {
-    > div {
+    >div {
       padding-bottom: 20px;
 
       &:last-child {
@@ -3404,7 +3408,7 @@
         text-align: center;
         margin: 0;
 
-        + li {
+        +li {
           margin-left: 10px;
         }
 
@@ -3569,8 +3573,7 @@
         display: flex;
         align-items: center;
         gap: calc(5px + (8 - 5) * ((100vw - 320px) / (1920 - 320)));
-        margin-block: calc(9px + (17 - 9) * ((100vw - 320px) / (1920 - 320)))
-          calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320)));
+        margin-block: calc(9px + (17 - 9) * ((100vw - 320px) / (1920 - 320))) calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320)));
         color: var(--theme-color);
         font-weight: 600;
         letter-spacing: 0.01em;
@@ -4029,7 +4032,7 @@
     .accordion-item {
       border: unset;
 
-      + .accordion-item {
+      +.accordion-item {
         margin-top: 17px;
       }
 
@@ -4040,8 +4043,7 @@
           line-height: 1.3;
           color: variables.$dark-top;
           text-align: center;
-          padding: calc(10px + (14 - 10) * ((100vw - 320px) / (1920 - 320)))
-            calc(14px + (19 - 14) * ((100vw - 320px) / (1920 - 320)));
+          padding: calc(10px + (14 - 10) * ((100vw - 320px) / (1920 - 320))) calc(14px + (19 - 14) * ((100vw - 320px) / (1920 - 320)));
           text-decoration: unset;
           border: 1px solid variables.$white-dark;
           font-weight: 500;
@@ -4079,7 +4081,7 @@
           }
         }
 
-        > * {
+        >* {
           &:first-child {
             .bordered-box {
               padding: 0;
@@ -4174,7 +4176,7 @@
       .nav-link.active {
         color: var(--theme-color);
 
-        & ~ .material-border {
+        &~.material-border {
           transition: all 0.3s ease;
           opacity: 1;
         }
@@ -4502,7 +4504,7 @@
         padding: calc(16px + 4 * (100vw - 320px) / 671) calc(12px + 8 * (100vw - 320px) / 671) 0;
       }
 
-      + .accordion-item {
+      +.accordion-item {
         margin-top: 0;
         padding-top: 0;
         border-top: unset;
@@ -4741,8 +4743,7 @@
       top: 120px;
       left: 0;
       background-color: variables.$top-header;
-      padding: calc(18px + (20 - 18) * ((100vw - 320px) / (1920 - 320)))
-        calc(15px + (20 - 15) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(18px + (20 - 18) * ((100vw - 320px) / (1920 - 320))) calc(15px + (20 - 15) * ((100vw - 320px) / (1920 - 320)));
       border: 1px solid variables.$white-dark;
       border-radius: 0;
 
@@ -4781,7 +4782,7 @@
           margin: 0;
         }
 
-        > a {
+        >a {
           font-size: 15px;
           cursor: pointer;
           color: var(--theme-color);
@@ -4994,8 +4995,7 @@
 
         .form-control {
           height: auto;
-          padding: calc(10px + (12 - 10) * ((100vw - 320px) / (1920 - 320)))
-            calc(13px + (19 - 13) * ((100vw - 320px) / (1920 - 320)));
+          padding: calc(10px + (12 - 10) * ((100vw - 320px) / (1920 - 320))) calc(13px + (19 - 13) * ((100vw - 320px) / (1920 - 320)));
           font-weight: 500;
           border-radius: 0;
           border: 1px solid variables.$white-dark;
@@ -5282,7 +5282,7 @@
               transform: translate(-50%, -50%) scale(1);
             }
 
-            ~ label {
+            ~label {
               color: variables.$dark-font;
             }
           }
@@ -5486,7 +5486,7 @@
       justify-content: space-between;
       width: 100%;
 
-      + li {
+      +li {
         margin-top: 14px;
       }
 
@@ -5519,7 +5519,7 @@
         letter-spacing: unset;
         margin: 0;
 
-        + h4 {
+        +h4 {
           text-align: left;
         }
       }
@@ -5604,7 +5604,7 @@
       line-height: 1.3;
       font-size: 18px;
 
-      + li {
+      +li {
         margin-top: 8px;
       }
 
@@ -5631,12 +5631,12 @@
 .checkout-section-2 {
   .left-sidebar-checkout {
     .checkout-detail-box {
-      > ul {
+      >ul {
         display: flex;
         flex-wrap: wrap;
         gap: calc(20px + (40 - 20) * ((100vw - 320px) / (1920 - 320)));
 
-        > li {
+        >li {
           position: relative;
           width: 100%;
 
@@ -5734,7 +5734,7 @@
                 background-color: variables.$white;
                 height: 100%;
 
-                > div {
+                >div {
                   display: flex;
                   position: relative;
                   cursor: pointer;
@@ -5998,8 +5998,7 @@
                   align-items: center;
                   color: #4a5568;
                   width: 100%;
-                  padding: calc(8px + (10 - 8) * ((100vw - 320px) / (1920 - 320)))
-                    calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
+                  padding: calc(8px + (10 - 8) * ((100vw - 320px) / (1920 - 320))) calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
 
                   input {
                     font-size: calc(14px + (15 - 14) * ((100vw - 320px) / (1920 - 320)));
@@ -6062,7 +6061,7 @@
                         }
                       }
 
-                      + li {
+                      +li {
                         margin-top: 5px;
                       }
                     }
@@ -6146,8 +6145,7 @@
               }
 
               .payment-button {
-                padding: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)))
-                  calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
+                padding: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320))) calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
                 font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
                 font-weight: 500;
               }
@@ -6413,7 +6411,7 @@
       position: unset;
       inset: unset;
 
-      + .checkout-details {
+      +.checkout-details {
         margin-top: 20px;
       }
     }
@@ -6455,7 +6453,7 @@
         color: #333;
       }
 
-      > a {
+      >a {
         position: absolute;
         right: 0;
         top: 12px;
@@ -6587,7 +6585,7 @@
         font-weight: 500;
       }
 
-      > a {
+      >a {
         margin-left: auto;
         color: var(--theme-color);
       }
@@ -6621,8 +6619,7 @@
 
     .tab-pane {
       .card-body {
-        padding: calc(15px + (22 - 15) * ((100vw - 320px) / (1920 - 320)))
-          calc(15px + (22 - 15) * ((100vw - 320px) / (1920 - 320)));
+        padding: calc(15px + (22 - 15) * ((100vw - 320px) / (1920 - 320))) calc(15px + (22 - 15) * ((100vw - 320px) / (1920 - 320)));
         border-radius: 0;
 
         .order-title {
@@ -6921,9 +6918,7 @@
       width: 100%;
       background-color: variables.$top-header;
       border-radius: 0;
-      padding: calc(13px + (17 - 13) * ((100vw - 320px) / (1920 - 320))) 0
-        calc(13px + (17 - 13) * ((100vw - 320px) / (1920 - 320)))
-        calc(21px + (25 - 21) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(13px + (17 - 13) * ((100vw - 320px) / (1920 - 320))) 0 calc(13px + (17 - 13) * ((100vw - 320px) / (1920 - 320))) calc(21px + (25 - 21) * ((100vw - 320px) / (1920 - 320)));
 
       &:after {
         opacity: 1;
@@ -7075,7 +7070,7 @@
           font-size: 16px;
         }
 
-        > span {
+        >span {
           font-size: 14px;
           font-weight: 500;
           color: variables.$grey;
@@ -7106,6 +7101,7 @@
       .owl-item {
         &.active {
           .compare-part {
+
             .detail-part,
             .btn-part {
               border-right: 1px solid variables.$white-dark;
@@ -7186,8 +7182,8 @@
       }
 
       .rating {
-        > * {
-          > span {
+        >* {
+          >span {
             line-height: 1;
           }
         }
@@ -7215,7 +7211,7 @@
         line-height: 1.5;
         font-weight: 400;
 
-        + p {
+        +p {
           margin-top: 10px;
         }
       }
@@ -7286,7 +7282,7 @@
       }
     }
 
-    + .profile-left {
+    +.profile-left {
       margin-top: 40px;
     }
   }
@@ -7329,7 +7325,7 @@
       margin-left: -50px;
       margin-right: -50px;
 
-      > div {
+      >div {
         padding-left: 50px;
         padding-right: 50px;
 
@@ -7648,6 +7644,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         display: block;
+
         h5 {
           text-transform: capitalize;
           font-weight: 600;
@@ -7720,8 +7717,7 @@
     .show-btn {
       background-color: var(--theme-color);
       border-radius: 0;
-      padding: calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320)))
-        calc(12px + (19 - 12) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320))) calc(12px + (19 - 12) * ((100vw - 320px) / (1920 - 320)));
       text-transform: unset;
       font-weight: 600;
       color: variables.$white;
@@ -7919,6 +7915,7 @@
 
   .product-table {
     tr {
+
       th,
       td {
         &:first-child {
@@ -8007,8 +8004,7 @@
     .btn {
       margin-left: auto;
       text-transform: capitalize;
-      padding: calc(5px + (7 - 5) * ((100vw - 320px) / (1920 - 320)))
-        calc(7px + (14 - 7) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(5px + (7 - 5) * ((100vw - 320px) / (1920 - 320))) calc(7px + (14 - 7) * ((100vw - 320px) / (1920 - 320)));
     }
   }
 
@@ -8105,7 +8101,7 @@
         }
 
         .row {
-          > div {
+          >div {
             .form-check {
               margin-bottom: 5px;
               padding-left: 0;
@@ -8122,7 +8118,7 @@
           margin-top: 0;
         }
 
-        + .account-setting {
+        +.account-setting {
           margin-top: 20px;
         }
       }
@@ -8183,7 +8179,7 @@
       background-color: transparent;
     }
 
-    + .dropdown-item {
+    +.dropdown-item {
       padding-top: 6px;
       border-top: 1px solid #eee;
       margin-top: 6px;
@@ -8296,8 +8292,7 @@
     border-radius: 0;
     border: 1px solid variables.$white-dark;
     background-color: variables.$white;
-    padding: calc(13px + (20 - 13) * ((100vw - 320px) / (1920 - 320)))
-      calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
+    padding: calc(13px + (20 - 13) * ((100vw - 320px) / (1920 - 320))) calc(12px + (18 - 12) * ((100vw - 320px) / (1920 - 320)));
     padding-left: calc(33px + (46 - 33) * ((100vw - 320px) / (1920 - 320)));
     position: relative;
 
@@ -8312,7 +8307,7 @@
       border-radius: 100%;
     }
 
-    + li {
+    +li {
       border-top: 1px solid variables.$white-dark;
     }
 
@@ -8380,7 +8375,7 @@
   border: 1px solid variables.$white-dark;
   overflow: hidden;
 
-  + .sticky-product-height {
+  +.sticky-product-height {
     margin-top: 30px;
   }
 
@@ -8507,6 +8502,7 @@
 
   &.radio {
     .disabled {
+
       &::before,
       &::after {
         content: unset;
@@ -8547,7 +8543,7 @@
   align-items: center;
   gap: calc(26px + (50 - 26) * ((100vw - 767px) / (1920 - 767)));
 
-  + .variation-box {
+  +.variation-box {
     margin-top: 14px;
   }
 
@@ -8651,8 +8647,7 @@
       display: flex;
       align-items: center;
       gap: calc(5px + (8 - 5) * ((100vw - 320px) / (1920 - 320)));
-      margin-block: calc(9px + (17 - 9) * ((100vw - 320px) / (1920 - 320)))
-        calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320)));
+      margin-block: calc(9px + (17 - 9) * ((100vw - 320px) / (1920 - 320))) calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320)));
       color: var(--theme-color);
       font-weight: 600;
       letter-spacing: 0.01em;
@@ -8702,8 +8697,7 @@
     font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
     border-block: 1px dashed #ddd;
     padding-block: 12px;
-    margin-block: calc(10px + (14 - 10) * ((100vw - 320px) / (1920 - 320)))
-      calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+    margin-block: calc(10px + (14 - 10) * ((100vw - 320px) / (1920 - 320))) calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
     gap: 9px calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320)));
     flex-wrap: wrap;
 
@@ -8829,8 +8823,7 @@
     margin-top: 17px;
     display: flex;
     align-items: center;
-    gap: calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320)))
-      calc(12px + (20 - 12) * ((100vw - 320px) / (1920 - 320)));
+    gap: calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320))) calc(12px + (20 - 12) * ((100vw - 320px) / (1920 - 320)));
     flex-wrap: wrap;
     font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
 
@@ -9137,7 +9130,7 @@
       @media (max-width: 480.98px) {
         width: 100%;
 
-        > * {
+        >* {
           width: 100%;
 
           button {
@@ -9163,8 +9156,7 @@
   }
 
   .buy-button {
-    padding: calc(11px + (13 - 11) * ((100vw - 320px) / (1920 - 320)))
-      calc(17px + (33 - 17) * ((100vw - 320px) / (1920 - 320))) !important;
+    padding: calc(11px + (13 - 11) * ((100vw - 320px) / (1920 - 320))) calc(17px + (33 - 17) * ((100vw - 320px) / (1920 - 320))) !important;
     font-size: calc(15px + (17 - 15) * ((100vw - 320px) / (1920 - 320)));
     font-weight: 600;
     text-transform: unset;
@@ -9430,6 +9422,7 @@
 }
 
 .vertical-tab {
+
   &.tab-product,
   .product-full-tab {
     .nav-material {
@@ -9569,6 +9562,7 @@
     width: 100%;
 
     .owl-dot {
+
       &.active,
       &:hover {
         span {
@@ -9580,6 +9574,7 @@
 
   &.sold-out {
     .img-wrapper {
+
       img,
       .bg-size {
         filter: grayscale(100);
@@ -9624,10 +9619,7 @@
       font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
       font-weight: 500;
       color: #333;
-      padding: calc(5px + (9 - 5) * ((100vw - 320px) / (1920 - 320)))
-        calc(30px + (36 - 30) * ((100vw - 320px) / (1920 - 320)))
-        calc(5px + (9 - 5) * ((100vw - 320px) / (1920 - 320)))
-        calc(10px + (16 - 10) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(5px + (9 - 5) * ((100vw - 320px) / (1920 - 320))) calc(30px + (36 - 30) * ((100vw - 320px) / (1920 - 320))) calc(5px + (9 - 5) * ((100vw - 320px) / (1920 - 320))) calc(10px + (16 - 10) * ((100vw - 320px) / (1920 - 320)));
       width: max-content;
       max-width: 100%;
     }
@@ -9673,7 +9665,7 @@
     z-index: 0;
     background-color: variables.$top-header;
 
-    > app-image-variant {
+    >app-image-variant {
       height: 100%;
     }
 
@@ -9784,8 +9776,7 @@
       left: 10px;
       background-color: var(--theme-color);
       color: variables.$white;
-      padding: calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320)))
-        calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(2px + (4 - 2) * ((100vw - 320px) / (1920 - 320))) calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320)));
       font-weight: 500;
       margin-bottom: 0;
       font-size: calc(10px + (12 - 10) * ((100vw - 320px) / (1920 - 320)));
@@ -9812,8 +9803,7 @@
       bottom: 10px;
       left: 10px;
       background-color: variables.$white;
-      padding: calc(2px + (5 - 2) * ((100vw - 320px) / (1920 - 320)))
-        calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)));
+      padding: calc(2px + (5 - 2) * ((100vw - 320px) / (1920 - 320))) calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)));
       display: flex;
       align-items: center;
       gap: 5px;
@@ -10039,35 +10029,30 @@
       position: absolute;
       z-index: -1;
       inset: 0;
-      background: radial-gradient(
-          35% 35%,
+      background: radial-gradient(35% 35%,
           rgba(0, 0, 0, 0) 96%,
           rgba(0, 0, 0, 0) 97% 99%,
-          rgba(0, 0, 0, 0)
-        )
-        var(--theme-color);
-      clip-path: polygon(
-        100% 50%,
-        88.04% 62.36%,
-        90.45% 79.39%,
-        73.51% 82.36%,
-        65.45% 97.55%,
-        50% 90%,
-        34.55% 97.55%,
-        26.49% 82.36%,
-        9.55% 79.39%,
-        11.96% 62.36%,
-        0% 50%,
-        11.96% 37.64%,
-        9.55% 20.61%,
-        26.49% 17.64%,
-        34.55% 2.45%,
-        50% 10%,
-        65.45% 2.45%,
-        73.51% 17.64%,
-        90.45% 20.61%,
-        88.04% 37.64%
-      );
+          rgba(0, 0, 0, 0)) var(--theme-color);
+      clip-path: polygon(100% 50%,
+          88.04% 62.36%,
+          90.45% 79.39%,
+          73.51% 82.36%,
+          65.45% 97.55%,
+          50% 90%,
+          34.55% 97.55%,
+          26.49% 82.36%,
+          9.55% 79.39%,
+          11.96% 62.36%,
+          0% 50%,
+          11.96% 37.64%,
+          9.55% 20.61%,
+          26.49% 17.64%,
+          34.55% 2.45%,
+          50% 10%,
+          65.45% 2.45%,
+          73.51% 17.64%,
+          90.45% 20.61%,
+          88.04% 37.64%);
       animation: animName 20s linear infinite;
     }
   }
@@ -10086,23 +10071,20 @@
     background: var(--theme-color);
     border-bottom: var(--f) solid #0005;
     border-right: var(--r) solid #0000;
-    clip-path: polygon(
-      0 0,
-      0 calc(100% - var(--f)),
-      var(--f) 100%,
-      var(--f) calc(100% - var(--f)),
-      100% calc(100% - var(--f)),
-      calc(100% - var(--r)) calc(50% - var(--f) / 2),
-      100% 0
-    );
+    clip-path: polygon(0 0,
+        0 calc(100% - var(--f)),
+        var(--f) 100%,
+        var(--f) calc(100% - var(--f)),
+        100% calc(100% - var(--f)),
+        calc(100% - var(--r)) calc(50% - var(--f) / 2),
+        100% 0);
     z-index: 1;
   }
 
   .add-cart-btn {
     width: 100%;
     display: block;
-    padding: calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)))
-      calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)));
+    padding: calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320))) calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)));
     text-align: center;
     border: none;
     color: #888;
@@ -10134,7 +10116,7 @@
     gap: 4px;
     margin-bottom: 6px;
 
-    > span {
+    >span {
       font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
     }
   }
@@ -10152,7 +10134,7 @@
           border-radius: 100%;
           border: 2px solid variables.$white;
 
-          + li {
+          +li {
             margin-left: -13px;
           }
         }
@@ -10191,7 +10173,7 @@
         width: unset;
         height: unset;
 
-        + li {
+        +li {
           a {
             img {
               margin-left: calc(2px + (5 - 2) * ((100vw - 320px) / (1920 - 320)));
@@ -10285,7 +10267,7 @@
         overflow: hidden;
         border: 1px solid variables.$white;
 
-        + li {
+        +li {
           margin-top: 7px;
         }
 
@@ -10553,7 +10535,7 @@
         transition: 0.4s ease;
 
         li {
-          + li {
+          +li {
             opacity: 0;
             visibility: hidden;
           }
@@ -10566,7 +10548,7 @@
         }
       }
 
-      > div {
+      >div {
         padding: calc(10px + (15 - 10) * ((100vw - 320px) / (1920 - 320))) 0;
         border-bottom: 1px solid variables.$white-dark;
       }
@@ -10631,7 +10613,7 @@
           animation: marquee-discount 8s linear infinite;
 
           li {
-            + li {
+            +li {
               opacity: 1;
               visibility: visible;
             }
@@ -10723,7 +10705,7 @@
           color: variables.$grey;
           line-height: 24px;
 
-          + li {
+          +li {
             margin-left: 12px;
           }
         }
@@ -10801,7 +10783,7 @@
           padding: 0;
         }
 
-        + li {
+        +li {
           border-left: 1px solid variables.$white-dark;
         }
       }
@@ -11159,8 +11141,7 @@
 
     .addtocart_btn {
       .add-button {
-        padding: calc(7px + (9 - 7) * ((100vw - 320px) / (1920 - 320)))
-          calc(19px + (29 - 19) * ((100vw - 320px) / (1920 - 320)));
+        padding: calc(7px + (9 - 7) * ((100vw - 320px) / (1920 - 320))) calc(19px + (29 - 19) * ((100vw - 320px) / (1920 - 320)));
         font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
       }
     }
@@ -11199,7 +11180,7 @@
         background-color: transparent;
         box-shadow: none;
 
-        + a {
+        +a {
           &::after {
             content: '';
             position: absolute;
@@ -11482,7 +11463,7 @@
         }
       }
 
-      > div {
+      >div {
         background-color: var(--theme-color);
         display: flex;
         align-items: center;
@@ -11705,7 +11686,7 @@
           border-radius: 100%;
           border: 2px solid variables.$white;
 
-          + li {
+          +li {
             margin-left: -13px;
           }
         }
@@ -11744,7 +11725,7 @@
         width: unset;
         height: unset;
 
-        + li {
+        +li {
           a {
             img {
               margin-left: calc(2px + (5 - 2) * ((100vw - 320px) / (1920 - 320)));
@@ -12074,8 +12055,8 @@
         padding-left: 5px;
 
         .rating {
-          > * {
-            > span {
+          >* {
+            >span {
               line-height: 1;
             }
           }
@@ -12289,7 +12270,7 @@
             font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
           }
 
-          + li {
+          +li {
             margin-left: calc(-19px + (-14 - -19) * ((100vw - 320px) / (1920 - 320)));
           }
         }
@@ -12354,8 +12335,7 @@
     margin-inline: auto;
     background-color: variables.$top-header;
     border: 1px solid variables.$white-dark;
-    padding: calc(14px + (28 - 14) * ((100vw - 320px) / (1920 - 320)))
-      calc(13px + (18 - 13) * ((100vw - 320px) / (1920 - 320)));
+    padding: calc(14px + (28 - 14) * ((100vw - 320px) / (1920 - 320))) calc(13px + (18 - 13) * ((100vw - 320px) / (1920 - 320)));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12536,6 +12516,7 @@
     }
 
     .cart-info {
+
       button,
       a {
         background-color: #0d0914;
@@ -12623,6 +12604,7 @@
       border-color: #212121;
 
       .cart-info {
+
         a,
         button {
           background-color: #0d0914;
@@ -12634,7 +12616,7 @@
       }
 
       .product-detail {
-        > div {
+        >div {
           border-color: #212121;
         }
 
@@ -12660,7 +12642,7 @@
 
       .cart-detail {
         li {
-          + li {
+          +li {
             border-color: #212121;
           }
 

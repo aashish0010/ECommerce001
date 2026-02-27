@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/widgets/loader/loader.ts", "src/app/shared/components/widgets/loader/loader.html"],
+  "sourcesContent": ["import { Component, input } from '@angular/core';\n\nimport { TranslateModule } from '@ngx-translate/core';\n\n@Component({\n  selector: 'app-loader',\n  imports: [TranslateModule],\n  templateUrl: './loader.html',\n  styleUrl: './loader.scss',\n})\nexport class Loader {\n  readonly loaderClass = input<string>('loader-wrapper');\n}\n", "<div [class]=\"loaderClass()\">\n  <div>\n    <div class=\"loader\"></div>\n    <h3>{{ 'loading' | translate }}</h3>\n  </div>\n</div>\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAUM,IAAO,SAAP,MAAO,QAAM;EANnB,cAAA;AAOW,SAAA,cAAc,MAAc,kBAAgB,GAAA,YAAA,CAAA,EAAA,WAAA,cAAA,CAAA,IAAA,CAAA,CAAA;;;;uCAD1C,SAAM;IAAA;EAAA;;yEAAN,SAAM,WAAA,CAAA,CAAA,YAAA,CAAA,GAAA,QAAA,EAAA,aAAA,CAAA,GAAA,aAAA,EAAA,GAAA,OAAA,GAAA,MAAA,GAAA,QAAA,CAAA,CAAA,GAAA,QAAA,CAAA,GAAA,UAAA,SAAA,gBAAA,IAAA,KAAA;AAAA,UAAA,KAAA,GAAA;ACVnB,QAAA,4BAAA,GAAA,KAAA,EAA6B,GAAA,KAAA;AAEzB,QAAA,uBAAA,GAAA,OAAA,CAAA;AACA,QAAA,4BAAA,GAAA,IAAA;AAAI,QAAA,iBAAA,CAAA;;AAA2B,QAAA,0BAAA,EAAK,EAChC;;;AAJH,QAAA,qBAAA,IAAA,YAAA,CAAA;AAGG,QAAA,oBAAA,CAAA;AAAA,QAAA,4BAAA,sBAAA,GAAA,GAAA,SAAA,CAAA;;sBDGI,iBAAe,aAAA,GAAA,eAAA,EAAA,CAAA;EAAA;;;sEAId,QAAM,CAAA;UANlB;uBACW,cAAY,SACb,CAAC,eAAe,GAAC,UAAA;;;;;;EAAA,CAAA;;;;6EAIf,QAAM,EAAA,WAAA,UAAA,UAAA,sDAAA,YAAA,GAAA,CAAA;AAAA,GAAA;",
+  "names": []
+}

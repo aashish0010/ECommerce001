@@ -16,13 +16,8 @@
 
 <app-theme-customizer />
 
-@if((themeOption$ | async)?.general?.back_to_top_enable && show){
-<app-back-to-top />
-}
 
-@if((themeOption$ | async)?.popup?.news_letter?.is_enable){
-<app-newsletter-modal #newsletterModal />
-} @if(!themeOptionService.newsletterModal && exit && (themeOption$ |
+@if(!themeOptionService.newsletterModal && exit && (themeOption$ |
 async)?.popup?.exit?.is_enable){
 <app-exit-modal it-modal #exitModal />
 } @if(authService.isLogin){

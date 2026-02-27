@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/services/theme-option.service.ts"],
+  "sourcesContent": ["import { HttpClient } from '@angular/common/http';\nimport { Injectable, inject } from '@angular/core';\n\nimport { Observable } from 'rxjs';\n\nimport { environment } from '../../../environments/environment';\nimport { IThemeOption } from '../interface/theme-option.interface';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class ThemeOptionService {\n  private http = inject(HttpClient);\n\n  public preloader: boolean = true;\n  public theme_color: string;\n  public theme_color_2: string;\n  public theme_color_class: string;\n  public footer_height: number;\n  public newsletterModal: boolean = false;\n  public productBox: string;\n\n  getThemeOption(): Observable<IThemeOption> {\n    return this.http.get<IThemeOption>(`${environment.URL}/themeOptions.json`);\n  }\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;AAWM,IAAO,qBAAP,MAAO,oBAAkB;EAH/B,cAAA;AAIU,SAAA,OAAO,OAAO,UAAU;AAEzB,SAAA,YAAqB;AAKrB,SAAA,kBAA2B;;EAGlC,iBAAc;AACZ,WAAO,KAAK,KAAK,IAAkB,GAAG,YAAY,GAAG,oBAAoB;EAC3E;;;uCAbW,qBAAkB;IAAA;EAAA;;4EAAlB,qBAAkB,SAAlB,oBAAkB,WAAA,YAFjB,OAAM,CAAA;EAAA;;;sEAEP,oBAAkB,CAAA;UAH9B;WAAW;MACV,YAAY;KACb;;;",
+  "names": []
+}

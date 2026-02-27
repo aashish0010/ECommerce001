@@ -1,2 +1,0 @@
-import './polyfills.server.mjs';
-var s=(()=>{class t{static{this.type="[Brand] Get"}constructor(r){this.payload=r}}return t})(),e=(()=>{class t{static{this.type="[Brand] Get Brand By Slug"}constructor(r){this.slug=r}}return t})();export{s as a,e as b};

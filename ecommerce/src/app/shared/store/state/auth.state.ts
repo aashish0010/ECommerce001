@@ -14,6 +14,7 @@ import {
   LoginAction,
   LoginWithNumberAction,
   LogoutAction,
+  RefreshTokenSuccessAction,
   RegisterAction,
   SendEmailOtpAction,
   UpdatePasswordAction,
@@ -28,6 +29,7 @@ export interface AuthStateModel {
   number: IAuthNumberLoginState | null;
   token: String | Number;
   access_token: String | null;
+  refresh_token: String | null;
   permissions: [];
   processId: string;
 }
@@ -39,6 +41,7 @@ export interface AuthStateModel {
     token: '',
     number: null,
     access_token: '',
+    refresh_token: null,
     permissions: [],
     processId: '',
   },
@@ -100,6 +103,7 @@ export class AuthState {
             email: action.payload.phone,
             token: res.token || '',
             access_token: res.token || '',
+            refresh_token: res.refreshToken || null,
           });
           this.store.dispatch(new GetUserDetailsAction());
         },
@@ -218,11 +222,21 @@ export class AuthState {
       email: '',
       token: '',
       access_token: null,
+      refresh_token: null,
       permissions: [],
       processId: '',
     });
     this.authService.redirectUrl = undefined;
     this.store.dispatch(new AccountClearAction());
     this.store.dispatch(new ClearCartAction());
+  }
+
+  @Action(RefreshTokenSuccessAction)
+  refreshTokenSuccess(ctx: StateContext<AuthStateModel>, action: RefreshTokenSuccessAction) {
+    ctx.patchState({
+      token: action.accessToken || '',
+      access_token: action.accessToken || '',
+      refresh_token: action.refreshToken || null,
+    });
   }
 }

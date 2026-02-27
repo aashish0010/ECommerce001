@@ -16,14 +16,13 @@
       <a href="javascript:void(0)" (click)="cartToggle(true)">
         <i class="ri-shopping-bag-line"></i>
         <span>{{ 'cart' | translate }}</span>
+        @if((cartItem$ | async)?.length){
+        <span class="cart_qty_cls">{{ (cartItem$ | async)?.length }}</span>
+        }
       </a>
     </li>
     <li [class.active]="'user' === active">
-      <a
-        href="javascript:void(0)"
-        [routerLink]="['/account/dashboard']"
-        (click)="activeMenu('user')"
-      >
+      <a href="javascript:void(0)" [routerLink]="['/account/dashboard']" (click)="activeMenu('user')">
         <i class="ri-user-line"></i>
         <span>{{ 'user' | translate }}</span>
       </a>

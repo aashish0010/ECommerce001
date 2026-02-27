@@ -62,3 +62,11 @@ export class LogoutAction {
 export class AuthClearAction {
   static readonly type = '[Auth] clear';
 }
+
+export class RefreshTokenSuccessAction {
+  static readonly type = '[Auth] Refresh Token Success';
+  constructor(
+    public accessToken: string,
+    public refreshToken: string,
+  ) {}
+}

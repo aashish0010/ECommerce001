@@ -33,6 +33,7 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<CompareItem> CompareItems { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -355,6 +356,20 @@ namespace BookManagementSystem.Infrastructure
             builder.Entity<CompareItem>()
                 .HasIndex(x => new { x.UserName, x.ProductId })
                 .IsUnique();
+
+            #endregion
+
+            #region RefreshToken
+
+            builder.Entity<RefreshToken>().HasKey(x => x.Id);
+            builder.Entity<RefreshToken>().Property(x => x.UserName).HasMaxLength(256).IsRequired();
+            builder.Entity<RefreshToken>().Property(x => x.Token).HasMaxLength(256).IsRequired();
+            builder.Entity<RefreshToken>().Property(x => x.ReplacedByToken).HasMaxLength(256);
+            builder.Entity<RefreshToken>().HasIndex(x => x.Token).IsUnique();
+            builder.Entity<RefreshToken>().HasIndex(x => x.UserName);
+            builder.Entity<RefreshToken>().Ignore(x => x.IsRevoked);
+            builder.Entity<RefreshToken>().Ignore(x => x.IsExpired);
+            builder.Entity<RefreshToken>().Ignore(x => x.IsActive);
 
             #endregion
 

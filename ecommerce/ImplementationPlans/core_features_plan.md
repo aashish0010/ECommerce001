@@ -21,7 +21,21 @@ This plan identifies missing modern features, documents technical bugs, and outl
 
 ### Real-Time Services [NEW]
 - **Flight Booking**: Integrate a live GDS/API (or mock aggregator) to provide real-time pricing and availability.
-- **International Parcel**: Complete the shipping wizard and connect to a logistics tracking API for real-time cargo status.
+- **International Parcel**: Complete the shipping wizard and connect to a logistics tracking API for real-time cargo status. 
+
+## 2.5 Dashboard & About Us Enhancements (Targeted Updates)
+### Dashboard Integration (Homepage `fashion-1`)
+- **Goal**: Make Flight Booking and Parcel services prominent, beyond just the 3 standard service banners.
+- **Flight Search Form**: Create a prominent flight search widget (Origin, Destination, Dates) and place it directly below the main hero slider on the homepage.
+- **Parcel Tracking/Quote**: Create a "Track your Parcel" or "Get a Quote" block on the homepage to drive immediate action.
+
+### About Us Beautification
+- **Goal**: Replace generic placeholder text ("Sed Ut Perspiciatis...") with meaningful WoWeBazaar content.
+- **Content Update (`themeOptions.json`)**: 
+  - Rewrite the main title to reflect the connection between Nepal, Cyprus, and global routes.
+  - Update the team member placeholders to professional logistics/ecommerce roles.
+  - Rewrite testimonials to specifically praise the cargo speed, flight affordability, and marketplace quality.
+- **Visual Polish**: Ensure the layout strictly adheres to the new brand colors and uses the updated high-quality images.
 
 ## 3. Bug Analysis & Remediation
 | ID | Issue | Root Cause | Proposed Fix |

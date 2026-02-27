@@ -1,0 +1,14 @@
+:host {
+    display: block;
+
+    img {
+        height: 80px !important;
+        width: 80px !important;
+        object-fit: contain;
+
+        @media (max-width: 576px) {
+            height: 60px !important;
+            width: 60px !important;
+        }
+    }
+}

@@ -6,7 +6,7 @@ $font-themify: themify;
 $font-serif: sans-serif;
 
 :root {
-  --theme-color: #ec8951;
+  --theme-color: #E11731;
 }
 
 /* colors */
@@ -24,7 +24,7 @@ $round-border: #dddddd;
 $dark-grey: #565656;
 $dark-silver: #909090;
 $grey-lighter: #f9f9f9;
-$theme-default: #ff4c3b;
+$theme-default: #00ADEF;
 $grey-darken: #393230;
 $grey-link: #948e8c;
 $grey-font: #afafaf;
@@ -82,7 +82,7 @@ $max-breakpoints: (
   sm: 575px,
   md: 767px,
   lg: 991px,
-  xl: 1199px, 
+  xl: 1199px,
   2xl: 1399px,
 );
 

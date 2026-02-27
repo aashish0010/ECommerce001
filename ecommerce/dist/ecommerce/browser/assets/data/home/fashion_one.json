@@ -37,7 +37,7 @@
         {
           "title": "Online Marketplace",
           "status": true,
-          "image_url": "assets/images/branded/logo.png",
+          "image_url": "/images/branded/logo.png",
           "description": "Shop the latest products from local sellers."
         }
       ]
@@ -54,7 +54,7 @@
         },
         {
           "status": true,
-          "image_url": "/images/branded/parcel.png",
+          "image_url": "/images/branded/hero.png",
           "redirect_link": {
             "link": "",
             "link_type": "external_url"

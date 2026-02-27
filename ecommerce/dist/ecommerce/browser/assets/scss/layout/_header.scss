@@ -38,7 +38,7 @@ header {
       }
 
       .header-dropdown {
-        > li {
+        >li {
           @media (max-width: 1400px) {
             padding: 25px 0 25px 10px !important;
           }
@@ -61,7 +61,7 @@ header {
     }
 
     .logo-menu-part {
-      > .container {
+      >.container {
         background-color: variables.$white;
         border-bottom: 2px solid var(--theme-color);
       }
@@ -95,13 +95,22 @@ header {
 
       .brand-logo {
         padding-block: 25px;
+
+        @media (max-width: 576px) {
+          padding-block: 10px;
+
+          img {
+            max-height: 40px;
+            width: auto;
+          }
+        }
       }
     }
 
     .pixelstrap {
       &.sm-horizontal {
-        > li {
-          > a {
+        >li {
+          >a {
             padding-block: 25px;
 
             &:hover,
@@ -134,7 +143,7 @@ header {
       }
 
       .logo-menu-part {
-        > .container {
+        >.container {
           border-bottom: 0;
           padding: 0 12px;
         }
@@ -163,6 +172,7 @@ header {
       background-color: variables.$white;
 
       .header-dropdown {
+
         .mobile-wishlist,
         .mobile-account {
           img {
@@ -179,7 +189,7 @@ header {
     .onhover-div {
       padding-block: 15px;
 
-      > div {
+      >div {
         img {
           width: 20px;
           height: auto;
@@ -204,8 +214,8 @@ header {
       }
 
       .pixelstrap {
-        > li {
-          > a {
+        >li {
+          >a {
             padding: 10px 0 20px 0;
             background-color: variables.$white;
 
@@ -309,6 +319,7 @@ header {
         }
 
         .leftside_setting {
+
           .language,
           .currency {
             display: flex;
@@ -380,7 +391,7 @@ header {
 
       .menu-right {
         .header-dropdown {
-          > li {
+          >li {
             img {
               width: 20px;
               height: auto;
@@ -390,7 +401,7 @@ header {
 
         .icon-nav {
           .onhover-div {
-            > img {
+            >img {
               width: 20px;
               height: auto;
             }
@@ -417,13 +428,13 @@ header {
       box-shadow: none;
 
       .pixelstrap {
-        > li {
-          > a {
+        >li {
+          >a {
             text-align: right;
           }
 
           &:last-child {
-            > a {
+            >a {
               padding-bottom: 0;
             }
           }
@@ -483,10 +494,10 @@ header {
               }
             }
 
-            > li {
+            >li {
               border-bottom: 1px solid #f3f3f3;
 
-              > a {
+              >a {
                 padding: 10px 0 20px 0;
                 text-align: center;
 
@@ -544,7 +555,7 @@ header {
   &.header-style {
     .top-header {
       .header-dropdown {
-        > li {
+        >li {
           padding: 25px 0 25px 20px;
         }
       }
@@ -697,7 +708,7 @@ header {
     padding: 10px 0;
 
     .right-nav-list {
-      + .right-nav-list {
+      +.right-nav-list {
         .theme-form-select {
           .dropdown-toggle {
             padding-left: 12px;
@@ -743,7 +754,7 @@ header {
           li {
             width: 100%;
 
-            + li {
+            +li {
               margin-top: 4px;
             }
 
@@ -1048,7 +1059,7 @@ header {
 
     &.around-border {
       .navbar {
-        > a {
+        >a {
           padding: 0;
         }
       }
@@ -1059,7 +1070,7 @@ header {
         padding-right: 0;
         padding-left: 45px;
 
-        > a {
+        >a {
           padding: 0;
         }
 
@@ -1082,6 +1093,7 @@ header {
         padding-left: calc(8px + (20 - 8) * ((100vw - 320px) / (1920 - 320)));
 
         @media (max-width: 578px) {
+
           &:nth-child(2),
           &:first-child {
             display: none;
@@ -1093,7 +1105,7 @@ header {
         display: flex;
         align-items: center;
 
-        > div {
+        >div {
           display: flex;
           align-items: center;
           padding: 12px;
@@ -1286,8 +1298,7 @@ header {
                   font-weight: 600;
                   transition: all 0.25s ease-in-out;
                   width: 100%;
-                  padding: calc(9px + (12 - 9) * ((100vw - 320px) / (1920 - 320)))
-                    calc(15px + (29 - 15) * ((100vw - 320px) / (1920 - 320)));
+                  padding: calc(9px + (12 - 9) * ((100vw - 320px) / (1920 - 320))) calc(15px + (29 - 15) * ((100vw - 320px) / (1920 - 320)));
                   background-color: var(--theme-color);
                   border: 1px solid var(--theme-color);
 
@@ -1432,7 +1443,7 @@ header {
       li {
         padding: 10px 0;
 
-        + li {
+        +li {
           padding-left: 25px;
         }
       }
@@ -1460,7 +1471,7 @@ header {
 
     .right-nav-about {
       .right-nav-list {
-        + .right-nav-list {
+        +.right-nav-list {
           .theme-form-select {
             .dropdown-toggle {
               border-left-color: rgba(#fff, 0.32);
@@ -1472,8 +1483,9 @@ header {
   }
 
   .pixelstrap {
-    > li {
-      > a,
+    >li {
+
+      >a,
       a:hover,
       a:active {
         padding-block: 15px;
@@ -1579,8 +1591,8 @@ header {
 
       .main-nav-center {
         .sm {
-          > li {
-            > a {
+          >li {
+            >a {
               padding-top: 20px;
               padding-bottom: 20px;
             }
@@ -1594,8 +1606,8 @@ header {
       }
 
       .pixelstrap {
-        > li {
-          > a {
+        >li {
+          >a {
             color: #222;
 
             &:hover,
@@ -1616,7 +1628,7 @@ header {
 
     .top-header {
       .header-dropdown {
-        > li {
+        >li {
           padding: 15px 25px;
           padding-right: 0;
         }
@@ -1663,8 +1675,8 @@ header {
     }
 
     .pixelstrap {
-      > li {
-        > a {
+      >li {
+        >a {
           color: variables.$white;
 
           &:hover,
@@ -1688,8 +1700,8 @@ header {
 
       .main-nav-center {
         .sm {
-          > li {
-            > a {
+          >li {
+            >a {
               padding-block: 14px;
             }
           }
@@ -1697,8 +1709,8 @@ header {
       }
 
       .pixelstrap {
-        > li {
-          > a {
+        >li {
+          >a {
             color: #222222;
 
             &:hover,
@@ -1729,7 +1741,7 @@ header {
 
       .menu-right {
         .icon-nav {
-          > li {
+          >li {
             padding-block: 30px;
           }
         }
@@ -1779,7 +1791,7 @@ header {
         .navbar-nav {
           .nav-item {
             &.dropdown {
-              > a {
+              >a {
                 padding-block: 19px;
               }
             }
@@ -1789,8 +1801,8 @@ header {
     }
 
     .navbar-nav {
-      > li {
-        > a {
+      >li {
+        >a {
           padding-block: 19px;
         }
       }
@@ -1815,9 +1827,9 @@ header {
         padding-top: 0;
 
         .main-nav-center {
-          .sm > {
+          .sm> {
             li {
-              > a {
+              >a {
                 padding-block: 20px;
                 background-color: variables.$white;
               }
@@ -1845,8 +1857,8 @@ header {
 
     .navbar-expand-xl {
       .navbar-nav {
-        > .nav-item {
-          > a {
+        >.nav-item {
+          >a {
             color: #fff !important;
 
             &:hover {
@@ -1929,8 +1941,8 @@ header {
     }
 
     .pixelstrap {
-      > li {
-        > a {
+      >li {
+        >a {
           padding: 10px 30px 8px 30px;
 
           &:hover,
@@ -1996,6 +2008,15 @@ header {
     .main-menu {
       .brand-logo {
         padding-block: 25px;
+
+        @media (max-width: 576px) {
+          padding-block: 10px;
+
+          img {
+            max-height: 40px;
+            width: auto;
+          }
+        }
       }
     }
 
@@ -2027,8 +2048,8 @@ header {
 
 .svg-icon-menu {
   .pixelstrap {
-    > li {
-      > a {
+    >li {
+      >a {
         img {
           width: 38px;
           background-color: variables.$white;
@@ -2042,8 +2063,8 @@ header {
 
   &.wo-bg {
     .pixelstrap {
-      > li {
-        > a {
+      >li {
+        >a {
           display: flex;
           align-items: center;
 
@@ -2080,7 +2101,7 @@ header {
         .navbar-nav {
           .nav-item {
             &.dropdown {
-              > a {
+              >a {
                 color: variables.$dark-link;
               }
             }
@@ -2182,6 +2203,7 @@ header {
   }
 
   .pixelstrap {
+
     a,
     a:hover,
     a:active {
@@ -2211,8 +2233,8 @@ header {
 
   .main-nav-center {
     .sm {
-      > li {
-        > a {
+      >li {
+        >a {
           padding-block: 10px;
         }
       }
@@ -2498,7 +2520,7 @@ header {
       border: 3px solid #fff;
     }
 
-    > li {
+    >li {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -2523,7 +2545,7 @@ header {
       .suggestion-category {
         text-align: unset;
 
-        > div {
+        >div {
           flex-wrap: wrap;
           gap: 2px 0;
           display: flex;
@@ -2536,7 +2558,7 @@ header {
           color: #4a5568;
           position: relative;
 
-          + p {
+          +p {
             &::before {
               content: '|';
               font-size: 15px;
@@ -2625,7 +2647,7 @@ header {
       gap: 10px;
       flex-wrap: wrap;
 
-      > a {
+      >a {
         background-color: lightgray;
         color: #222 !important;
         font-size: 14px !important;
@@ -2661,7 +2683,7 @@ body {
           background-color: transparent;
 
           .header-dropdown {
-            > li {
+            >li {
               padding-top: 40px;
               padding-right: 0;
 
@@ -2728,7 +2750,7 @@ body {
 
           .top-header {
             .header-dropdown {
-              > li {
+              >li {
                 padding-top: 20px;
               }
             }
@@ -2757,8 +2779,8 @@ body {
           }
 
           .navbar-nav {
-            > li {
-              > a {
+            >li {
+              >a {
                 color: variables.$white;
 
                 @media (max-width: 1199px) {
@@ -2791,7 +2813,7 @@ body {
               .navbar-nav {
                 .nav-item {
                   &.dropdown {
-                    > a {
+                    >a {
                       color: variables.$white;
 
                       @media (max-width: 1199px) {
@@ -2800,8 +2822,8 @@ body {
                     }
                   }
 
-                  > .dropdown-menu {
-                    > .nav-item {
+                  >.dropdown-menu {
+                    >.nav-item {
                       .nav-link {
                         color: #222;
                       }
@@ -2813,8 +2835,8 @@ body {
           }
 
           .pixelstrap {
-            > li {
-              > a {
+            >li {
+              >a {
                 color: variables.$white;
 
                 @media (max-width: 1199px) {
@@ -2858,8 +2880,8 @@ body {
 
           .navbar-expand-xl {
             .navbar-nav {
-              > .nav-item {
-                > a {
+              >.nav-item {
+                >a {
                   color: #fff !important;
                 }
               }
@@ -2889,8 +2911,8 @@ body {
           }
 
           .pixelstrap {
-            > li {
-              > a {
+            >li {
+              >a {
                 padding-block: 20px;
                 color: variables.$white;
 
@@ -2914,7 +2936,7 @@ body {
           .onhover-div {
             padding-block: 20px;
 
-            > div {
+            >div {
               img {
                 filter: brightness(54);
               }
@@ -3023,8 +3045,8 @@ body {
             background: linear-gradient(90deg, rgba(9, 9, 21, 1) 0%, rgba(64, 46, 62, 1) 100%);
 
             .navbar-nav {
-              > li {
-                > a {
+              >li {
+                >a {
                   color: variables.$white;
                 }
               }
@@ -3035,7 +3057,7 @@ body {
                 .navbar-nav {
                   .nav-item {
                     &.dropdown {
-                      > a {
+                      >a {
                         color: variables.$white;
                       }
                     }
@@ -3069,7 +3091,7 @@ body {
             .navbar-nav {
               .nav-item {
                 &.dropdown {
-                  > a {
+                  >a {
                     @media (max-width: 1199px) {
                       color: #fff !important;
                     }
@@ -3081,8 +3103,8 @@ body {
         }
 
         .navbar-nav {
-          > li {
-            > a {
+          >li {
+            >a {
               @media (max-width: 1199px) {
                 color: #fff !important;
               }

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/environments/environment.development.ts"],
+  "sourcesContent": ["export const environment = {\n  production: false,\n  baseURL: '/api/',\n  siteURL: '/',\n  URL: '/assets/data',\n  storageURL: '/assets',\n  companyCode: 'WOW001',\n  companyInfoId: 1,\n};\n"],
+  "mappings": ";AAAO,IAAM,cAAc;EACzB,YAAY;EACZ,SAAS;EACT,SAAS;EACT,KAAK;EACL,YAAY;EACZ,aAAa;EACb,eAAe;;",
+  "names": []
+}

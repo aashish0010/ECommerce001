@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/components/header/widgets/header-logo/header-logo.scss"],
+  "sourcesContent": [":host {\r\n    display: block;\r\n\r\n    img {\r\n        height: 80px !important;\r\n        width: 80px !important;\r\n        object-fit: contain;\r\n\r\n        @media (max-width: 576px) {\r\n            height: 60px !important;\r\n            width: 60px !important;\r\n        }\r\n    }\r\n}"],
+  "mappings": ";AAAA;AACI,WAAA;;AAEA,MAAA;AACI,UAAA;AACA,SAAA;AACA,cAAA;;AAEA,QAAA,WAAA;AALJ,QAAA;AAMQ,YAAA;AACA,WAAA;;;",
+  "names": []
+}

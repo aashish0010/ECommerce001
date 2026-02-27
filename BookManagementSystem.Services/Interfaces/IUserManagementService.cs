@@ -16,5 +16,6 @@ namespace BookManagementSystem.Service.Interfaces
 		Task<UserProfileDto> GetUserProfile(string userName);
 		Task<Common> UpdateUserProfile(string userName, UpdateProfileRequest request);
 		Task<Common> ChangeUserPassword(string userName, ChangePasswordRequest request);
+		Task<LoginResponse> RefreshToken(RefreshTokenRequest request);
 	}
 }
