@@ -9,9 +9,8 @@ import { Observable } from 'rxjs';
 import { AddressModal } from '../../../shared/components/widgets/modal/address-modal/address-modal';
 import { DeleteAddressModal } from '../../../shared/components/widgets/modal/delete-address-modal/delete-address-modal';
 import { NoData } from '../../../shared/components/widgets/no-data/no-data';
-import { IAccountUser } from '../../../shared/interface/account.interface';
-import { IUserAddress } from '../../../shared/interface/user.interface';
-import { DeleteAddressAction } from '../../../shared/store/action/account.action';
+import { ISavedAddress } from '../../../shared/interface/user.interface';
+import { DeleteAddressAction, GetAddressesAction } from '../../../shared/store/action/account.action';
 import { AccountState } from '../../../shared/store/state/account.state';
 
 @Component({
@@ -24,27 +23,27 @@ export class Addresses {
   private store = inject(Store);
   private modal = inject(NgbModal);
 
-  user$: Observable<IAccountUser> = inject(Store).select(
-    AccountState.user,
-  ) as Observable<IAccountUser>;
+  addresses$: Observable<ISavedAddress[]> = this.store.select(AccountState.addresses);
 
-  AddressModal(address?: IUserAddress) {
+  constructor() {
+    this.store.dispatch(new GetAddressesAction());
+  }
+
+  AddressModal(address?: ISavedAddress) {
     const modal = this.modal.open(AddressModal, { centered: true, windowClass: 'theme-modal-2' });
-
     if (address) {
       modal.componentInstance.userAddress = address;
     }
   }
 
-  removeAddress(address: IUserAddress) {
+  removeAddress(address: ISavedAddress) {
     const modal = this.modal.open(DeleteAddressModal, { centered: true });
-
     if (address) {
       modal.componentInstance.userAddress = address;
     }
   }
 
-  delete(action: string, data: IUserAddress) {
+  delete(action: string, data: ISavedAddress) {
     if (action == 'delete' && data) this.store.dispatch(new DeleteAddressAction(data.id));
   }
 }

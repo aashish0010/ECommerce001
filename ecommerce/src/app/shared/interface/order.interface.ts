@@ -6,14 +6,15 @@ import { IStores } from './store.interface';
 import { IUser, IUserAddress } from './user.interface';
 import { ITransactionsData } from './wallet.interface';
 
-export interface IOrderModel extends IPaginateModel {
+export interface IOrderModel {
   data: IOrder[];
+  total: number;
 }
 
 export interface IOrder {
   id: number;
   order_id: string;
-  order_number: number;
+  order_number: string;
   amount: number;
   order_status_activities: IOrderStatusActivities[];
   store_id: number;
@@ -48,7 +49,8 @@ export interface IOrder {
   transactions: ITransactionsData[];
   invoice_url?: string;
   is_digital_only: boolean;
-  status: boolean;
+  status: string;
+  items_count?: number;
   created_by_id: number;
   deleted_at?: string;
   created_at?: string;
@@ -101,7 +103,7 @@ export interface IPlaceOrder {
 }
 
 export interface IRePaymentPayload {
-  order_number: number;
+  order_number: string;
   payment_method: string;
 }
 

@@ -38,4 +38,12 @@ export class AccountService {
   createAddress(payload: any): Observable<ISavedAddress> {
     return this.http.post<ISavedAddress>(`${environment.baseURL}address`, payload);
   }
+
+  updateAddress(id: number, payload: any): Observable<ISavedAddress> {
+    return this.http.put<ISavedAddress>(`${environment.baseURL}address/${id}`, payload);
+  }
+
+  deleteAddress(id: number): Observable<any> {
+    return this.http.delete(`${environment.baseURL}address/${id}`);
+  }
 }

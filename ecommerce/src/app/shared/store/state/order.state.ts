@@ -62,11 +62,13 @@ export class OrderState {
   getOrders(ctx: StateContext<OrderStateModel>, action: GetOrdersAction) {
     return this.orderService.getOrders(action?.payload).pipe(
       tap({
-        next: result => {
+        next: (result: any) => {
+          // Backend returns a flat array; wrap it into the paginated model shape
+          const data: IOrder[] = Array.isArray(result) ? result : (result?.data ?? []);
           ctx.patchState({
             order: {
-              data: result.data,
-              total: result?.total ? result?.total : result.data?.length,
+              data,
+              total: data.length,
             },
           });
         },
@@ -80,17 +82,19 @@ export class OrderState {
   @Action(ViewOrderAction)
   viewOrder(ctx: StateContext<OrderStateModel>, { id }: ViewOrderAction) {
     this.orderService.skeletonLoader = true;
+    const cached = ctx.getState().order.data;
+    if (cached?.length) {
+      const result = cached.find(order => order.order_number == id);
+      ctx.patchState({ selectedOrder: result ?? null });
+      this.orderService.skeletonLoader = false;
+      return;
+    }
     return this.orderService.getOrders().pipe(
       tap({
-        next: results => {
-          if (results && results.data) {
-            const state = ctx.getState();
-            const result = results.data.find(order => order.order_number == id);
-            ctx.patchState({
-              ...state,
-              selectedOrder: result,
-            });
-          }
+        next: (results: any) => {
+          const data: IOrder[] = Array.isArray(results) ? results : (results?.data ?? []);
+          const result = data.find(order => order.order_number == id);
+          ctx.patchState({ selectedOrder: result ?? null });
         },
         error: err => {
           throw new Error(err?.error?.message);

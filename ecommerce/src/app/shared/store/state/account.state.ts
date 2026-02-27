@@ -156,13 +156,39 @@ export class AccountState {
   }
 
   @Action(UpdateAddressAction)
-  updateAddress(_ctx: StateContext<AccountStateModel>, _action: UpdateAddressAction) {
-    // Address management not yet implemented in backend
+  updateAddress(ctx: StateContext<AccountStateModel>, { id, payload }: UpdateAddressAction) {
+    return this.accountService.updateAddress(id, payload).pipe(
+      tap({
+        next: (updated) => {
+          const state = ctx.getState();
+          ctx.patchState({
+            addresses: state.addresses.map(a => a.id === id ? updated : a),
+          });
+          this.notificationService.showSuccess('Address updated successfully');
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update address');
+        },
+      }),
+    );
   }
 
   @Action(DeleteAddressAction)
-  deleteAddress(_ctx: StateContext<AccountStateModel>, _action: DeleteAddressAction) {
-    // Address management not yet implemented in backend
+  deleteAddress(ctx: StateContext<AccountStateModel>, { id }: DeleteAddressAction) {
+    return this.accountService.deleteAddress(id).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          ctx.patchState({
+            addresses: state.addresses.filter(a => a.id !== id),
+          });
+          this.notificationService.showSuccess('Address deleted successfully');
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete address');
+        },
+      }),
+    );
   }
 
   @Action(AccountClearAction)

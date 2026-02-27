@@ -8,19 +8,26 @@
             >+ {{ 'add_new' | translate }}</a
           >
         </div>
-        @if((user$ | async)?.address?.length){
+        @if((addresses$ | async)?.length){
         <div class="address-book-section">
           <div class="row g-4">
-            @for(address of (user$ | async)?.address; track address.id; let i = $index){
-            <div class="select-box active col-xl-4 col-md-6">
+            @for(address of (addresses$ | async); track address.id; let i = $index){
+            <div class="select-box col-xl-4 col-md-6" [class.active]="address?.is_default">
               <div class="address-box">
                 <div class="top">
-                  <h6>{{ (user$ | async)?.name | titlecase }} <span>{{ address?.title }}</span></h6>
+                  <h6>
+                    {{ address?.title | titlecase }}
+                    @if(address?.is_default){
+                    <span class="badge bg-theme ms-2" style="font-size:10px;vertical-align:middle">Default</span>
+                    }
+                  </h6>
                 </div>
                 <div class="middle">
                   <div class="address">
                     <p>{{ address?.street }}, {{ address?.city }}</p>
-                    <p>{{ address?.state?.name }}, {{ address?.country?.name }}</p>
+                    @if(address?.state_name || address?.country_name){
+                    <p>{{ address?.state_name }}{{ address?.country_name ? ', ' + address?.country_name : '' }}</p>
+                    }
                     <p>{{ address?.pincode }}</p>
                   </div>
                   <div class="number">

@@ -5,7 +5,7 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { IOrder, IOrderModel } from '../interface/order.interface';
+import { IOrder } from '../interface/order.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +15,12 @@ export class OrderService {
 
   public skeletonLoader: boolean = false;
 
-  getOrders(payload?: Params): Observable<IOrderModel> {
-    return this.http.get<IOrderModel>(`${environment.URL}/order.json`, { params: payload });
+  getOrders(payload?: Params): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(`${environment.baseURL}order`);
   }
 
-  viewOrder(id: number): Observable<IOrder> {
-    return this.http.get<IOrder>(`${environment.URL}/order/${id}`);
+  viewOrder(id: string): Observable<IOrder> {
+    return this.http.get<IOrder>(`${environment.baseURL}order/${id}`);
   }
 
   orderTracking(payload: { order_number: string; email_or_phone: string }): Observable<IOrder> {

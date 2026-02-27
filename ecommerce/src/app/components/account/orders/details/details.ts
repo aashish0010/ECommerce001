@@ -111,7 +111,7 @@ export class Details {
     modal.componentInstance.orderId = order_id;
   }
 
-  download(id: number) {
+  download(id: string) {
     this.store.dispatch(new DownloadInvoiceAction({ order_number: id }));
   }
 
