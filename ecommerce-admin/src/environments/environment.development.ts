@@ -3,4 +3,5 @@ export const environment = {
   URL: '/api',
   MOCK_URL: '/assets/data',
   storageURL: 'http://localhost:4200/assets',
+  baseURL: 'https://ecommerce001-production.up.railway.app/api/',
 };

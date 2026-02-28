@@ -27,3 +27,20 @@ export interface IUpdatePasswordModel {
   email: string;
   token: number;
 }
+
+export interface IAdminLoginModel {
+  userName: string;
+  password: string;
+}
+
+export interface IAdminAuthResponse {
+  code: number;
+  status: string;
+  message: string;
+  userName: string;
+  email?: string;
+  token: string;
+  refreshToken: string;
+  role: string;
+  permissions?: any[];
+}
