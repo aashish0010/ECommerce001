@@ -44,5 +44,27 @@ namespace BookManagementSystem.Controller
             var result = await _unitOfWork.orderService.GetUserOrdersAsync(userName);
             return Ok(result);
         }
+
+        [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllOrders([FromQuery] int page = 1, [FromQuery] int paginate = 15)
+        {
+            var result = await _unitOfWork.orderService.GetAllOrdersAsync(page, paginate);
+            return Ok(result);
+        }
+
+        [HttpPut("admin/{id}/status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusRequest request)
+        {
+            if (string.IsNullOrEmpty(request?.Status))
+                return BadRequest(new { message = "Status is required" });
+
+            var result = await _unitOfWork.orderService.UpdateOrderStatusAsync(id, request.Status);
+            if (!result)
+                return NotFound(new { message = "Order not found" });
+
+            return Ok(new { message = "Order status updated successfully" });
+        }
     }
 }

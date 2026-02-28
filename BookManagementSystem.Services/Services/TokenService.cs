@@ -68,6 +68,7 @@ namespace BookManagementSystem.Service.Services
 			};
 
 			var tokenHandler = new JwtSecurityTokenHandler();
+			tokenHandler.MapInboundClaims = false;
 			var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
 
 			if (securityToken is not JwtSecurityToken jwtToken ||

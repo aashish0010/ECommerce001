@@ -138,6 +138,65 @@ namespace BookManagementSystem.Service.Services
                 .ToListAsync();
         }
 
+        public async Task<AdminOrderListResponse> GetAllOrdersAsync(int page = 1, int pageSize = 15)
+        {
+            var query = _context.Orders.OrderByDescending(o => o.CreatedAt);
+            var total = await query.CountAsync();
+            var orders = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(o => new AdminOrderDto
+                {
+                    Id = o.Id,
+                    OrderNumber = o.OrderNumber,
+                    Amount = o.SubTotal,
+                    Total = o.Total,
+                    ConsumerName = o.UserName,
+                    PaymentMethod = o.PaymentMethod,
+                    PaymentStatus = o.PaymentStatus,
+                    OrderStatus = new AdminOrderStatusDto
+                    {
+                        Id = GetStatusId(o.Status),
+                        Name = o.Status,
+                        Slug = o.Status,
+                        Sequence = GetStatusId(o.Status),
+                    },
+                    CreatedAt = o.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss")
+                })
+                .ToListAsync();
+
+            return new AdminOrderListResponse
+            {
+                Data = orders,
+                Total = total
+            };
+        }
+
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, string status)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null) return false;
+
+            order.Status = status;
+            if (status == "delivered")
+                order.PaymentStatus = "completed";
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        private static int GetStatusId(string status) => status switch
+        {
+            "pending" => 1,
+            "confirmed" => 2,
+            "shipped" => 3,
+            "delivered" => 4,
+            "cancelled" => 5,
+            "refunded" => 6,
+            "returned" => 7,
+            _ => 0
+        };
+
         private static string GenerateOrderNumber()
         {
             return "ORD-" + DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + new Random().Next(1000, 9999);

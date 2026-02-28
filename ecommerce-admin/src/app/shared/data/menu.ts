@@ -1,0 +1,92 @@
+import { ISidebar } from '../interface/sidebar.interface';
+
+export const menu: ISidebar[] = [
+  {
+    id: 1,
+    title: 'dashboard',
+    path: '/dashboard',
+    active: false,
+    icon: 'ri-home-line',
+    type: 'sub',
+    level: 1,
+  },
+  {
+    id: 2,
+    title: 'users',
+    active: false,
+    icon: 'ri-contacts-line',
+    type: 'sub',
+    level: 1,
+    children: [
+      {
+        parent_id: 2,
+        title: 'add user',
+        path: '/user/create',
+        type: 'link',
+        level: 2,
+      },
+      {
+        parent_id: 2,
+        title: 'all users',
+        path: '/user',
+        type: 'link',
+        level: 2,
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: 'products',
+    active: false,
+    icon: 'ri-store-3-line',
+    type: 'sub',
+    level: 1,
+    children: [
+      {
+        parent_id: 3,
+        title: 'add product',
+        path: '/product/create',
+        type: 'link',
+        level: 2,
+      },
+      {
+        parent_id: 3,
+        title: 'all products',
+        path: '/product',
+        type: 'link',
+        level: 2,
+      },
+      {
+        parent_id: 3,
+        title: 'categories',
+        path: '/category',
+        type: 'link',
+        level: 2,
+      },
+      {
+        parent_id: 3,
+        title: 'brands',
+        path: '/brand',
+        type: 'link',
+        level: 2,
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: 'orders',
+    active: false,
+    icon: 'ri-list-unordered',
+    type: 'sub',
+    level: 1,
+    children: [
+      {
+        parent_id: 5,
+        title: 'all orders',
+        path: '/order',
+        type: 'link',
+        level: 2,
+      },
+    ],
+  },
+];

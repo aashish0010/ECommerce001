@@ -18,5 +18,8 @@ namespace BookManagementSystem.Service.Interfaces
 		CouponService couponService { get; }
 		WishlistService wishlistService { get; }
 		CompareService compareService { get; }
+		CloudinaryService cloudinaryService { get; }
+		DashboardService dashboardService { get; }
+		AdminUserService adminUserService { get; }
     }
 }

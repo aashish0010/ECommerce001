@@ -47,6 +47,27 @@ namespace BookManagementSystem.Controller
             return BadRequest(result);
         }
 
+        [HttpPost("admin-login")]
+        [EnableRateLimiting("auth")]
+        public async Task<IActionResult> AdminLogin(LoginRequest login)
+        {
+            var result = await _unitOfWork.userManagementService.Login(login);
+            if (result.Status != Level.Success)
+                return BadRequest(result);
+
+            if (result.Role != "Admin")
+            {
+                result.Code = StatusCodes.Status403Forbidden;
+                result.Status = Level.Failed;
+                result.Message = "Access denied. Admin role required.";
+                result.Token = null;
+                result.RefreshToken = null;
+                return StatusCode(StatusCodes.Status403Forbidden, result);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost("refresh")]
         [EnableRateLimiting("auth")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)

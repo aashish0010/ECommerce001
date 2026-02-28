@@ -112,4 +112,64 @@ namespace BookManagementSystem.Domain.DTO
         [JsonPropertyName("items_count")]
         public int ItemsCount { get; set; }
     }
+
+    public class AdminOrderDto
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonPropertyName("order_number")]
+        public string OrderNumber { get; set; }
+
+        [JsonPropertyName("amount")]
+        public decimal Amount { get; set; }
+
+        [JsonPropertyName("total")]
+        public decimal Total { get; set; }
+
+        [JsonPropertyName("consumer_name")]
+        public string ConsumerName { get; set; }
+
+        [JsonPropertyName("payment_method")]
+        public string PaymentMethod { get; set; }
+
+        [JsonPropertyName("payment_status")]
+        public string PaymentStatus { get; set; }
+
+        [JsonPropertyName("order_status")]
+        public AdminOrderStatusDto OrderStatus { get; set; }
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; }
+    }
+
+    public class AdminOrderStatusDto
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("slug")]
+        public string Slug { get; set; }
+
+        [JsonPropertyName("sequence")]
+        public int Sequence { get; set; }
+    }
+
+    public class AdminOrderListResponse
+    {
+        [JsonPropertyName("data")]
+        public List<AdminOrderDto> Data { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+    }
+
+    public class UpdateOrderStatusRequest
+    {
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+    }
 }

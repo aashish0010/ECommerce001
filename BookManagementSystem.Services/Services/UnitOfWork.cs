@@ -69,5 +69,11 @@ namespace BookManagementSystem.Service.Services
         public WishlistService wishlistService => new WishlistService(_context);
 
         public CompareService compareService => new CompareService(_context);
+
+        public CloudinaryService cloudinaryService => new CloudinaryService(_configuration);
+
+        public DashboardService dashboardService => new DashboardService(_context);
+
+        public AdminUserService adminUserService => new AdminUserService(_context, _userManager, _roleManager);
     }
 }

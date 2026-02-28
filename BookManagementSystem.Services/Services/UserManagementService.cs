@@ -60,6 +60,7 @@ namespace BookManagementSystem.Service.Services
                 response.Status = Level.Success;
                 response.Message = "Login SuccessFully";
                 response.UserName = login.UserName;
+                response.Role = role.FirstOrDefault() ?? "user";
                 response.Token = _token.TokenGenerate(user, role.FirstOrDefault());
 
                 var refreshTokenString = _token.GenerateRefreshToken();
@@ -388,6 +389,7 @@ namespace BookManagementSystem.Service.Services
                 Code = StatusCodes.Status100Continue,
                 Status = Level.Success,
                 Message = "Login Succefully",
+                Role = role,
                 Token = _token.TokenGenerate(user, role),
                 RefreshToken = refreshTokenString
             };
@@ -518,6 +520,7 @@ namespace BookManagementSystem.Service.Services
             response.Status = Level.Success;
             response.Message = "Token refreshed successfully";
             response.UserName = userName;
+            response.Role = role.FirstOrDefault() ?? "user";
             response.Token = newAccessToken;
             response.RefreshToken = newRefreshTokenString;
 

@@ -54,6 +54,24 @@ namespace BookManagementSystem.Controller
             return CreatedAtAction(nameof(GetProductBySlug), new { slug = result.Product?.Slug }, result);
         }
 
+        [HttpPost("with-image")]
+        [Authorize]
+        public async Task<IActionResult> CreateProductWithImage(
+            [FromForm] CreateProductRequest request,
+            IFormFile image)
+        {
+            if (image != null)
+            {
+                var uploadResult = await _unitOfWork.cloudinaryService.UploadImageAsync(image, "products");
+                if (uploadResult.Status == Domain.Entities.Level.Failed)
+                    return BadRequest(uploadResult);
+                request.ImageUrl = uploadResult.Url;
+            }
+
+            var result = await _unitOfWork.productService.CreateProduct(request);
+            return CreatedAtAction(nameof(GetProductBySlug), new { slug = result.Product?.Slug }, result);
+        }
+
         [HttpPost("seed")]
         public async Task<IActionResult> SeedData([FromQuery] int companyInfoId = 1)
         {

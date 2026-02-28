@@ -74,6 +74,7 @@ options.IgnoredPaths.Add("/css");
 
 
 			services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+			services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 			services.AddControllers();
 			services.AddOpenApiDocument(document =>
 			{
