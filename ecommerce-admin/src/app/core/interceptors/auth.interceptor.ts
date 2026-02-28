@@ -5,7 +5,8 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { Store } from '@ngxs/store';
@@ -19,11 +20,23 @@ export class AuthInterceptor implements HttpInterceptor {
   private router = inject(Router);
   private store = inject(Store);
   private notificationService = inject(NotificationService);
+  private platformId = inject(PLATFORM_ID);
+
+  private readonly publicEndpoints = [
+    'Auth/companydetails',
+    'Auth/login',
+    'Auth/admin-login',
+  ];
 
   intercept<T>(req: HttpRequest<T>, next: HttpHandler): Observable<HttpEvent<T>> {
-    const token = this.store.selectSnapshot(state => state.auth.access_token);
-
-    if (token) {
+    let token: string | null = null;
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('admin_token');
+    }
+    const isPublic = this.publicEndpoints.some(endpoint =>
+      req.url.toLowerCase().includes(endpoint.toLowerCase()),
+    );
+    if (token && !isPublic) {
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
@@ -33,7 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401 && !isPublic) {
           this.notificationService.notification = false;
           this.store.dispatch(new AuthClearAction());
           void this.router.navigate(['/auth/login']);

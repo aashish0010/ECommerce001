@@ -43,7 +43,8 @@ options.IgnoredPaths.Add("/css");
 					ValidateIssuerSigningKey = true,
 					ValidIssuer = configuration["Jwt:Issuer"],
 					ValidAudience = configuration["Jwt:Issuer"],
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+					RoleClaimType = "Role"
 				};
 			});
 
