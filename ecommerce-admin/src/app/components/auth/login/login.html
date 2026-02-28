@@ -19,13 +19,13 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="email"
-                    formControlName="email"
+                    id="userName"
+                    formControlName="userName"
                     placeholder="Username"
                   />
-                  <label for="email">Username</label>
-                  @if(form.controls['email'].touched &&
-                  form.controls['email'].errors?.['required']){
+                  <label for="userName">Username</label>
+                  @if(form.controls['userName'].touched &&
+                  form.controls['userName'].errors?.['required']){
                   <div class="invalid-feedback">Username is required</div>
                   }
                 </div>

@@ -13,6 +13,6 @@ export class AccountService {
   private http = inject(HttpClient);
 
   getUserDetails(): Observable<IAccountUser> {
-    return this.http.get<IAccountUser>(`${environment.URL}/user/me`);
+    return this.http.get<IAccountUser>(`${environment.baseURL}user/me`);
   }
 }

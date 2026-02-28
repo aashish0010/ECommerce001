@@ -3,11 +3,12 @@ import {
   IAuthUserStateModel,
   IUpdatePasswordModel,
   IVerifyEmailOtpModel,
+  IAdminLoginModel,
 } from '../../interface/auth.interface';
 
 export class LoginAction {
   static readonly type = '[Auth] Login';
-  constructor(public payload: IAuthUserStateModel) {}
+  constructor(public payload: IAdminLoginModel) {}
 }
 
 export class ForgotPassWordAction {

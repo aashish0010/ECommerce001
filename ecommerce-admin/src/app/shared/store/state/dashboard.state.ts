@@ -43,7 +43,7 @@ export class DashboardState {
           });
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('Failed to get statistics:', err);
         },
       }),
     );
@@ -59,7 +59,7 @@ export class DashboardState {
           });
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('Failed to get revenue chart:', err);
         },
       }),
     );

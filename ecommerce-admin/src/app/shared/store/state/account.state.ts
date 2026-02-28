@@ -63,7 +63,7 @@ export class AccountState {
           });
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('Failed to get user details:', err);
         },
       }),
     );

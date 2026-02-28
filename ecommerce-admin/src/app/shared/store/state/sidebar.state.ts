@@ -91,7 +91,7 @@ export class SidebarState {
           );
         },
         error: err => {
-          throw new Error(err?.error?.message);
+          console.error('Failed to get badges:', err);
         },
       }),
     );
