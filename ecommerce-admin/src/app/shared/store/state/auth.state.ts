@@ -87,6 +87,16 @@ export class AuthState {
     );
   }
 
+  ngxsOnInit(ctx: StateContext<AuthStateModel>) {
+    const token = this.authService.getToken();
+    if (token) {
+      ctx.patchState({
+        access_token: token,
+        token: token,
+      });
+    }
+  }
+
   @Action(ForgotPassWordAction)
   forgotPassword(_ctx: StateContext<AuthStateModel>, _action: ForgotPassWordAction) {
     this.notificationService.notification = false;

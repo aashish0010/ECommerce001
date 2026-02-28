@@ -1,6 +1,7 @@
 export interface IAuthUserState {
   phone: string;
   password: string;
+  companyCode: string;
 }
 
 export interface IAuthStateModal {
@@ -44,6 +45,7 @@ export interface IRegisterModal {
   country_code: number;
   password: string;
   password_confirmation: string;
+  companyCode: string;
 }
 
 export interface ISendEmailOtpState {

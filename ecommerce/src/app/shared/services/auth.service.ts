@@ -17,10 +17,11 @@ export class AuthService {
   public isLogin: boolean = false;
   public pendingRegistration: IRegisterModal | null = null;
 
-  login(payload: { phone: string; password: string }): Observable<any> {
+  login(payload: { phone: string; password: string; companyCode: string }): Observable<any> {
     return this.http.post(`${environment.baseURL}auth/login`, {
       userName: payload.phone,
       password: payload.password,
+      companyCode: payload.companyCode,
     });
   }
 

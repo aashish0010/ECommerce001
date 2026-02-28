@@ -10,6 +10,9 @@ namespace BookManagementSystem.Domain.DTO
 
 		[Required(ErrorMessage = "Password is required")]
 		public string Password { get; set; }
+
+		[Required(ErrorMessage = "Company code is required")]
+		public string CompanyCode { get; set; }
 	}
 	public class RegisterRequest
 	{

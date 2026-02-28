@@ -3,7 +3,6 @@ import {
   HTTP_INTERCEPTORS,
   HttpClient,
   provideHttpClient,
-  withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
@@ -157,7 +156,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    provideHttpClient(withInterceptorsFromDi()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,

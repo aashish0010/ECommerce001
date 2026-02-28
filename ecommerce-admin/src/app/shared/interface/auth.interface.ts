@@ -31,6 +31,7 @@ export interface IUpdatePasswordModel {
 export interface IAdminLoginModel {
   userName: string;
   password: string;
+  companyCode: string;
 }
 
 export interface IAdminAuthResponse {

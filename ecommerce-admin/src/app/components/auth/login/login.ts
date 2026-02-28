@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Alert } from '../../../shared/components/ui/alert/alert';
 import { Button } from '../../../shared/components/ui/button/button';
 import { IValues } from '../../../shared/interface/setting.interface';
@@ -53,7 +54,11 @@ export class Login {
   submit() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      this.store.dispatch(new LoginAction(this.form.value)).subscribe({
+      const loginData = {
+        ...this.form.value,
+        companyCode: environment.companyCode,
+      };
+      this.store.dispatch(new LoginAction(loginData)).subscribe({
         complete: () => {
           void this.router.navigateByUrl('/dashboard');
         },

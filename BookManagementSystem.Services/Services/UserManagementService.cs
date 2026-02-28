@@ -45,15 +45,29 @@ namespace BookManagementSystem.Service.Services
         public async Task<LoginResponse> Login(LoginRequest login)
         {
             LoginResponse response = new LoginResponse();
-            User user = await _userManager.FindByNameAsync(login.UserName);
+            User user = await _userManager.Users
+                .Include(u => u.CompanyInfo)
+                .FirstOrDefaultAsync(u => u.UserName == login.UserName);
+
             if (user == null)
             {
                 _logger.LogInformation("Unable to Find User");
                 response.Code = StatusCodes.Status404NotFound;
                 response.Status = Level.Failed;
                 response.Message = "Unable to Find User";
+                return response;
             }
-            else if (await _userManager.CheckPasswordAsync(user, login.Password))
+
+            if (user.CompanyInfo?.CompanyCode != login.CompanyCode)
+            {
+                _logger.LogInformation("Invalid Company Code");
+                response.Code = StatusCodes.Status403Forbidden;
+                response.Status = Level.Failed;
+                response.Message = "Invalid Company Code";
+                return response;
+            }
+
+            if (await _userManager.CheckPasswordAsync(user, login.Password))
             {
                 var role = await _userManager.GetRolesAsync(user);
                 response.Code = StatusCodes.Status200OK;

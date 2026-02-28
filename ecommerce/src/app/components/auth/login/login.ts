@@ -15,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { Observable, take } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { Alert } from '../../../shared/components/widgets/alert/alert';
 import { Button } from '../../../shared/components/widgets/button/button';
 import { ICart, ICartAddOrUpdate } from '../../../shared/interface/cart.interface';
@@ -63,7 +64,11 @@ export class Login {
   submit() {
     this.loginForm.markAllAsTouched();
     if (this.loginForm.valid) {
-      this.store.dispatch(new LoginAction(this.loginForm.value)).subscribe({
+      const loginData = {
+        ...this.loginForm.value,
+        companyCode: environment.companyCode,
+      };
+      this.store.dispatch(new LoginAction(loginData)).subscribe({
         complete: () => {
           this.modalService.dismissAll();
           let syncCartItems: ICartAddOrUpdate[] = [];
