@@ -4,13 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
 
 import { DeleteModal } from '../../../../shared/components/ui/modal/delete-modal/delete-modal';
-import { HasPermissionDirective } from '../../../../shared/directive/has-permission.directive';
 import { ICategory } from '../../../../shared/interface/category.interface';
 import { DeleteCategoryAction } from '../../../../shared/store/action/category.action';
 
 @Component({
   selector: 'app-tree-node',
-  imports: [RouterModule, HasPermissionDirective, DeleteModal],
+  imports: [RouterModule, DeleteModal],
   templateUrl: './tree-node.html',
   styleUrl: './tree-node.scss',
 })

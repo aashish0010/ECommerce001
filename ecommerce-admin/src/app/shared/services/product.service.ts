@@ -38,6 +38,7 @@ export class ProductService {
   }
 
   createProduct(payload: any): Observable<any> {
+    const imageUrls = (payload.image_urls || []).filter((url: string) => url?.trim());
     return this.http.post<any>(`${environment.URL}/product`, {
       name: payload.name,
       shortDescription: payload.short_description || '',
@@ -45,18 +46,19 @@ export class ProductService {
       price: payload.price || 0,
       salePrice: payload.sale_price || null,
       sku: payload.sku || '',
-      imageUrl: payload.image_url || '',
+      imageUrls: imageUrls,
       stockStatus: payload.stock_status || 'in_stock',
       quantity: payload.quantity || 0,
       isFeatured: payload.is_featured || false,
-      categoryId: payload.category_id || payload.categories?.[0] || 0,
+      categoryId: payload.categories?.[0] || 0,
       brandId: payload.brand_id || null,
-      colorIds: payload.color_ids || [],
+      colorIds: [],
       companyInfoId: 1,
     });
   }
 
   updateProduct(id: number, payload: any): Observable<any> {
+    const imageUrls = (payload.image_urls || []).filter((url: string) => url?.trim());
     return this.http.put<any>(`${environment.URL}/product/${id}`, {
       name: payload.name,
       shortDescription: payload.short_description || '',
@@ -64,14 +66,14 @@ export class ProductService {
       price: payload.price || 0,
       salePrice: payload.sale_price || null,
       sku: payload.sku || '',
-      imageUrl: payload.image_url || '',
+      imageUrls: imageUrls,
       stockStatus: payload.stock_status || 'in_stock',
       quantity: payload.quantity || 0,
       isFeatured: payload.is_featured || false,
       status: payload.status ?? true,
-      categoryId: payload.category_id || payload.categories?.[0] || 0,
+      categoryId: payload.categories?.[0] || 0,
       brandId: payload.brand_id || null,
-      colorIds: payload.color_ids || [],
+      colorIds: [],
     });
   }
 

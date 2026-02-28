@@ -1,24 +1,11 @@
 <div class="row">
   <div class="col-xl-4 p-0">
     <app-page-wrapper [gridClass]="'col-sm-12'" [title]="'categories'">
-      <div button *hasPermission="'category.create'">
-        @if(categoryType() === 'product' || type() === 'edit'){
-        <div ngbDropdown class="d-inline-block dropdown-box">
-          <button type="button" class="btn btn-sm btn-light-bg" id="action" ngbDropdownToggle>
-            {{ 'action' | translate }}
-          </button>
-          <div ngbDropdownMenu aria-labelledby="action" class="dropdown-menu dropdown-menu-end">
-            @if(categoryType() === 'product'){
-            <button ngbDropdownItem (click)="CSVModal().openModal()">
-              {{ 'bulk_import' | translate }}
-            </button>
-            } @if(categoryType() === 'product'){
-            <button ngbDropdownItem (click)="export()">{{ 'export' | translate }}</button>
-            } @if(type() === 'edit'){
-            <button ngbDropdownItem (click)="create(type())">{{ 'create' | translate }}</button>
-            }
-          </div>
-        </div>
+      <div button>
+        @if(type() === 'edit'){
+        <button class="btn btn-sm btn-theme" (click)="create(categoryType())">
+          <i class="ri-add-line"></i> {{ 'add_category' | translate }}
+        </button>
         }
       </div>
       <div class="category-tree-box">
@@ -36,9 +23,6 @@
       [categories]="(category$ | async)?.data"
       [type]="type()"
       [categoryType]="categoryType()"
-      *hasPermission="'category.'+type()"
     />
   </div>
 </div>
-
-<app-import-csv-modal [module]="'category'" #csvModal />

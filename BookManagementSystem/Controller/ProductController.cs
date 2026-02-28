@@ -105,7 +105,8 @@ namespace BookManagementSystem.Controller
                 var uploadResult = await _unitOfWork.cloudinaryService.UploadImageAsync(image, "products");
                 if (uploadResult.Status == Domain.Entities.Level.Failed)
                     return BadRequest(uploadResult);
-                request.ImageUrl = uploadResult.Url;
+                request.ImageUrls ??= new List<string>();
+                request.ImageUrls.Insert(0, uploadResult.Url);
             }
 
             var result = await _unitOfWork.productService.CreateProduct(request);

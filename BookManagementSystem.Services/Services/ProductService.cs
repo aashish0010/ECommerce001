@@ -1,3 +1,4 @@
+using System.Text.Json;
 using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Domain.Entities.Company;
@@ -17,9 +18,29 @@ namespace BookManagementSystem.Service.Services
             _context = context;
         }
 
+        internal static List<string> ParseImageUrls(string imageUrl)
+        {
+            if (string.IsNullOrWhiteSpace(imageUrl)) return new List<string>();
+            if (imageUrl.TrimStart().StartsWith("["))
+            {
+                try { return JsonSerializer.Deserialize<List<string>>(imageUrl) ?? new List<string>(); }
+                catch { return new List<string> { imageUrl }; }
+            }
+            return new List<string> { imageUrl };
+        }
+
+        internal static string SerializeImageUrls(List<string> urls)
+        {
+            var filtered = urls?.Where(u => !string.IsNullOrWhiteSpace(u)).ToList() ?? new List<string>();
+            return filtered.Count > 0 ? JsonSerializer.Serialize(filtered) : null;
+        }
+
         internal static ProductDetailDto MapToDto(Product p)
         {
-            var thumbnail = AttachmentDto.FromUrl(p.ImageUrl, p.Id, p.Slug ?? "product");
+            var imageUrls = ParseImageUrls(p.ImageUrl);
+            var firstUrl = imageUrls.FirstOrDefault();
+            var thumbnail = AttachmentDto.FromUrl(firstUrl, p.Id, p.Slug ?? "product");
+            var galleries = imageUrls.Select((url, idx) => AttachmentDto.FromUrl(url, p.Id * 1000 + idx, $"{p.Slug ?? "product"}-{idx}")).Where(a => a != null).ToList();
             return new ProductDetailDto
             {
                 Id = p.Id,
@@ -36,7 +57,8 @@ namespace BookManagementSystem.Service.Services
                 IsFeatured = p.IsFeatured,
                 ProductThumbnailId = thumbnail != null ? p.Id : null,
                 ProductThumbnail = thumbnail,
-                ProductGalleries = thumbnail != null ? new List<AttachmentDto> { thumbnail } : new List<AttachmentDto>(),
+                ProductGalleries = galleries,
+                ImageUrls = imageUrls,
                 Categories = p.Category != null
                     ? new List<ProductCategoryDto> { new ProductCategoryDto { Id = p.Category.Id, Name = p.Category.Name, Slug = p.Category.Slug } }
                     : new List<ProductCategoryDto>(),
@@ -194,7 +216,7 @@ namespace BookManagementSystem.Service.Services
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 SKU = request.SKU,
-                ImageUrl = request.ImageUrl,
+                ImageUrl = SerializeImageUrls(request.ImageUrls),
                 StockStatus = request.StockStatus ?? "in_stock",
                 Quantity = request.Quantity,
                 IsFeatured = request.IsFeatured,
@@ -255,7 +277,7 @@ namespace BookManagementSystem.Service.Services
             product.Price = request.Price;
             product.SalePrice = request.SalePrice;
             product.SKU = request.SKU ?? product.SKU;
-            product.ImageUrl = request.ImageUrl ?? product.ImageUrl;
+            product.ImageUrl = request.ImageUrls?.Count > 0 ? SerializeImageUrls(request.ImageUrls) : product.ImageUrl;
             product.StockStatus = request.StockStatus ?? product.StockStatus;
             product.Quantity = request.Quantity;
             product.IsFeatured = request.IsFeatured;

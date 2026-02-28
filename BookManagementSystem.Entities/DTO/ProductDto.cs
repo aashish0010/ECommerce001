@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using BookManagementSystem.Domain.Entities;
 
@@ -126,6 +127,9 @@ namespace BookManagementSystem.Domain.DTO
         [JsonPropertyName("colors")]
         public List<ColorDetailDto> Colors { get; set; } = new List<ColorDetailDto>();
 
+        [JsonPropertyName("image_urls")]
+        public List<string> ImageUrls { get; set; } = new List<string>();
+
         [JsonPropertyName("created_at")]
         public string CreatedAt { get; set; }
 
@@ -158,7 +162,7 @@ namespace BookManagementSystem.Domain.DTO
         public decimal Price { get; set; }
         public decimal? SalePrice { get; set; }
         public string SKU { get; set; }
-        public string ImageUrl { get; set; }
+        public List<string> ImageUrls { get; set; } = new List<string>();
         public string StockStatus { get; set; } = "in_stock";
         public int Quantity { get; set; }
         public bool IsFeatured { get; set; }
@@ -176,7 +180,7 @@ namespace BookManagementSystem.Domain.DTO
         public decimal Price { get; set; }
         public decimal? SalePrice { get; set; }
         public string SKU { get; set; }
-        public string ImageUrl { get; set; }
+        public List<string> ImageUrls { get; set; } = new List<string>();
         public string StockStatus { get; set; }
         public int Quantity { get; set; }
         public bool IsFeatured { get; set; }
