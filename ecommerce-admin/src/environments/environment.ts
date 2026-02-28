@@ -4,5 +4,5 @@ export const environment = {
   MOCK_URL: '/assets/data',
   storageURL: '/assets',
   baseURL: 'https://ecommerce001-production.up.railway.app/api/',
-  companyCode: 'COMP001',
+  companyCode: 'WOW001',
 };

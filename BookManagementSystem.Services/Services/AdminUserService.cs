@@ -2,6 +2,7 @@ using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service.Function;
+using BookManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +14,39 @@ namespace BookManagementSystem.Service.Services
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailManagerService _emailManagerService;
+        private readonly ITokenService _tokenService;
 
-        public AdminUserService(ApplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminUserService(
+            ApplicationDbContext context, 
+            UserManager<User> userManager, 
+            RoleManager<IdentityRole> roleManager,
+            IEmailManagerService emailManagerService,
+            ITokenService tokenService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailManagerService = emailManagerService;
+            _tokenService = tokenService;
         }
 
         public async Task<AdminUserListResponse> GetAllUsersAsync(int page = 1, int pageSize = 15)
         {
-            var users = _userManager.Users.OrderByDescending(u => u.Created);
+            var currentUserName = _tokenService.UserName;
+            var currentUser = await _userManager.Users
+                .Include(u => u.CompanyInfo)
+                .FirstOrDefaultAsync(u => u.UserName == currentUserName);
+
+            if (currentUser == null || currentUser.CompanyInfoId == 0)
+            {
+                return new AdminUserListResponse { Data = new List<AdminUserDto>(), Total = 0 };
+            }
+
+            var users = _userManager.Users
+                .Where(u => u.CompanyInfoId == currentUser.CompanyInfoId)
+                .OrderByDescending(u => u.Created);
+            
             var total = await users.CountAsync();
             var userList = await users
                 .Skip((page - 1) * pageSize)
@@ -62,6 +85,14 @@ namespace BookManagementSystem.Service.Services
             if (existingUser != null)
                 return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = "User with this phone already exists" };
 
+            var currentUserName = _tokenService.UserName;
+            var currentUser = await _userManager.Users
+                .Include(u => u.CompanyInfo)
+                .FirstOrDefaultAsync(u => u.UserName == currentUserName);
+
+            if (currentUser == null || currentUser.CompanyInfo == null)
+                return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = "Admin user or company not found" };
+
             var names = Helper.SplitStringBySpace(request.Name);
             var user = new User
             {
@@ -70,6 +101,8 @@ namespace BookManagementSystem.Service.Services
                 PhoneNumber = request.Phone,
                 IsActive = "t",
                 Created = DateTime.UtcNow,
+                CompanyInfoId = currentUser.CompanyInfoId,
+                CompanyInfo = currentUser.CompanyInfo
             };
 
             if (names != null)
@@ -82,7 +115,13 @@ namespace BookManagementSystem.Service.Services
                 }
             }
 
-            var createResult = await _userManager.CreateAsync(user, request.Password);
+            string password = request.Password;
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                password = Helper.RandomPassword();
+            }
+
+            var createResult = await _userManager.CreateAsync(user, password);
             if (!createResult.Succeeded)
                 return new Common { Code = StatusCodes.Status400BadRequest, Status = Level.Failed, Message = createResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user" };
 
@@ -92,6 +131,31 @@ namespace BookManagementSystem.Service.Services
                 await _roleManager.CreateAsync(new IdentityRole(roleName));
 
             await _userManager.AddToRoleAsync(user, roleName);
+
+            if (request.SendPasswordSetupEmail)
+            {
+                var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var encodedToken = System.Web.HttpUtility.UrlEncode(resetToken);
+                var resetLink = $"https://your-frontend-url.com/auth/setup-password?email={user.Email}&token={encodedToken}";
+
+                var mailRequest = new MailRequest
+                {
+                    ToEmail = user.Email,
+                    Subject = "Welcome! Set Up Your Password",
+                    Body = $@"
+                        <h2>Welcome to {currentUser.CompanyInfo.CompanyName}!</h2>
+                        <p>Hello {user.FirstName},</p>
+                        <p>An account has been created for you. Please click the link below to set up your password:</p>
+                        <p><a href='{resetLink}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Set Up Password</a></p>
+                        <p>This link will expire in 24 hours.</p>
+                        <p>If you didn't request this, please ignore this email.</p>
+                        <br/>
+                        <p>Best regards,<br/>{currentUser.CompanyInfo.CompanyName} Team</p>
+                    "
+                };
+
+                await _emailManagerService.SendEmail(mailRequest);
+            }
 
             return new Common { Code = StatusCodes.Status200OK, Status = Level.Success, Message = "User created successfully" };
         }

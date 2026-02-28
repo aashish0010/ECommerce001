@@ -14,6 +14,7 @@ namespace BookManagementSystem.Service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<AdminUserService>();
             services.AddHttpContextAccessor();
 
             services.AddHttpClient("Resend", client =>

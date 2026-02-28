@@ -66,10 +66,11 @@ namespace BookManagementSystem.Domain.DTO
         [JsonPropertyName("phone")]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        [MinLength(6)]
         [JsonPropertyName("password")]
         public string Password { get; set; }
+
+        [JsonPropertyName("send_password_setup_email")]
+        public bool SendPasswordSetupEmail { get; set; } = true;
 
         [JsonPropertyName("role_id")]
         public int RoleId { get; set; } = 2;
