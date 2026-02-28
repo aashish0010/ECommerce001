@@ -14,10 +14,10 @@ export class RoleService {
   private http = inject(HttpClient);
 
   getRoleModules(): Observable<IModule[]> {
-    return this.http.get<IModule[]>(`${environment.URL}/module.json`);
+    return this.http.get<IModule[]>(`${environment.MOCK_URL}/module.json`);
   }
 
   getRoles(payload?: Params): Observable<IRoleModel> {
-    return this.http.get<IRoleModel>(`${environment.URL}/role.json`, { params: payload });
+    return this.http.get<IRoleModel>(`${environment.MOCK_URL}/role.json`, { params: payload });
   }
 }

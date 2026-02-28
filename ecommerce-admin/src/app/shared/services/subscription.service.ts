@@ -14,7 +14,7 @@ export class SubscriptionService {
   private http = inject(HttpClient);
 
   getSubscribeList(payload?: Params): Observable<ISubscriptionModel> {
-    return this.http.get<ISubscriptionModel>(`${environment.URL}/subscribe.json`, {
+    return this.http.get<ISubscriptionModel>(`${environment.MOCK_URL}/subscribe.json`, {
       params: payload,
     });
   }

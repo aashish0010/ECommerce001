@@ -14,6 +14,6 @@ export class NoticeService {
   private http = inject(HttpClient);
 
   getNotice(payload?: Params): Observable<INoticeModel> {
-    return this.http.get<INoticeModel>(`${environment.URL}/notice.json`, { params: payload });
+    return this.http.get<INoticeModel>(`${environment.MOCK_URL}/notice.json`, { params: payload });
   }
 }

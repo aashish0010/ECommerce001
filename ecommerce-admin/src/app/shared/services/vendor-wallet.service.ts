@@ -14,6 +14,6 @@ export class VendorWalletService {
   private http = inject(HttpClient);
 
   getVendorTransaction(payload?: Params): Observable<IVenderWallet> {
-    return this.http.get<IVenderWallet>(`${environment.URL}/wallet.json`, { params: payload });
+    return this.http.get<IVenderWallet>(`${environment.MOCK_URL}/wallet.json`, { params: payload });
   }
 }

@@ -14,6 +14,6 @@ export class TaxService {
   private http = inject(HttpClient);
 
   getTaxes(payload?: Params): Observable<ITaxModel> {
-    return this.http.get<ITaxModel>(`${environment.URL}/tax.json`, { params: payload });
+    return this.http.get<ITaxModel>(`${environment.MOCK_URL}/tax.json`, { params: payload });
   }
 }

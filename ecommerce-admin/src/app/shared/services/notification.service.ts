@@ -42,7 +42,7 @@ export class NotificationService {
   }
 
   getNotifications(payload?: Params): Observable<INotificationModel> {
-    return this.http.get<INotificationModel>(`${environment.URL}/notifications.json`, {
+    return this.http.get<INotificationModel>(`${environment.MOCK_URL}/notifications.json`, {
       params: payload,
     });
   }

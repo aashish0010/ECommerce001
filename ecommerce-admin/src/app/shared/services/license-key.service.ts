@@ -14,7 +14,7 @@ export class LicenseKeyService {
   private http = inject(HttpClient);
 
   getLicenseKeys(payload?: Params): Observable<ILicenseKeyModel> {
-    return this.http.get<ILicenseKeyModel>(`${environment.URL}/license-key.json`, {
+    return this.http.get<ILicenseKeyModel>(`${environment.MOCK_URL}/license-key.json`, {
       params: payload,
     });
   }

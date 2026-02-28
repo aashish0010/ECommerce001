@@ -14,6 +14,6 @@ export class CouponService {
   private http = inject(HttpClient);
 
   getCoupons(payload?: Params): Observable<ICouponModel> {
-    return this.http.get<ICouponModel>(`${environment.URL}/coupon.json`, { params: payload });
+    return this.http.get<ICouponModel>(`${environment.MOCK_URL}/coupon.json`, { params: payload });
   }
 }

@@ -14,7 +14,7 @@ export class OrderStatusService {
   private http = inject(HttpClient);
 
   getOrderStatus(payload?: Params): Observable<IOrderStatusModel> {
-    return this.http.get<IOrderStatusModel>(`${environment.URL}/orderStatus.json`, {
+    return this.http.get<IOrderStatusModel>(`${environment.MOCK_URL}/orderStatus.json`, {
       params: payload,
     });
   }

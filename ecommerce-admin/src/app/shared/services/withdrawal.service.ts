@@ -14,7 +14,7 @@ export class WithdrawalService {
   private http = inject(HttpClient);
 
   getWithdrawRequest(payload?: Params): Observable<IWithdrawalModel> {
-    return this.http.get<IWithdrawalModel>(`${environment.URL}/withdrawRequest.json`, {
+    return this.http.get<IWithdrawalModel>(`${environment.MOCK_URL}/withdrawRequest.json`, {
       params: payload,
     });
   }

@@ -14,11 +14,11 @@ export class AttributeService {
   private http = inject(HttpClient);
 
   getAttributes(payload?: Params): Observable<IAttributeModel> {
-    return this.http.get<IAttributeModel>(`${environment.URL}/attribute.json`, { params: payload });
+    return this.http.get<IAttributeModel>(`${environment.MOCK_URL}/attribute.json`, { params: payload });
   }
 
   getAttributeValues(payload?: Params): Observable<IAttributeValueModel> {
-    return this.http.get<IAttributeValueModel>(`${environment.URL}/attribute-value.json`, {
+    return this.http.get<IAttributeValueModel>(`${environment.MOCK_URL}/attribute-value.json`, {
       params: payload,
     });
   }

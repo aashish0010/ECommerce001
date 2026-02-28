@@ -14,6 +14,6 @@ export class CategoryService {
   private http = inject(HttpClient);
 
   getCategories(payload?: Params): Observable<ICategoryModel> {
-    return this.http.get<ICategoryModel>(`${environment.URL}/category.json`, { params: payload });
+    return this.http.get<ICategoryModel>(`${environment.MOCK_URL}/category.json`, { params: payload });
   }
 }

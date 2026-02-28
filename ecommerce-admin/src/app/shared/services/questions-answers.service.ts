@@ -14,7 +14,7 @@ export class QuestionsAnswersService {
   private http = inject(HttpClient);
 
   getQuestionAnswers(payload?: Params): Observable<IQnAModel> {
-    return this.http.get<IQnAModel>(`${environment.URL}/question-and-answer.json`, {
+    return this.http.get<IQnAModel>(`${environment.MOCK_URL}/question-and-answer.json`, {
       params: payload,
     });
   }

@@ -14,6 +14,6 @@ export class RefundService {
   private http = inject(HttpClient);
 
   getRefunds(payload?: Params): Observable<IRefundModel> {
-    return this.http.get<IRefundModel>(`${environment.URL}/refund.json`, { params: payload });
+    return this.http.get<IRefundModel>(`${environment.MOCK_URL}/refund.json`, { params: payload });
   }
 }

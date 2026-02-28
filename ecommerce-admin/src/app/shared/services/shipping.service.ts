@@ -14,6 +14,6 @@ export class ShippingService {
   private http = inject(HttpClient);
 
   getShippings(payload?: Params): Observable<IShipping[]> {
-    return this.http.get<IShipping[]>(`${environment.URL}/shipping.json`, { params: payload });
+    return this.http.get<IShipping[]>(`${environment.MOCK_URL}/shipping.json`, { params: payload });
   }
 }

@@ -21,6 +21,6 @@ export class NavService {
   public fullScreen: boolean = false;
 
   getBadges(payload?: Params): Observable<IBadges> {
-    return this.http.get<IBadges>(`${environment.URL}/badge.json`, payload);
+    return this.http.get<IBadges>(`${environment.MOCK_URL}/badge.json`, payload);
   }
 }

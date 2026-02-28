@@ -14,7 +14,7 @@ export class CommissionService {
   private http = inject(HttpClient);
 
   getCommissionHistory(payload?: Params): Observable<ICommissionModel> {
-    return this.http.get<ICommissionModel>(`${environment.URL}/commissionHistory.json`, {
+    return this.http.get<ICommissionModel>(`${environment.MOCK_URL}/commissionHistory.json`, {
       params: payload,
     });
   }

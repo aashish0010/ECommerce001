@@ -14,7 +14,7 @@ export class AttachmentService {
   private http = inject(HttpClient);
 
   getAttachments(payload?: Params): Observable<IAttachmentModel> {
-    return this.http.get<IAttachmentModel>(`${environment.URL}/attachment.json`, {
+    return this.http.get<IAttachmentModel>(`${environment.MOCK_URL}/attachment.json`, {
       params: payload,
     });
   }

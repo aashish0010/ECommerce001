@@ -13,6 +13,6 @@ export class StateService {
   private http = inject(HttpClient);
 
   getStates(): Observable<IStates[]> {
-    return this.http.get<IStates[]>(`${environment.URL}/state.json`);
+    return this.http.get<IStates[]>(`${environment.MOCK_URL}/state.json`);
   }
 }

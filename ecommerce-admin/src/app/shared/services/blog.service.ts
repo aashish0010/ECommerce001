@@ -14,6 +14,6 @@ export class BlogService {
   private http = inject(HttpClient);
 
   getBlogs(payload?: Params): Observable<IBlogModel> {
-    return this.http.get<IBlogModel>(`${environment.URL}/blog.json`, { params: payload });
+    return this.http.get<IBlogModel>(`${environment.MOCK_URL}/blog.json`, { params: payload });
   }
 }

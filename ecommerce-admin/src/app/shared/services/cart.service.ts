@@ -13,6 +13,6 @@ export class CartService {
   private http = inject(HttpClient);
 
   getCartItems(): Observable<ICartModel> {
-    return this.http.get<ICartModel>(`${environment.URL}/cart.json`);
+    return this.http.get<ICartModel>(`${environment.MOCK_URL}/cart.json`);
   }
 }

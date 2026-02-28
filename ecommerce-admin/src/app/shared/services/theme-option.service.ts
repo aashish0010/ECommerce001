@@ -13,6 +13,6 @@ export class ThemeOptionService {
   private http = inject(HttpClient);
 
   getThemeOption(): Observable<IThemeOption> {
-    return this.http.get<IThemeOption>(`${environment.URL}/themeOptions.json`);
+    return this.http.get<IThemeOption>(`${environment.MOCK_URL}/themeOptions.json`);
   }
 }

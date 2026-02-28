@@ -14,6 +14,6 @@ export class PageService {
   private http = inject(HttpClient);
 
   getPages(payload?: Params): Observable<IPageModel> {
-    return this.http.get<IPageModel>(`${environment.URL}/page.json`, { params: payload });
+    return this.http.get<IPageModel>(`${environment.MOCK_URL}/page.json`, { params: payload });
   }
 }

@@ -13,6 +13,6 @@ export class PaymentDetailsService {
   private http = inject(HttpClient);
 
   getPaymentAccount(): Observable<IPaymentDetails> {
-    return this.http.get<IPaymentDetails>(`${environment.URL}/paymentAccount`);
+    return this.http.get<IPaymentDetails>(`${environment.MOCK_URL}/paymentAccount`);
   }
 }

@@ -14,6 +14,6 @@ export class BrandService {
   private http = inject(HttpClient);
 
   getBrands(payload?: Params): Observable<IBrandModel> {
-    return this.http.get<IBrandModel>(`${environment.URL}/brand.json`, { params: payload });
+    return this.http.get<IBrandModel>(`${environment.MOCK_URL}/brand.json`, { params: payload });
   }
 }

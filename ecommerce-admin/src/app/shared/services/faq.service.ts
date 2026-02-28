@@ -14,6 +14,6 @@ export class FaqService {
   private http = inject(HttpClient);
 
   getFaqs(payload?: Params): Observable<IFaqModel> {
-    return this.http.get<IFaqModel>(`${environment.URL}/faq.json`, { params: payload });
+    return this.http.get<IFaqModel>(`${environment.MOCK_URL}/faq.json`, { params: payload });
   }
 }

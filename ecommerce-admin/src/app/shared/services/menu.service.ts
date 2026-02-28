@@ -14,6 +14,6 @@ export class MenuService {
   private http = inject(HttpClient);
 
   getMenu(payload?: Params): Observable<IMenuModel> {
-    return this.http.get<IMenuModel>(`${environment.URL}/menu.json`, { params: payload });
+    return this.http.get<IMenuModel>(`${environment.MOCK_URL}/menu.json`, { params: payload });
   }
 }

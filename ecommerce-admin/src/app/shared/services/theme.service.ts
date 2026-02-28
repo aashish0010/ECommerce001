@@ -14,10 +14,10 @@ export class ThemeService {
   private http = inject(HttpClient);
 
   getThemes(): Observable<IThemesModel> {
-    return this.http.get<IThemesModel>(`${environment.URL}/theme.json`);
+    return this.http.get<IThemesModel>(`${environment.MOCK_URL}/theme.json`);
   }
 
   getHomePage<T>(payload?: Params): Observable<T> {
-    return this.http.get<T>(`${environment.URL}/home/${payload!['slug']}.json`);
+    return this.http.get<T>(`${environment.MOCK_URL}/home/${payload!['slug']}.json`);
   }
 }

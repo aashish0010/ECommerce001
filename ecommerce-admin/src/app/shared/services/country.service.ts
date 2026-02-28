@@ -14,6 +14,6 @@ export class CountryService {
   private platformId = inject<Object>(PLATFORM_ID);
 
   getCountries(): Observable<ICountry[]> {
-    return this.http.get<ICountry[]>(`${environment.URL}/country.json`);
+    return this.http.get<ICountry[]>(`${environment.MOCK_URL}/country.json`);
   }
 }

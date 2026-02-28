@@ -15,11 +15,11 @@ export class SettingService {
   reCaptchaConfig: IGoogleReCaptcha;
 
   getSettingOption(): Observable<ISetting> {
-    return this.http.get<ISetting>(`${environment.URL}/settings.json`);
+    return this.http.get<ISetting>(`${environment.MOCK_URL}/settings.json`);
   }
 
   getAppSettingOption(): Observable<IAppSetting> {
-    return this.http.get<IAppSetting>(`${environment.URL}/app/settings`);
+    return this.http.get<IAppSetting>(`${environment.MOCK_URL}/app/settings`);
   }
   async getReCaptchaConfig(): Promise<void> {
     // const config = await this.getSettingOption().toPromise();

@@ -14,6 +14,6 @@ export class CurrencyService {
   private http = inject(HttpClient);
 
   getCurrencies(payload?: Params): Observable<ICurrencyModel> {
-    return this.http.get<ICurrencyModel>(`${environment.URL}/currency.json`, { params: payload });
+    return this.http.get<ICurrencyModel>(`${environment.MOCK_URL}/currency.json`, { params: payload });
   }
 }
