@@ -17,7 +17,7 @@ export class RoleService {
     return this.http.get<IModule[]>(`${environment.MOCK_URL}/module.json`);
   }
 
-  getRoles(payload?: Params): Observable<IRoleModel> {
-    return this.http.get<IRoleModel>(`${environment.MOCK_URL}/role.json`, { params: payload });
+  getRoles(payload?: Params): Observable<any> {
+    return this.http.get<any>(`${environment.URL}/user/roles`, { params: payload });
   }
 }

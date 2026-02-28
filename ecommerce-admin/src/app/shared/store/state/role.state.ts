@@ -71,10 +71,11 @@ export class RoleState {
     return this.roleService.getRoles(action?.payload).pipe(
       tap({
         next: result => {
+          const roles = Array.isArray(result) ? result : result.data || [];
           ctx.patchState({
             role: {
-              data: result.data,
-              total: result?.total ? result?.total : result.data.length,
+              data: roles,
+              total: Array.isArray(result) ? result.length : (result?.total || roles.length),
             },
           });
         },

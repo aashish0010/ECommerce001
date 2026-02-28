@@ -70,8 +70,8 @@ export class FormUser {
         phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)]),
         country_code: new FormControl('1', [Validators.required]),
         role_id: new FormControl('', [Validators.required]),
-        password: new FormControl('', [Validators.required]),
-        password_confirmation: new FormControl('', [Validators.required]),
+        password: new FormControl(''),
+        password_confirmation: new FormControl(''),
         status: new FormControl(1),
       },
       {

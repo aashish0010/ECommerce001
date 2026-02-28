@@ -97,5 +97,17 @@ namespace BookManagementSystem.Controller
                 return Ok(result);
             return BadRequest(result);
         }
+
+        [HttpGet("roles")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetRoles()
+        {
+            var roles = new[]
+            {
+                new { id = 1, name = "Admin" },
+                new { id = 2, name = "Customer" }
+            };
+            return Ok(roles);
+        }
     }
 }

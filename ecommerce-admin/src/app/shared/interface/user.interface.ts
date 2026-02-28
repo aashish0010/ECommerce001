@@ -29,6 +29,8 @@ export interface IUser {
   point?: IPoint;
   wallet?: IWallet;
   is_approved: boolean;
+  password?: string;
+  password_confirmation?: string;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;

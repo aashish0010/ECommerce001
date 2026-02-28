@@ -84,8 +84,10 @@ export class UserState {
     return this.userService.createUser({
       name: action.payload.name,
       email: action.payload.email,
-      phone: action.payload.phone,
-      password: 'Default@123',
+      phone: String(action.payload.phone),
+      password: action.payload.password || '',
+      send_password_setup_email: !action.payload.password,
+      role_id: action.payload.role_id || 2,
     }).pipe(
       tap({
         next: () => {
@@ -125,7 +127,8 @@ export class UserState {
     return this.userService.updateUser(phone, {
       name: payload.name,
       email: payload.email,
-      phone: payload.phone,
+      phone: String(payload.phone),
+      status: payload.status,
     }).pipe(
       tap({
         next: () => {
