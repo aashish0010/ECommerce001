@@ -153,7 +153,7 @@ export const appConfig: ApplicationConfig = {
       ]),
       NgxsModule.forFeature([AuthState, StoreState]),
       NgxsStoragePluginModule.forRoot({
-        keys: ['auth', 'dashboard', 'notification', 'account', 'country', 'state', 'setting'],
+        keys: ['adminAuth', 'adminAccount'],
       }),
     ),
     provideAnimations(),

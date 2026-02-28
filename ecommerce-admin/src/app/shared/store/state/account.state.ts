@@ -23,7 +23,7 @@ export class AccountStateModel {
 }
 
 @State<AccountStateModel>({
-  name: 'account',
+  name: 'adminAccount',
   defaults: {
     user: null,
     permissions: [],

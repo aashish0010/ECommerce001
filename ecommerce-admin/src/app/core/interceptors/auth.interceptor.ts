@@ -48,6 +48,9 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !isPublic) {
           this.notificationService.notification = false;
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.removeItem('admin_token');
+          }
           this.store.dispatch(new AuthClearAction());
           void this.router.navigate(['/auth/login']);
         }

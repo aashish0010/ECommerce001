@@ -27,7 +27,7 @@ export interface AuthStateModel {
 }
 
 @State<AuthStateModel>({
-  name: 'auth',
+  name: 'adminAuth',
   defaults: {
     email: '',
     token: '',
