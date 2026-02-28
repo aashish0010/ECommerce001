@@ -74,6 +74,6 @@ namespace BookManagementSystem.Service.Services
 
         public DashboardService dashboardService => new DashboardService(_context);
 
-        public AdminUserService adminUserService => new AdminUserService(_context, _userManager, _roleManager);
+        public AdminUserService adminUserService => new AdminUserService(_context, _userManager, _roleManager, mailService, tokenService);
     }
 }
