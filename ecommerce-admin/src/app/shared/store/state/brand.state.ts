@@ -79,20 +79,38 @@ export class BrandState {
   }
 
   @Action(CreateBrandAction)
-  create(_ctx: StateContext<BrandStateModel>, _action: CreateBrandAction) {
-    // Create Brand Logic Here
+  create(ctx: StateContext<BrandStateModel>, { payload }: CreateBrandAction) {
+    return this.brandService.createBrand(payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Brand created successfully');
+          this.store.dispatch(new GetBrandsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to create brand');
+        },
+      }),
+    );
   }
 
   @Action(EditBrandAction)
   edit(ctx: StateContext<BrandStateModel>, { id }: EditBrandAction) {
+    const state = ctx.getState();
+    const cached = state.brand.data.find(brand => brand.id == id);
+    if (cached) {
+      ctx.patchState({ selectedBrand: cached });
+      return;
+    }
     return this.brandService.getBrands().pipe(
       tap({
         next: results => {
-          const state = ctx.getState();
           const result = results.data.find(brand => brand.id == id);
           ctx.patchState({
-            ...state,
-            selectedBrand: result,
+            brand: {
+              data: results.data,
+              total: results.total || results.data.length,
+            },
+            selectedBrand: result || null,
           });
         },
         error: err => {
@@ -103,26 +121,63 @@ export class BrandState {
   }
 
   @Action(UpdateBrandAction)
-  update(_ctx: StateContext<BrandStateModel>, { payload: _payload, id: _id }: UpdateBrandAction) {
-    // Update Brand Logic Here
+  update(ctx: StateContext<BrandStateModel>, { payload, id }: UpdateBrandAction) {
+    return this.brandService.updateBrand(id, payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Brand updated successfully');
+          this.store.dispatch(new GetBrandsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update brand');
+        },
+      }),
+    );
   }
 
   @Action(UpdateBrandStatusAction)
-  updateStatus(
-    _ctx: StateContext<BrandStateModel>,
-    { id: _id, status: _status }: UpdateBrandStatusAction,
-  ) {
-    // Update Brand Status Logic Here
+  updateStatus(ctx: StateContext<BrandStateModel>, { id, status }: UpdateBrandStatusAction) {
+    return this.brandService.updateBrandStatus(id, status).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Brand status updated successfully');
+          this.store.dispatch(new GetBrandsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update status');
+        },
+      }),
+    );
   }
 
   @Action(DeleteBrandAction)
-  delete(_ctx: StateContext<BrandStateModel>, { id: _id }: DeleteBrandAction) {
-    // Delete Brand Logic Here
+  delete(ctx: StateContext<BrandStateModel>, { id }: DeleteBrandAction) {
+    return this.brandService.deleteBrand(id).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Brand deleted successfully');
+          this.store.dispatch(new GetBrandsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete brand');
+        },
+      }),
+    );
   }
 
   @Action(DeleteAllBrandAction)
-  deleteAll(_ctx: StateContext<BrandStateModel>, { ids: _ids }: DeleteAllBrandAction) {
-    // Delete All Brand Logic Here
+  deleteAll(ctx: StateContext<BrandStateModel>, { ids }: DeleteAllBrandAction) {
+    return this.brandService.deleteAllBrands(ids).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Brands deleted successfully');
+          this.store.dispatch(new GetBrandsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete brands');
+        },
+      }),
+    );
   }
 
   @Action(ImportBrandAction)

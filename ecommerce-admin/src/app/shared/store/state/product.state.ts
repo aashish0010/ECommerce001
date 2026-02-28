@@ -126,31 +126,20 @@ export class ProductState {
   getProducts(ctx: StateContext<ProductStateModel>, action: GetProductsAction) {
     return this.productService.getProducts(action.payload).pipe(
       tap({
-        next: (result: IProductModel) => {
-          let paginateProduct;
-          if (action.payload!['page'] && action.payload!['paginate']) {
-            paginateProduct = result.data
-              .map(product => ({ ...product }))
-              .slice(
-                (action.payload!['page'] - 1) * action.payload!['paginate'],
-                (action.payload!['page'] - 1) * action.payload!['paginate'] +
-                  action.payload!['paginate'],
-              );
-          } else {
-            paginateProduct = result.data;
-          }
+        next: (result: any) => {
+          // API returns server-side paginated data
+          const products = result.data || [];
+          const total = result.total ?? result.Total ?? products.length;
 
-          if (action?.payload!['top_selling']) {
-            const state = ctx.getState();
+          if (action?.payload?.['top_selling']) {
             ctx.patchState({
-              ...state,
-              topSellingProducts: paginateProduct,
+              topSellingProducts: products,
             });
           } else {
             ctx.patchState({
               product: {
-                data: paginateProduct,
-                total: result?.total ? result?.total : paginateProduct?.length,
+                data: products,
+                total: total,
               },
             });
           }
@@ -163,20 +152,39 @@ export class ProductState {
   }
 
   @Action(CreateProductAction)
-  create(_ctx: StateContext<ProductStateModel>, _action: CreateProductAction) {
-    // Create Product Logic Here
+  create(ctx: StateContext<ProductStateModel>, { payload }: CreateProductAction) {
+    return this.productService.createProduct(payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Product created successfully');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to create product');
+        },
+      }),
+    );
   }
 
   @Action(EditProductAction)
   edit(ctx: StateContext<ProductStateModel>, { id }: EditProductAction) {
+    const state = ctx.getState();
+    const cached = state.product.data.find(product => product.id == id);
+    if (cached) {
+      ctx.patchState({ selectedProduct: cached });
+      return;
+    }
     return this.productService.getProducts().pipe(
       tap({
-        next: results => {
-          const state = ctx.getState();
-          const result = results.data.find(product => product.id == id);
+        next: (results: any) => {
+          const products = results.data || [];
+          const result = products.find((product: IProduct) => product.id == id);
           ctx.patchState({
-            ...state,
-            selectedProduct: result,
+            product: {
+              data: products,
+              total: results.total || products.length,
+            },
+            selectedProduct: result || null,
           });
         },
         error: err => {
@@ -187,56 +195,98 @@ export class ProductState {
   }
 
   @Action(UpdateProductAction)
-  update(
-    _ctx: StateContext<ProductStateModel>,
-    { payload: _payload, id: _id }: UpdateProductAction,
-  ) {
-    // Update Product Login Here
+  update(ctx: StateContext<ProductStateModel>, { payload, id }: UpdateProductAction) {
+    return this.productService.updateProduct(id, payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Product updated successfully');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update product');
+        },
+      }),
+    );
   }
 
   @Action(UpdateProductStatusAction)
-  updateStatus(
-    _ctx: StateContext<ProductStateModel>,
-    { id: _id, status: _status }: UpdateProductStatusAction,
-  ) {
-    // Update Product Status Login Here
+  updateStatus(ctx: StateContext<ProductStateModel>, { id, status }: UpdateProductStatusAction) {
+    return this.productService.updateProductStatus(id, status).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Product status updated successfully');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update status');
+        },
+      }),
+    );
   }
 
   @Action(ApproveProductStatusAction)
-  approveStatus(
-    _ctx: StateContext<ProductStateModel>,
-    { id: _id, status: _status }: ApproveProductStatusAction,
-  ) {
-    // Approve Product Status Login Here
+  approveStatus(ctx: StateContext<ProductStateModel>, { id, status }: ApproveProductStatusAction) {
+    // Approve uses same status endpoint
+    return this.productService.updateProductStatus(id, status).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Product approval updated');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update approval');
+        },
+      }),
+    );
   }
 
   @Action(DeleteProductAction)
-  delete(_ctx: StateContext<ProductStateModel>, { id: _id }: DeleteProductAction) {
-    // Delete Product Login Here
+  delete(ctx: StateContext<ProductStateModel>, { id }: DeleteProductAction) {
+    return this.productService.deleteProduct(id).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Product deleted successfully');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete product');
+        },
+      }),
+    );
   }
 
   @Action(DeleteAllProductAction)
-  deleteAll(_ctx: StateContext<ProductStateModel>, { ids: _ids }: DeleteAllProductAction) {
-    // Delete All Product Login Here
+  deleteAll(ctx: StateContext<ProductStateModel>, { ids }: DeleteAllProductAction) {
+    return this.productService.deleteAllProducts(ids).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Products deleted successfully');
+          this.store.dispatch(new GetProductsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete products');
+        },
+      }),
+    );
   }
 
   @Action(ReplicateProductAction)
   replicateProduct(_ctx: StateContext<ProductStateModel>, { ids: _ids }: ReplicateProductAction) {
-    // Replicate Product Login Here
+    // Replicate Product Logic Here
   }
 
   @Action(ImportProductAction)
   import(_ctx: StateContext<ProductStateModel>, _action: ImportProductAction) {
-    // Import Product Login Here
+    // Import Product Logic Here
   }
 
   @Action(ExportProductAction)
   export(_ctx: StateContext<ProductStateModel>, _action: ExportProductAction) {
-    // Export Product Login Here
+    // Export Product Logic Here
   }
 
   @Action(DownloadAction)
   download(_ctx: StateContext<ProductStateModel>, _action: DownloadAction) {
-    // Download Product Login Here
+    // Download Product Logic Here
   }
 }

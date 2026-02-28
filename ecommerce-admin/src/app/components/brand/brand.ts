@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { Params, Router, RouterModule } from '@angular/router';
 
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 
 import { PageWrapper } from '../../shared/components/page-wrapper/page-wrapper';
 import { Table } from '../../shared/components/ui/table/table';
-import { HasPermissionDirective } from '../../shared/directive/has-permission.directive';
 import { IBrand, IBrandModel } from '../../shared/interface/brand.interface';
 import { ITableClickedAction, ITableConfig } from '../../shared/interface/table.interface';
 import {
@@ -17,10 +16,11 @@ import {
   UpdateBrandStatusAction,
 } from '../../shared/store/action/brand.action';
 import { BrandState } from '../../shared/store/state/brand.state';
+import { BrandModal } from './brand-modal/brand-modal';
 
 @Component({
   selector: 'app-brand',
-  imports: [TranslateModule, RouterModule, HasPermissionDirective, PageWrapper, Table],
+  imports: [TranslateModule, RouterModule, PageWrapper, Table, BrandModal],
   templateUrl: './brand.html',
   styleUrl: './brand.scss',
 })
@@ -29,24 +29,12 @@ export class Brand {
   router = inject(Router);
 
   brand$: Observable<IBrandModel> = inject(Store).select(BrandState.brand);
+  readonly brandModal = viewChild<BrandModal>('brandModal');
 
   public tableConfig: ITableConfig = {
     columns: [
-      {
-        title: 'image',
-        dataField: 'brand_image',
-        class: 'tbl-image',
-        type: 'image',
-        placeholder: 'assets/images/product.png',
-      },
       { title: 'Name', dataField: 'name', sortable: true, sort_direction: 'desc' },
-      {
-        title: 'created_at',
-        dataField: 'created_at',
-        type: 'date',
-        sortable: true,
-        sort_direction: 'desc',
-      },
+      { title: 'No of Products', dataField: 'products_count', sortable: true },
       { title: 'status', dataField: 'status', type: 'switch' },
     ],
     rowActions: [
@@ -80,8 +68,12 @@ export class Brand {
     else if (action.actionToPerform == 'deleteAll') this.deleteAll(action.data);
   }
 
+  openAddModal() {
+    this.brandModal()?.openModal();
+  }
+
   edit(data: IBrand) {
-    void this.router.navigateByUrl(`/brand/edit/${data.id}`);
+    this.brandModal()?.openModal(data);
   }
 
   status(data: IBrand) {
@@ -94,5 +86,9 @@ export class Brand {
 
   deleteAll(ids: number[]) {
     this.store.dispatch(new DeleteAllBrandAction(ids));
+  }
+
+  onModalClosed() {
+    this.store.dispatch(new GetBrandsAction());
   }
 }

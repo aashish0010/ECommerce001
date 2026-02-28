@@ -39,5 +39,55 @@ namespace BookManagementSystem.Controller
             var result = await _unitOfWork.brandService.CreateBrand(request);
             return CreatedAtAction(nameof(GetBrandBySlug), new { slug = result.Brands?.FirstOrDefault()?.Slug }, result);
         }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBrand(int id, [FromBody] UpdateBrandRequest request)
+        {
+            var result = await _unitOfWork.brandService.UpdateBrand(id, request);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpPatch("{id}/status")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBrandStatus(int id, [FromBody] StatusRequest request)
+        {
+            var result = await _unitOfWork.brandService.UpdateBrandStatus(id, request.Status);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteBrand(int id)
+        {
+            var result = await _unitOfWork.brandService.DeleteBrand(id);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpPost("delete-all")]
+        [Authorize]
+        public async Task<IActionResult> DeleteAllBrands([FromBody] DeleteAllRequest request)
+        {
+            var result = await _unitOfWork.brandService.DeleteAllBrands(request.Ids);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+    }
+
+    public class StatusRequest
+    {
+        public bool Status { get; set; }
+    }
+
+    public class DeleteAllRequest
+    {
+        public List<int> Ids { get; set; } = new List<int>();
     }
 }

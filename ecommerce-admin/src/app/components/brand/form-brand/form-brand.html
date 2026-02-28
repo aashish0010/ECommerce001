@@ -12,48 +12,21 @@
     }
   </app-form-fields>
 
-  <app-form-fields [label]="'image' | translate " [for]="'image'" [required]="false">
-    <app-image-upload
-      [accept]="[mediaConfig.image]"
-      [multipleImage]="false"
-      [image]="brand?.brand_image"
-      (selectedFiles)="selectBrandImage($event)"
-    />
-  </app-form-fields>
-
-  <app-form-fields [label]="'banner_image' | translate " [for]="'banner_image'" [required]="false">
-    <app-image-upload
-      [accept]="[mediaConfig.image]"
-      [multipleImage]="false"
-      [image]="brand?.brand_banner"
-      (selectedFiles)="selectBannerImage($event)"
-    />
-  </app-form-fields>
-
-  <app-form-fields [label]="'meta_title'" [for]="'metatitle'" [required]="false">
-    <input
-      class="form-control"
-      type="text"
-      placeholder="{{'enter_meta_title' | translate }}"
-      formControlName="meta_title"
-    />
-  </app-form-fields>
-
-  <app-form-fields [label]="'meta_description'" [for]="'desc'" [required]="false">
+  <app-form-fields [label]="'description'" [for]="'description'" [required]="false">
     <textarea
       class="form-control"
-      placeholder="{{ 'enter_meta_description' | translate }}"
-      formControlName="meta_description"
+      placeholder="{{ 'enter_description' | translate }}"
+      formControlName="description"
       rows="3"
     ></textarea>
   </app-form-fields>
 
-  <app-form-fields [label]="'meta_image' | translate " [for]="'meta_image'" [required]="false">
-    <app-image-upload
-      [accept]="[mediaConfig.image]"
-      [multipleImage]="false"
-      [image]="brand?.brand_meta_image"
-      (selectedFiles)="selectMetaImage($event)"
+  <app-form-fields [label]="'image_url'" [for]="'image_url'" [required]="false">
+    <input
+      class="form-control"
+      type="text"
+      placeholder="{{ 'enter_image_url' | translate }}"
+      formControlName="image_url"
     />
   </app-form-fields>
 

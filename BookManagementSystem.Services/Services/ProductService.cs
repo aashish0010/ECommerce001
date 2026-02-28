@@ -230,6 +230,150 @@ namespace BookManagementSystem.Service.Services
             };
         }
 
+        public async Task<SingleProductResponseDto> UpdateProduct(int id, UpdateProductRequest request)
+        {
+            var product = await _context.Products
+                .Include(p => p.ProductColors)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return new SingleProductResponseDto
+                {
+                    Status = Level.Failed,
+                    Code = 404,
+                    Message = "Product not found"
+                };
+            }
+
+            product.Name = request.Name ?? product.Name;
+            product.Slug = request.Name != null
+                ? request.Name.ToLower().Replace(" ", "-").Replace("'", "").Replace("\"", "")
+                : product.Slug;
+            product.ShortDescription = request.ShortDescription ?? product.ShortDescription;
+            product.Description = request.Description ?? product.Description;
+            product.Price = request.Price;
+            product.SalePrice = request.SalePrice;
+            product.SKU = request.SKU ?? product.SKU;
+            product.ImageUrl = request.ImageUrl ?? product.ImageUrl;
+            product.StockStatus = request.StockStatus ?? product.StockStatus;
+            product.Quantity = request.Quantity;
+            product.IsFeatured = request.IsFeatured;
+            product.IsActive = request.Status;
+            product.CategoryId = request.CategoryId > 0 ? request.CategoryId : product.CategoryId;
+            product.BrandId = request.BrandId;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            // Update colors
+            if (request.ColorIds != null)
+            {
+                _context.ProductColors.RemoveRange(product.ProductColors);
+                if (request.ColorIds.Count > 0)
+                {
+                    var newColors = request.ColorIds.Select(cId => new ProductColor { ProductId = product.Id, ColorId = cId }).ToList();
+                    _context.ProductColors.AddRange(newColors);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Reload with relations
+            product.Category = await _context.Categories.FindAsync(product.CategoryId);
+            product.Brand = product.BrandId.HasValue ? await _context.Brands.FindAsync(product.BrandId) : null;
+            product.ProductColors = await _context.ProductColors.Include(pc => pc.Color).Where(pc => pc.ProductId == product.Id).ToListAsync();
+
+            return new SingleProductResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Product updated successfully",
+                Product = MapToDto(product)
+            };
+        }
+
+        public async Task<SingleProductResponseDto> UpdateProductStatus(int id, bool status)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return new SingleProductResponseDto
+                {
+                    Status = Level.Failed,
+                    Code = 404,
+                    Message = "Product not found"
+                };
+            }
+
+            product.IsActive = status;
+            product.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return new SingleProductResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Product status updated successfully"
+            };
+        }
+
+        public async Task<SingleProductResponseDto> DeleteProduct(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.ProductColors)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return new SingleProductResponseDto
+                {
+                    Status = Level.Failed,
+                    Code = 404,
+                    Message = "Product not found"
+                };
+            }
+
+            _context.ProductColors.RemoveRange(product.ProductColors);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return new SingleProductResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Product deleted successfully"
+            };
+        }
+
+        public async Task<ProductResponseDto> DeleteAllProducts(List<int> ids)
+        {
+            var products = await _context.Products
+                .Include(p => p.ProductColors)
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync();
+
+            if (!products.Any())
+            {
+                return new ProductResponseDto
+                {
+                    Status = Level.Failed,
+                    Code = 404,
+                    Message = "No products found"
+                };
+            }
+
+            var productColors = products.SelectMany(p => p.ProductColors).ToList();
+            _context.ProductColors.RemoveRange(productColors);
+            _context.Products.RemoveRange(products);
+            await _context.SaveChangesAsync();
+
+            return new ProductResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = $"{products.Count} product(s) deleted successfully"
+            };
+        }
+
         public async Task<CategoryResponseDto> SeedCategories(int companyInfoId)
         {
             try

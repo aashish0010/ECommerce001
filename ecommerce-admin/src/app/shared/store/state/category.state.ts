@@ -56,7 +56,7 @@ export class CategoryState {
         data: {
           name: res.name,
           slug: res.slug,
-          image: res.category_icon ? res.category_icon.original_url : 'assets/images/category.png',
+          image: res.image_url || 'assets/images/category.png',
         },
       };
     });
@@ -71,7 +71,7 @@ export class CategoryState {
         data: {
           name: res.name,
           slug: res.slug,
-          image: res.category_icon ? res.category_icon.original_url : 'assets/images/category.png',
+          image: res.image_url || 'assets/images/category.png',
         },
       };
     });
@@ -90,7 +90,7 @@ export class CategoryState {
           ctx.patchState({
             category: {
               data: result.data,
-              total: result?.total ? result?.total : result.data.length,
+              total: result?.total ? result?.total : result.data?.length,
             },
           });
         },
@@ -102,20 +102,59 @@ export class CategoryState {
   }
 
   @Action(CreateCategoryAction)
-  create(_ctx: StateContext<CategoryStateModel>, _action: CreateCategoryAction) {
-    // Create Category Logic Here
+  create(ctx: StateContext<CategoryStateModel>, { payload }: CreateCategoryAction) {
+    return this.categoryService.createCategory(payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Category created successfully');
+          this.store.dispatch(new GetCategoriesAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to create category');
+        },
+      }),
+    );
   }
 
   @Action(EditCategoryAction)
   edit(ctx: StateContext<CategoryStateModel>, { id }: EditCategoryAction) {
+    const state = ctx.getState();
+    // Search in top-level and subcategories
+    let found: ICategory | undefined;
+    for (const cat of state.category.data) {
+      if (cat.id == id) {
+        found = cat;
+        break;
+      }
+      if (cat.subcategories) {
+        found = cat.subcategories.find(sc => sc.id == id);
+        if (found) break;
+      }
+    }
+    if (found) {
+      ctx.patchState({ selectedCategory: found });
+      return;
+    }
     return this.categoryService.getCategories().pipe(
       tap({
         next: results => {
-          const state = ctx.getState();
-          const result = results.data.find(category => category.id == id);
+          let result: ICategory | undefined;
+          for (const cat of results.data) {
+            if (cat.id == id) {
+              result = cat;
+              break;
+            }
+            if (cat.subcategories) {
+              result = cat.subcategories.find(sc => sc.id == id);
+              if (result) break;
+            }
+          }
           ctx.patchState({
-            ...state,
-            selectedCategory: result,
+            category: {
+              data: results.data,
+              total: results.total || results.data.length,
+            },
+            selectedCategory: result || null,
           });
         },
         error: err => {
@@ -126,16 +165,33 @@ export class CategoryState {
   }
 
   @Action(UpdateCategoryAction)
-  update(
-    _ctx: StateContext<CategoryStateModel>,
-    { payload: _payload, id: _id }: UpdateCategoryAction,
-  ) {
-    // Update Category Logic Here
+  update(ctx: StateContext<CategoryStateModel>, { payload, id }: UpdateCategoryAction) {
+    return this.categoryService.updateCategory(id, payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Category updated successfully');
+          this.store.dispatch(new GetCategoriesAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update category');
+        },
+      }),
+    );
   }
 
   @Action(DeleteCategoryAction)
-  delete(_ctx: StateContext<CategoryStateModel>, { id: _id, type: _type }: DeleteCategoryAction) {
-    // Delete Category Logic Here
+  delete(ctx: StateContext<CategoryStateModel>, { id }: DeleteCategoryAction) {
+    return this.categoryService.deleteCategory(id).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Category deleted successfully');
+          this.store.dispatch(new GetCategoriesAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete category');
+        },
+      }),
+    );
   }
 
   @Action(ImportCategoryAction)

@@ -170,7 +170,6 @@ namespace BookManagementSystem.Domain.DTO
 
     public class UpdateProductRequest
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
@@ -181,7 +180,10 @@ namespace BookManagementSystem.Domain.DTO
         public string StockStatus { get; set; }
         public int Quantity { get; set; }
         public bool IsFeatured { get; set; }
+        public bool Status { get; set; } = true;
         public int CategoryId { get; set; }
+        public int? BrandId { get; set; }
+        public List<int> ColorIds { get; set; } = new List<int>();
     }
 
     public class CreateBrandRequest
@@ -190,6 +192,32 @@ namespace BookManagementSystem.Domain.DTO
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public int CompanyInfoId { get; set; }
+    }
+
+    public class UpdateBrandRequest
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public bool Status { get; set; } = true;
+    }
+
+    public class CreateCategoryRequest
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public int? ParentId { get; set; }
+        public int CompanyInfoId { get; set; }
+    }
+
+    public class UpdateCategoryRequest
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public int? ParentId { get; set; }
+        public bool Status { get; set; } = true;
     }
 
     public class CreateColorRequest

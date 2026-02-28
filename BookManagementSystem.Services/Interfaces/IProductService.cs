@@ -8,6 +8,10 @@ namespace BookManagementSystem.Service.Interfaces
         Task<SingleProductResponseDto> GetProductBySlug(string slug);
         Task<CategoryResponseDto> GetCategories(int companyInfoId);
         Task<SingleProductResponseDto> CreateProduct(CreateProductRequest request);
+        Task<SingleProductResponseDto> UpdateProduct(int id, UpdateProductRequest request);
+        Task<SingleProductResponseDto> UpdateProductStatus(int id, bool status);
+        Task<SingleProductResponseDto> DeleteProduct(int id);
+        Task<ProductResponseDto> DeleteAllProducts(List<int> ids);
         Task<CategoryResponseDto> SeedCategories(int companyInfoId);
     }
 }

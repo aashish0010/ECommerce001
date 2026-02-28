@@ -34,9 +34,9 @@ export class TreeNode {
   }
 
   delete(actionType: string, data: ICategory) {
-    this.store.dispatch(new DeleteCategoryAction(data.id!, data.type)).subscribe({
+    this.store.dispatch(new DeleteCategoryAction(data.id!, this.categoryType())).subscribe({
       complete: () => {
-        if (data.type == 'post') void this.router.navigateByUrl('/blog/category');
+        if (this.categoryType() == 'post') void this.router.navigateByUrl('/blog/category');
         else void this.router.navigateByUrl('/category');
       },
     });

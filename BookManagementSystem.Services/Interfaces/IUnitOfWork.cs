@@ -12,6 +12,7 @@ namespace BookManagementSystem.Service.Interfaces
 		CommonService commonService { get; }
 		ProductService productService { get; }
 		BrandService brandService { get; }
+		CategoryService categoryService { get; }
 		ColorService colorService { get; }
 		OrderService orderService { get; }
 		AddressService addressService { get; }

@@ -1,14 +1,15 @@
 <app-page-wrapper [gridClass]="'col-sm-12'" [title]="'brands'">
-  <div *hasPermission="'brand.create'" button>
-    <a [routerLink]="['/brand/create']" class="align-items-center btn btn-theme d-flex">
+  <div button>
+    <button (click)="openAddModal()" class="align-items-center btn btn-theme d-flex">
       <i class="ri-add-line"></i> {{ 'add_brand' | translate }}
-    </a>
+    </button>
   </div>
   <app-table
     [tableConfig]="tableConfig"
     [hasCheckbox]="true"
     (tableChanged)="onTableChange($event)"
-    (rowClicked)="edit($event)"
     (action)="onActionClicked($event)"
   />
 </app-page-wrapper>
+
+<app-brand-modal #brandModal (modalClosed)="onModalClosed()" />

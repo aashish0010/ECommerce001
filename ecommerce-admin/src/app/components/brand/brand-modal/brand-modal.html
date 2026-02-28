@@ -1,0 +1,51 @@
+<app-modal [modalClass]="'modal-md'" #brandModal>
+  <ng-container title>
+    <h5 class="modal-title">{{ (isEdit ? 'edit_brand' : 'add_brand') | translate }}</h5>
+  </ng-container>
+  <ng-container body>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">{{ 'name' | translate }}</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+          />
+          <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger">
+            {{ 'name_required' | translate }}
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'description' | translate }}</label>
+          <textarea class="form-control" formControlName="description" rows="3"></textarea>
+        </div>
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="status"
+              formControlName="status"
+            />
+            <label class="form-check-label" for="status">
+              {{ 'active' | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container footer>
+    <button type="button" class="btn btn-secondary" (click)="modal()?.closeModal()">
+      {{ 'cancel' | translate }}
+    </button>
+    <app-button
+      [class]="'btn btn-theme'"
+      [id]="'submit_brand'"
+      (click)="submit()"
+    >
+      {{ (isEdit ? 'update' : 'save') | translate }}
+    </app-button>
+  </ng-container>
+</app-modal>

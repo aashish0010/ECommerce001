@@ -1,30 +1,18 @@
-import { IAttachment } from './attachment.interface';
-import { IPaginateModel } from './core.interface';
-
-export interface ICategoryModel extends IPaginateModel {
+export interface ICategoryModel {
   data: ICategory[];
+  total: number;
 }
 
 export interface ICategory {
   id: number;
   name: string;
   slug: string;
-  description: string;
-  type: string;
+  description?: string;
+  image_url?: string;
   parent_id?: number;
-  category_image?: IAttachment;
-  category_image_id?: number;
-  category_icon?: IAttachment;
-  category_icon_id?: number;
-  commission_rate?: number;
-  subcategories?: ICategory[];
-  category_meta_image_id: number;
-  category_meta_image: IAttachment;
-  meta_title: string;
-  meta_description: string;
   status: boolean;
-  created_by_id?: number;
+  subcategories?: ICategory[];
+  products_count?: number;
   created_at?: string;
   updated_at?: string;
-  deleted_at?: string;
 }

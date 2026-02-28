@@ -17,9 +17,6 @@ import { PageWrapper } from '../../../shared/components/page-wrapper/page-wrappe
 import { AdvanceDropdown } from '../../../shared/components/ui/advance-dropdown/advance-dropdown';
 import { Button } from '../../../shared/components/ui/button/button';
 import { FormFields } from '../../../shared/components/ui/form-fields/form-fields';
-import { ImageUpload } from '../../../shared/components/ui/image-upload/image-upload';
-import { mediaConfig } from '../../../shared/data/media-config';
-import { IAttachment } from '../../../shared/interface/attachment.interface';
 import { ICategory } from '../../../shared/interface/category.interface';
 import {
   CreateCategoryAction,
@@ -37,7 +34,6 @@ import { CategoryState } from '../../../shared/store/state/category.state';
     PageWrapper,
     FormFields,
     AdvanceDropdown,
-    ImageUpload,
     Button,
   ],
   templateUrl: './form-category.html',
@@ -56,7 +52,6 @@ export class FormCategory {
   public form: FormGroup;
   public category: ICategory;
   public id: number;
-  public mediaConfig = mediaConfig;
 
   private destroy$ = new Subject<void>();
 
@@ -65,19 +60,8 @@ export class FormCategory {
       name: new FormControl('', [Validators.required]),
       description: new FormControl(),
       parent_id: new FormControl(),
-      type: new FormControl(this.categoryType(), []),
-      commission_rate: new FormControl(),
-      category_image_id: new FormControl(),
-      category_icon_id: new FormControl(),
-      category_meta_image_id: new FormControl(),
-      meta_title: new FormControl(),
-      meta_description: new FormControl(),
       status: new FormControl(true),
     });
-  }
-
-  ngOnChanges() {
-    this.form.controls['type'].setValue(this.categoryType());
   }
 
   ngOnInit() {
@@ -97,13 +81,6 @@ export class FormCategory {
           name: this.category?.name,
           description: this.category?.description,
           parent_id: this.category?.parent_id,
-          type: this.category?.type,
-          commission_rate: this.category?.commission_rate,
-          category_image_id: this.category?.category_image_id,
-          category_icon_id: this.category?.category_icon_id,
-          category_meta_image_id: this.category?.category_meta_image_id,
-          meta_title: this.category?.meta_title,
-          meta_description: this.category?.meta_description,
           status: this.category?.status,
         });
       });
@@ -114,24 +91,6 @@ export class FormCategory {
       this.form.controls['parent_id'].setValue(data[0]);
     } else {
       this.form.controls['parent_id'].setValue('');
-    }
-  }
-
-  selectCategoryImage(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['category_image_id'].setValue(data ? data.id : '');
-    }
-  }
-
-  selectCategoryIcon(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['category_icon_id'].setValue(data ? data.id : '');
-    }
-  }
-
-  selectMetaImage(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['category_meta_image_id'].setValue(data ? data.id : '');
     }
   }
 
@@ -148,15 +107,9 @@ export class FormCategory {
         complete: () => {
           if (this.type() == 'create') {
             this.form.reset();
-            this.form.controls['category_image_id'].setValue('');
-            this.form.controls['category_icon_id'].setValue('');
             this.form.controls['status'].setValue(true);
           } else {
-            if (this.form.value.type === 'product') {
-              void this.router.navigateByUrl('/category');
-            } else {
-              void this.router.navigateByUrl('/blog/category');
-            }
+            void this.router.navigateByUrl('/category');
           }
         },
       });

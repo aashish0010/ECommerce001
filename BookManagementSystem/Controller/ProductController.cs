@@ -54,6 +54,46 @@ namespace BookManagementSystem.Controller
             return CreatedAtAction(nameof(GetProductBySlug), new { slug = result.Product?.Slug }, result);
         }
 
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductRequest request)
+        {
+            var result = await _unitOfWork.productService.UpdateProduct(id, request);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpPatch("{id}/status")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProductStatus(int id, [FromBody] StatusRequest request)
+        {
+            var result = await _unitOfWork.productService.UpdateProductStatus(id, request.Status);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var result = await _unitOfWork.productService.DeleteProduct(id);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpPost("delete-all")]
+        [Authorize]
+        public async Task<IActionResult> DeleteAllProducts([FromBody] DeleteAllRequest request)
+        {
+            var result = await _unitOfWork.productService.DeleteAllProducts(request.Ids);
+            if (result.Code == 404)
+                return NotFound(result);
+            return Ok(result);
+        }
+
         [HttpPost("with-image")]
         [Authorize]
         public async Task<IActionResult> CreateProductWithImage(

@@ -58,6 +58,8 @@ namespace BookManagementSystem.Service.Services
 
         public BrandService brandService => new BrandService(_context);
 
+        public CategoryService categoryService => new CategoryService(_context);
+
         public ColorService colorService => new ColorService(_context);
 
         public OrderService orderService => new OrderService(_context);

@@ -70,20 +70,6 @@ export const menu: ISidebar[] = [
         type: 'link',
         level: 2,
       },
-      {
-        parent_id: 3,
-        title: 'attributes',
-        path: '/attribute',
-        type: 'link',
-        level: 2,
-      },
-      {
-        parent_id: 3,
-        title: 'tags',
-        path: '/tag',
-        type: 'link',
-        level: 2,
-      },
     ],
   },
   {

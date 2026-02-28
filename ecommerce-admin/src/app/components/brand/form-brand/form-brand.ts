@@ -15,9 +15,6 @@ import { Subject, mergeMap, of, switchMap, takeUntil } from 'rxjs';
 
 import { Button } from '../../../shared/components/ui/button/button';
 import { FormFields } from '../../../shared/components/ui/form-fields/form-fields';
-import { ImageUpload } from '../../../shared/components/ui/image-upload/image-upload';
-import { mediaConfig } from '../../../shared/data/media-config';
-import { IAttachment } from '../../../shared/interface/attachment.interface';
 import { IBrand } from '../../../shared/interface/brand.interface';
 import {
   CreateBrandAction,
@@ -28,7 +25,7 @@ import { BrandState } from '../../../shared/store/state/brand.state';
 
 @Component({
   selector: 'app-form-brand',
-  imports: [TranslateModule, FormsModule, ReactiveFormsModule, FormFields, ImageUpload, Button],
+  imports: [TranslateModule, FormsModule, ReactiveFormsModule, FormFields, Button],
   templateUrl: './form-brand.html',
   styleUrl: './form-brand.scss',
 })
@@ -42,19 +39,15 @@ export class FormBrand {
 
   public form: FormGroup;
   public brand: IBrand | null;
-  public mediaConfig = mediaConfig;
 
   private destroy$ = new Subject<void>();
 
   constructor() {
     this.form = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
-      brand_image_id: new FormControl(),
+      description: new FormControl(''),
+      image_url: new FormControl(''),
       status: new FormControl(true),
-      brand_banner_id: new FormControl(),
-      brand_meta_image_id: new FormControl(),
-      meta_title: new FormControl(),
-      meta_description: new FormControl(),
     });
   }
 
@@ -69,36 +62,15 @@ export class FormBrand {
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe(faq => {
-        this.brand = faq;
+      .subscribe(brand => {
+        this.brand = brand;
         this.form.patchValue({
           name: this.brand?.name,
-          brand_image_id: this.brand?.brand_image_id,
-          brand_meta_image_id: this.brand?.brand_meta_image_id,
-          meta_title: this.brand?.meta_title,
-          brand_banner_id: this.brand?.brand_banner_id,
-          meta_description: this.brand?.meta_description,
+          description: this.brand?.description || '',
+          image_url: this.brand?.image_url || '',
           status: this.brand?.status,
         });
       });
-  }
-
-  selectBrandImage(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['brand_image_id'].setValue(data ? data.id : '');
-    }
-  }
-
-  selectBannerImage(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['brand_banner_id'].setValue(data ? data.id : '');
-    }
-  }
-
-  selectMetaImage(data: IAttachment) {
-    if (!Array.isArray(data)) {
-      this.form.controls['brand_meta_image_id'].setValue(data ? data.id : '');
-    }
   }
 
   submit() {
