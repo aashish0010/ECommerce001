@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Store, State, Selector, Action, StateContext } from '@ngxs/store';
-import { tap, catchError, EMPTY } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
@@ -23,7 +23,7 @@ export interface AuthStateModel {
   email: string;
   token: string | number;
   access_token: string | null;
-  permissions: [];
+  permissions: any[];
 }
 
 @State<AuthStateModel>({
@@ -65,23 +65,24 @@ export class AuthState {
   @Action(LoginAction)
   login(ctx: StateContext<AuthStateModel>, action: LoginAction) {
     this.notificationService.notification = false;
-    return this.authService.login(action.payload.email, action.payload.password).pipe(
-      tap((res) => {
-        ctx.patchState({
-          email: res.userName,
-          token: '',
-          access_token: res.token,
-          permissions: [],
-        });
-        this.store.dispatch(new GetUserDetailsAction());
-        this.store.dispatch(new GetBadgesAction());
-        this.store.dispatch(new GetNotificationAction());
-        this.store.dispatch(new GetSettingOptionAction());
-      }),
-      catchError((error) => {
-        const message = error?.error?.message || 'Login failed';
-        this.notificationService.showError(message);
-        return EMPTY;
+    return this.authService.adminLogin(action.payload).pipe(
+      tap({
+        next: (response) => {
+          this.authService.setToken(response.token);
+          ctx.patchState({
+            email: response.email || response.userName,
+            token: response.token,
+            access_token: response.token,
+            permissions: response.permissions || [],
+          });
+          this.store.dispatch(new GetUserDetailsAction());
+          this.store.dispatch(new GetBadgesAction());
+          this.store.dispatch(new GetNotificationAction());
+          this.store.dispatch(new GetSettingOptionAction());
+        },
+        error: (err) => {
+          throw new Error(err?.error?.message || 'Login failed');
+        },
       }),
     );
   }
@@ -106,6 +107,7 @@ export class AuthState {
 
   @Action(LogoutAction)
   logout(_ctx: StateContext<AuthStateModel>) {
+    this.authService.logout();
     this.store.dispatch(new AuthClearAction()).subscribe({
       complete: () => {
         void this.router.navigate(['/auth/login']);

@@ -3,16 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-
-export interface LoginResponse {
-  code: number;
-  status: string;
-  message: string;
-  userName: string;
-  token: string;
-  refreshToken: string;
-  role: string;
-}
+import { IAdminLoginModel, IAdminAuthResponse } from '../interface/auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,10 +11,27 @@ export interface LoginResponse {
 export class AuthService {
   private http = inject(HttpClient);
 
-  login(userName: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.URL}/auth/admin-login`, {
-      userName,
-      password,
-    });
+  adminLogin(payload: IAdminLoginModel): Observable<IAdminAuthResponse> {
+    return this.http.post<IAdminAuthResponse>(
+      `${environment.baseURL}Auth/admin-login`,
+      payload
+    );
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('admin_token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('admin_token');
+  }
+
+  setToken(token: string): void {
+    localStorage.setItem('admin_token', token);
+  }
+
+  logout(): void {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
   }
 }

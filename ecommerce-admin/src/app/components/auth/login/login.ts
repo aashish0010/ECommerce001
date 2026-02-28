@@ -45,7 +45,7 @@ export class Login {
 
   constructor() {
     this.form = this.formBuilder.group({
-      email: new FormControl('', [Validators.required]),
+      userName: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
     });
   }
