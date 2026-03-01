@@ -3,6 +3,6 @@ export const environment = {
   URL: '/api',
   MOCK_URL: '/assets/data',
   storageURL: '/assets',
-  baseURL: 'https://ecommerce001-production.up.railway.app/api/',
+  baseURL: '/api/',
   companyCode: 'WOW001',
 };

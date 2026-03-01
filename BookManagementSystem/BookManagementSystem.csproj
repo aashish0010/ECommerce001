@@ -5,9 +5,10 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\ecommerce\</SpaRoot>
+    <AdminRoot>..\ecommerce-admin\</AdminRoot>
     <SpaProxyServerUrl>http://localhost:4200</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**;$(AdminRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\BookManagementSystem.Services\BookManagementSystem.Service.csproj" />
   </ItemGroup>
 
+  <!-- Build ecommerce (main SPA) and copy to wwwroot/ -->
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:csr" />
@@ -42,6 +44,20 @@
       <DistFiles Include="$(SpaRoot)dist\ecommerce\browser\**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <!-- Build ecommerce-admin (admin SPA) and copy to wwwroot/admin/ -->
+  <Target Name="PublishRunWebpackAdmin" AfterTargets="PublishRunWebpack">
+    <Exec WorkingDirectory="$(AdminRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(AdminRoot)" Command="npm run build" />
+    <ItemGroup>
+      <AdminDistFiles Include="$(AdminRoot)dist\multikart-admin\browser\**" />
+      <ResolvedFileToPublish Include="@(AdminDistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>wwwroot\admin\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </ResolvedFileToPublish>

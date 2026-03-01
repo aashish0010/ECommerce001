@@ -87,6 +87,23 @@ app.MapFallback("/api/{**slug}", () => Results.NotFound(new { message = "API end
 
 if (!app.Environment.IsDevelopment())
 {
+    // Admin SPA: /admin and /admin/** → serve wwwroot/admin/index.html
+    app.MapFallback("/admin", async ctx =>
+    {
+        var env = ctx.RequestServices.GetRequiredService<IWebHostEnvironment>();
+        ctx.Response.ContentType = "text/html";
+        await ctx.Response.SendFileAsync(
+            Path.Combine(env.WebRootPath, "admin", "index.html"));
+    });
+    app.MapFallback("/admin/{**slug}", async ctx =>
+    {
+        var env = ctx.RequestServices.GetRequiredService<IWebHostEnvironment>();
+        ctx.Response.ContentType = "text/html";
+        await ctx.Response.SendFileAsync(
+            Path.Combine(env.WebRootPath, "admin", "index.html"));
+    });
+
+    // Main ecommerce SPA: all other non-API routes → wwwroot/index.csr.html
     app.MapFallbackToFile("index.csr.html");
 }
 
