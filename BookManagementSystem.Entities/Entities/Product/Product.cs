@@ -27,6 +27,7 @@ namespace BookManagementSystem.Domain.Entities.Product
         [JsonIgnore]
         public Brand Brand { get; set; }
         public ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public int CompanyInfoId { get; set; }

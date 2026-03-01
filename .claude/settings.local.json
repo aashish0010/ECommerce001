@@ -42,7 +42,10 @@
       "Bash(dotnet ef migrations add AddRefreshToken --startup-project ../BookManagementSystem)",
       "Bash(export PATH=\"$HOME/.dotnet/tools:$PATH\")",
       "Bash(dotnet add package CloudinaryDotNet --version 1.26.2)",
-      "Bash(npx ng build --configuration development)"
+      "Bash(npx ng build --configuration development)",
+      "Bash(dotnet ef migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
+      "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
+      "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" database update --startup-project ../BookManagementSystem)"
     ]
   }
 }

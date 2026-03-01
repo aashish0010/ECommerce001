@@ -88,4 +88,10 @@ export class ProductService {
   deleteAllProducts(ids: number[]): Observable<void> {
     return this.http.post<void>(`${environment.URL}/product/delete-all`, { ids });
   }
+
+  uploadImage(file: File, folder: string = 'products'): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${environment.URL}/image/upload?folder=${folder}`, formData);
+  }
 }

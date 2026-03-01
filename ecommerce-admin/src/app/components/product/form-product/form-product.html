@@ -217,37 +217,62 @@
               <div class="tab" tab="images">
                 <div class="mb-4">
                   <h6 class="fw-semibold">Product Images</h6>
-                  <p class="text-muted small">Add image URLs for this product. The first image will be used as the thumbnail.</p>
+                  <p class="text-muted small">
+                    Select images from your system. They will be uploaded automatically.
+                    The first image is used as the thumbnail. Max 5MB per image (JPEG, PNG, GIF, WebP).
+                  </p>
                 </div>
 
-                <div formArrayName="image_urls">
-                  @for(control of imageUrlsControl.controls; track $index; let i = $index) {
-                  <div class="d-flex align-items-start gap-2 mb-3">
-                    <span class="badge mt-2" [class]="i === 0 ? 'bg-primary' : 'bg-light text-dark'">
-                      {{ i === 0 ? 'Thumbnail' : 'Image ' + (i + 1) }}
-                    </span>
-                    <div class="flex-grow-1">
-                      <input class="form-control" type="text" [formControlName]="i"
-                        placeholder="Enter image URL (e.g., https://example.com/image.jpg)" />
-                      @if(control.value) {
-                      <div class="mt-2">
-                        <img [src]="control.value" class="rounded border"
-                          style="max-height: 80px; max-width: 120px; object-fit: cover;"
-                          (error)="onImageError($event)" />
-                      </div>
-                      }
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger mt-1"
-                      (click)="removeImageUrl(i)" [disabled]="imageUrlsControl.length <= 1">
-                      <i class="ri-delete-bin-line"></i>
-                    </button>
-                  </div>
+                <!-- File picker -->
+                <div class="mb-4">
+                  <label class="btn btn-outline-primary" for="imageFileInput">
+                    <i class="ri-upload-cloud-2-line me-1"></i> Choose Images
+                  </label>
+                  <input type="file" id="imageFileInput" class="d-none" multiple
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    (change)="onFilesSelected($event)" />
+                  @if(isUploading) {
+                  <span class="ms-2 text-muted small">
+                    <i class="ri-loader-4-line spin"></i> Uploading...
+                  </span>
                   }
                 </div>
 
-                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addImageUrl()">
-                  <i class="ri-add-line"></i> Add Image
-                </button>
+                <!-- Image grid -->
+                @if(images.length) {
+                <div class="row g-3">
+                  @for(image of images; track $index; let i = $index) {
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="position-relative border rounded overflow-hidden"
+                      style="aspect-ratio: 1;" [ngClass]="{'opacity-50': image.uploading}">
+                      <img [src]="image.preview || image.url" class="w-100 h-100"
+                        style="object-fit: cover;" />
+                      @if(image.uploading) {
+                      <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="spinner-border spinner-border-sm text-primary"></div>
+                      </div>
+                      }
+                      @if(!image.uploading) {
+                      <button type="button"
+                        class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle p-0"
+                        style="width: 24px; height: 24px; line-height: 24px;"
+                        (click)="removeImage(i)">
+                        <i class="ri-close-line" style="font-size: 14px;"></i>
+                      </button>
+                      }
+                      @if(i === 0 && !image.uploading) {
+                      <span class="badge bg-primary position-absolute bottom-0 start-0 m-1">Thumbnail</span>
+                      }
+                    </div>
+                  </div>
+                  }
+                </div>
+                } @else {
+                <div class="text-center py-5 border rounded bg-light">
+                  <i class="ri-image-add-line" style="font-size: 48px; color: #ccc;"></i>
+                  <p class="text-muted mt-2 mb-0">No images added yet. Click "Choose Images" to upload.</p>
+                </div>
+                }
               </div>
             </ng-template>
           </li>

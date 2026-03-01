@@ -33,6 +33,7 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<CompareItem> CompareItems { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
@@ -238,6 +239,19 @@ namespace BookManagementSystem.Infrastructure
                 .WithMany(x => x.ProductColors)
                 .HasForeignKey(x => x.ColorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            #endregion
+
+            #region ProductImage
+
+            builder.Entity<ProductImage>().HasKey(x => x.Id);
+            builder.Entity<ProductImage>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<ProductImage>().Property(x => x.ImageUrl).HasMaxLength(1000).IsRequired();
+            builder.Entity<ProductImage>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.Images)
+                .HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
