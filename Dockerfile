@@ -21,7 +21,16 @@ RUN dotnet restore BookManagementSystem.sln
 # Copy the rest of the source
 COPY . .
 
-# Build Angular + publish .NET (PublishRunWebpack target runs npm install + npm run build:csr)
+# Pre-build ecommerce Angular (browser/CSR only)
+WORKDIR /src/ecommerce
+RUN npm ci && npm run build:csr
+
+# Pre-build ecommerce-admin Angular (production, baseHref=/admin/)
+WORKDIR /src/ecommerce-admin
+RUN npm ci && npm run build
+
+# Publish .NET — MSBuild targets skip npm if dist already exists, just copy files
+WORKDIR /src
 RUN dotnet publish BookManagementSystem/BookManagementSystem.csproj \
     -c Release \
     -o /app/publish \

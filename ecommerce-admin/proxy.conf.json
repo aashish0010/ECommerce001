@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://ecommerce001-production.up.railway.app",
+    "target": "http://localhost:5241",
     "secure": false,
     "changeOrigin": true
   }
