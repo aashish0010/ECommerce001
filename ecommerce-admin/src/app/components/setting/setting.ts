@@ -20,7 +20,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
 import { Select2Data, Select2Module } from 'ng-select2-component';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { PageWrapper } from '../../shared/components/page-wrapper/page-wrapper';
 import { Button } from '../../shared/components/ui/button/button';
@@ -304,22 +304,18 @@ export class Setting {
   }
 
   ngOnInit() {
-    const backendSettingOption$ = this.store.dispatch(new GetSettingOptionAction());
-    const getCurrencies$ = this.store.dispatch(new GetCurrenciesAction({ status: 1 }));
-    const getCompany$ = this.store.dispatch(new GetCompanyAction());
-    const getEmailConfig$ = this.store.dispatch(new GetEmailConfigAction());
-    const getMediaConfig$ = this.store.dispatch(new GetMediaConfigAction());
-    const getHomeConfig$ = this.store.dispatch(new GetHomeConfigAction());
+    this.store.dispatch(new GetSettingOptionAction());
+    this.store.dispatch(new GetCurrenciesAction({ status: 1 }));
+    this.store.dispatch(new GetCompanyAction());
+    this.store.dispatch(new GetEmailConfigAction());
+    this.store.dispatch(new GetMediaConfigAction());
+    this.store.dispatch(new GetHomeConfigAction());
 
-    forkJoin([backendSettingOption$, getCurrencies$, getCompany$, getEmailConfig$, getMediaConfig$, getHomeConfig$]).subscribe({
-      complete: () => {
-        this.patchForm();
-        this.patchCompanyForm();
-        this.patchEmailConfigForm();
-        this.patchMediaConfigForm();
-        this.patchHomeConfigForm();
-      },
-    });
+    this.patchForm();
+    this.patchCompanyForm();
+    this.patchEmailConfigForm();
+    this.patchMediaConfigForm();
+    this.patchHomeConfigForm();
   }
 
   patchForm() {

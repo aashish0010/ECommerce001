@@ -21,7 +21,7 @@ export class CompanyService {
   updateSocialLinks(id: number, socialLinks: ISocialLink[]): Observable<ICompanyAdminResponse> {
     return this.http.put<ICompanyAdminResponse>(
       `${environment.URL}/company/${id}/social-links`,
-      { socialLinks },
+      { social_links: socialLinks },
     );
   }
 }
