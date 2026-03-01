@@ -43,6 +43,13 @@ RUN dotnet publish BookManagementSystem/BookManagementSystem.csproj \
     -o /app/publish \
     --no-restore
 
+# Belt-and-suspenders: explicitly copy Angular outputs into the publish folder.
+# This guarantees the files are present regardless of how MSBuild handles the
+# wwwroot static-web-assets on Linux (backslash paths, lazy glob evaluation, etc.)
+RUN cp -r ecommerce/dist/ecommerce/browser/. /app/publish/wwwroot/ \
+ && mkdir -p /app/publish/wwwroot/admin \
+ && cp -r ecommerce-admin/dist/multikart-admin/browser/. /app/publish/wwwroot/admin/
+
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 

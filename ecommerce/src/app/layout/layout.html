@@ -10,16 +10,8 @@
 <router-outlet />
 <app-footer [logo]="setLogo().footer_logo" />
 
-@if ((themeOption$ | async)?.product?.sticky_product) {
-<app-recent-purchase-popup />
-}
-
 <app-theme-customizer />
 
-
-@if(!themeOptionService.newsletterModal && exit && (themeOption$ |
-async)?.popup?.exit?.is_enable){
-<app-exit-modal it-modal #exitModal />
-} @if(authService.isLogin){
+@if(authService.isLogin){
 <app-login-modal #loginModal />
 }

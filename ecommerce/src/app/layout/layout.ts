@@ -10,10 +10,7 @@ import { Footer } from '../shared/components/footer/footer';
 import { Header } from '../shared/components/header/header';
 import { BackToTop } from '../shared/components/widgets/back-to-top/back-to-top';
 import { Loader } from '../shared/components/widgets/loader/loader';
-import { ExitModal } from '../shared/components/widgets/modal/exit-modal/exit-modal';
 import { LoginModal } from '../shared/components/widgets/modal/login-modal/login-modal';
-import { NewsletterModal } from '../shared/components/widgets/modal/newsletter-modal/newsletter-modal';
-import { RecentPurchasePopup } from '../shared/components/widgets/recent-purchase-popup/recent-purchase-popup';
 import { ThemeCustomizer } from '../shared/components/widgets/theme-customizer/theme-customizer';
 import { IOption } from '../shared/interface/theme-option.interface';
 import { AuthService } from '../shared/services/auth.service';
@@ -33,9 +30,6 @@ import { ThemeOptionState } from '../shared/store/state/theme-option.state';
     LoadingBarRouterModule,
     Header,
     BackToTop,
-    NewsletterModal,
-    RecentPurchasePopup,
-    ExitModal,
     LoginModal,
     AsyncPipe,
   ],
@@ -54,14 +48,9 @@ export class Layout implements AfterViewInit {
     ThemeOptionState.themeOptions,
   ) as Observable<IOption>;
   cookies$: Observable<boolean> = inject(Store).select(ThemeOptionState.cookies);
-  exit$: Observable<boolean> = inject(Store).select(ThemeOptionState.exit);
-
-  readonly NewsletterModal = viewChild<NewsletterModal>('newsletterModal');
-  readonly ExitModal = viewChild<ExitModal>('exitModal');
   readonly LoginModal = viewChild<LoginModal>('loginModal');
 
   public cookies: boolean;
-  public exit: boolean;
   public theme: string;
   public show: boolean;
   public isBrowser: boolean;
@@ -75,7 +64,6 @@ export class Layout implements AfterViewInit {
     if (this.isBrowser) {
       this.store.dispatch(new ThemeOptionsAction());
       this.cookies$.subscribe(res => (this.cookies = res));
-      this.exit$.subscribe(res => (this.exit = res));
     }
 
     this.router.events.subscribe(event => {
