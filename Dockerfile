@@ -23,11 +23,13 @@ COPY . .
 
 # Pre-build ecommerce Angular (browser/CSR only)
 WORKDIR /src/ecommerce
-RUN npm ci && npm run build:csr
+RUN npm ci && npm run build:csr \
+ && test -f dist/ecommerce/browser/index.html || (echo "ERROR: ecommerce build did not produce browser/index.html" && exit 1)
 
 # Pre-build ecommerce-admin Angular (production, baseHref=/admin/)
 WORKDIR /src/ecommerce-admin
-RUN npm ci && npm run build
+RUN npm ci && npm run build \
+ && test -f dist/multikart-admin/browser/index.html || (echo "ERROR: admin build did not produce browser/index.html" && exit 1)
 
 # Copy Angular output directly into the source wwwroot BEFORE dotnet publish.
 # ASP.NET Core's publish always includes the source wwwroot/ as static content,
@@ -46,9 +48,13 @@ RUN dotnet publish BookManagementSystem/BookManagementSystem.csproj \
 # Belt-and-suspenders: explicitly copy Angular outputs into the publish folder.
 # This guarantees the files are present regardless of how MSBuild handles the
 # wwwroot static-web-assets on Linux (backslash paths, lazy glob evaluation, etc.)
-RUN cp -r ecommerce/dist/ecommerce/browser/. /app/publish/wwwroot/ \
- && mkdir -p /app/publish/wwwroot/admin \
- && cp -r ecommerce-admin/dist/multikart-admin/browser/. /app/publish/wwwroot/admin/
+RUN mkdir -p /app/publish/wwwroot/admin \
+ && cp -r ecommerce/dist/ecommerce/browser/. /app/publish/wwwroot/ \
+ && cp -r ecommerce-admin/dist/multikart-admin/browser/. /app/publish/wwwroot/admin/ \
+ && test -f /app/publish/wwwroot/index.html || (echo "ERROR: ecommerce index.html missing from publish output" && exit 1) \
+ && test -f /app/publish/wwwroot/admin/index.html || (echo "ERROR: admin index.html missing from publish output" && exit 1) \
+ && echo "✓ ecommerce files: $(ls /app/publish/wwwroot/*.js 2>/dev/null | wc -l) JS files" \
+ && echo "✓ admin files: $(ls /app/publish/wwwroot/admin/*.js 2>/dev/null | wc -l) JS files"
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
