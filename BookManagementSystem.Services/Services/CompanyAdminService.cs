@@ -51,6 +51,9 @@ namespace BookManagementSystem.Service.Services
             detail.DefaultCurrency = dto.DefaultCurrency;
             detail.SiteTagline = dto.SiteTagline;
             detail.SiteUrl = dto.SiteUrl;
+            if (dto.MinOrderFreeShipping.HasValue) detail.MinOrderFreeShipping = dto.MinOrderFreeShipping;
+            if (dto.MinOrderAmount.HasValue) detail.MinOrderAmount = dto.MinOrderAmount;
+            if (dto.TaxRate.HasValue) detail.TaxRate = dto.TaxRate;
 
             await _context.SaveChangesAsync();
 
@@ -109,6 +112,9 @@ namespace BookManagementSystem.Service.Services
                     DefaultCurrency = d.DefaultCurrency,
                     SiteTagline = d.SiteTagline,
                     SiteUrl = d.SiteUrl,
+                    MinOrderFreeShipping = d.MinOrderFreeShipping,
+                    MinOrderAmount = d.MinOrderAmount,
+                    TaxRate = d.TaxRate,
                     SocialLinks = socials.Select(s => new SocialLinkDto
                     {
                         Id = s.Id,

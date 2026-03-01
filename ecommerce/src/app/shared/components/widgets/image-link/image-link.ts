@@ -47,4 +47,9 @@ export class ImageLink {
     });
     return product ? product.slug : null;
   }
+
+  resolveUrl(imageUrl?: string): string {
+    if (!imageUrl) return this.placeholder() ?? '';
+    return imageUrl.startsWith('http') ? imageUrl : this.StorageURL + imageUrl;
+  }
 }

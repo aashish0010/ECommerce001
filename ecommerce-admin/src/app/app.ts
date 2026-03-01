@@ -10,10 +10,13 @@ import { Actions, Store, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { IValues } from './shared/interface/setting.interface';
+import { ICompanyAdmin } from './shared/interface/company.interface';
 import { LogoutAction } from './shared/store/action/auth.action';
 import { GetCountriesAction } from './shared/store/action/country.action';
 import { GetStatesAction } from './shared/store/action/state.action';
+import { GetCompanyAction } from './shared/store/action/company.action';
 import { SettingState } from './shared/store/state/setting.state';
+import { CompanyState } from './shared/store/state/company.state';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +32,7 @@ export class App {
   private translate = inject(TranslateService);
 
   setting$: Observable<IValues> = inject(Store).select(SettingState.setting) as Observable<IValues>;
+  company$: Observable<ICompanyAdmin | null> = inject(Store).select(CompanyState.company);
 
   public favIcon: HTMLLinkElement | null;
 
@@ -39,9 +43,10 @@ export class App {
     this.translate.use('en');
     this.store.dispatch(new GetCountriesAction());
     this.store.dispatch(new GetStatesAction());
-    // this.store.dispatch(new GetSettingOptionAction());
+    this.store.dispatch(new GetCompanyAction());
+
+    // Apply layout direction from setting
     this.setting$.subscribe(setting => {
-      // Set Direction
       if (setting?.general?.admin_site_language_direction === 'rtl') {
         document.getElementsByTagName('html')[0].setAttribute('dir', 'rtl');
         document.body.classList.add('ltr');
@@ -49,18 +54,20 @@ export class App {
         document.getElementsByTagName('html')[0].removeAttribute('dir');
         document.body.classList.remove('ltr');
       }
+    });
 
-      // Set Favicon
+    // Primary: use company data for favicon + page title
+    this.company$.subscribe(company => {
+      if (!company) return;
       this.favIcon = document.querySelector('#appIcon');
-      if (this.favIcon && this.favIcon.href)
-        this.favIcon.href = setting?.general?.favicon_image?.original_url!;
-
-      // Set site title
-      this.titleService.setTitle(
-        setting?.general?.site_title && setting?.general?.site_tagline
-          ? `${setting?.general?.site_title} | ${setting?.general?.site_tagline}`
-          : 'Marketplace: Where Vendors Shine Together',
-      );
+      if (this.favIcon && company.favicon_url) {
+        this.favIcon.href = company.favicon_url;
+      }
+      const name = company.company_name;
+      const tagline = company.site_tagline;
+      if (name) {
+        this.titleService.setTitle(tagline ? `${name} | ${tagline}` : name);
+      }
     });
 
     // customize default values of navs used by this component tree

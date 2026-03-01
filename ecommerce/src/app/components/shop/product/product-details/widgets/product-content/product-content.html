@@ -9,7 +9,7 @@
 />
 
 <!-- Wholesales Product -->
-@if(product.wholesales.length && !product_variation()){
+@if(product.wholesales?.length && !product_variation()){
 <app-product-wholesales [product]="product" />
 <h4>
   {{ 'total_price' | translate }}:

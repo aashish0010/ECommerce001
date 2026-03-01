@@ -4,7 +4,9 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
+import { ICompanyAdmin } from '../../interface/company.interface';
 import { IValues } from '../../interface/setting.interface';
+import { CompanyState } from '../../store/state/company.state';
 import { SettingState } from '../../store/state/setting.state';
 
 @Component({
@@ -15,4 +17,5 @@ import { SettingState } from '../../store/state/setting.state';
 })
 export class Footer {
   setting$: Observable<IValues> = inject(Store).select(SettingState.setting) as Observable<IValues>;
+  company$: Observable<ICompanyAdmin | null> = inject(Store).select(CompanyState.company);
 }

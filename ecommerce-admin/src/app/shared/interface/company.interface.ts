@@ -21,6 +21,9 @@ export interface ICompanyAdmin {
   default_currency?: string;
   site_tagline?: string;
   site_url?: string;
+  min_order_free_shipping?: number;
+  min_order_amount?: number;
+  tax_rate?: number;
   social_links: ISocialLink[];
 }
 

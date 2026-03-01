@@ -520,6 +520,7 @@
                 <div class="price-breakdown">
                   @let cartItems = (cartItem$ | async) ?? [];
                   @let applied = (appliedCoupon$ | async);
+                  @let themeOpt = (themeOption$ | async);
                   <div class="price-row">
                     <span>Subtotal</span>
                     <span>{{ getCartSubTotal(cartItems) | currencySymbol }}</span>
@@ -534,10 +535,16 @@
                     <span>Shipping</span>
                     <span class="free-label">Free</span>
                   </div>
+                  @if(getTaxRate(themeOpt) > 0){
+                  <div class="price-row">
+                    <span>Tax ({{ getTaxRate(themeOpt) }}%)</span>
+                    <span>{{ getTaxAmount(cartItems, applied, themeOpt) | currencySymbol }}</span>
+                  </div>
+                  }
                   <div class="price-divider"></div>
                   <div class="price-row total-row">
                     <span>Total</span>
-                    <span class="total-amount">{{ getOrderTotal(cartItems, applied) | currencySymbol }}</span>
+                    <span class="total-amount">{{ getOrderTotalWithTax(cartItems, applied, themeOpt) | currencySymbol }}</span>
                   </div>
                 </div>
 

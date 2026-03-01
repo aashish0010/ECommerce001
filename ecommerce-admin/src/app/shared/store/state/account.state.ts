@@ -56,8 +56,13 @@ export class AccountState {
     return this.accountService.getUserDetails().pipe(
       tap({
         next: (result: any) => {
+          const nameParts = [result.firstName, result.middleName, result.lastName].filter(Boolean);
           ctx.patchState({
-            user: result,
+            user: {
+              ...result,
+              name: nameParts.join(' '),
+              phone: result.phoneNumber,
+            },
             permissions: result.permission || [],
             roleName: result.role?.name || result.role || null,
           });
@@ -70,19 +75,50 @@ export class AccountState {
   }
 
   @Action(UpdateUserProfileAction)
-  updateProfile(
-    _ctx: StateContext<AccountStateModel>,
-    { payload: _payload }: UpdateUserProfileAction,
-  ) {
-    // Update profile logic hre
+  updateProfile(ctx: StateContext<AccountStateModel>, { payload }: UpdateUserProfileAction) {
+    const formVal = payload as any;
+    const nameParts = (formVal.name || '').trim().split(/\s+/).filter(Boolean);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+    const middleName = nameParts.length > 2 ? nameParts.slice(1, -1).join(' ') : '';
+    return this.accountService
+      .updateProfile({ firstName, middleName, lastName, phoneNumber: formVal.phone })
+      .pipe(
+        tap({
+          next: () => {
+            this.notificationService.showSuccess('Profile updated successfully');
+            ctx.dispatch(new GetUserDetailsAction());
+          },
+          error: err => {
+            this.notificationService.showError(err?.error?.message || 'Failed to update profile');
+            throw new Error(err?.error?.message);
+          },
+        }),
+      );
   }
 
   @Action(UpdateUserPasswordAction)
-  updatePassword(
-    _ctx: StateContext<AccountStateModel>,
-    { payload: _payload }: UpdateUserPasswordAction,
-  ) {
-    // Update password logic hre
+  updatePassword(_ctx: StateContext<AccountStateModel>, { payload }: UpdateUserPasswordAction) {
+    const formVal = payload as any;
+    return this.accountService
+      .updatePassword({
+        currentPassword: formVal.current_password,
+        newPassword: formVal.password,
+        confirmPassword: formVal.password_confirmation,
+      })
+      .pipe(
+        tap({
+          next: () => {
+            this.notificationService.showSuccess('Password changed successfully');
+          },
+          error: err => {
+            this.notificationService.showError(
+              err?.error?.message || 'Failed to change password',
+            );
+            throw new Error(err?.error?.message);
+          },
+        }),
+      );
   }
 
   @Action(UpdateStoreDetailsAction)
@@ -90,7 +126,7 @@ export class AccountState {
     _ctx: StateContext<AccountStateModel>,
     { payload: _payload }: UpdateStoreDetailsAction,
   ) {
-    // Update store details logic here
+    // Store update not yet supported by backend
   }
 
   @Action(AccountClearAction)

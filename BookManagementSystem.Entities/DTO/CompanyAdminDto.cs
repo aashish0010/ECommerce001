@@ -31,6 +31,12 @@ namespace BookManagementSystem.Domain.DTO
         public string? SiteTagline { get; set; }
         [JsonPropertyName("site_url")]
         public string? SiteUrl { get; set; }
+        [JsonPropertyName("min_order_free_shipping")]
+        public decimal? MinOrderFreeShipping { get; set; }
+        [JsonPropertyName("min_order_amount")]
+        public decimal? MinOrderAmount { get; set; }
+        [JsonPropertyName("tax_rate")]
+        public decimal? TaxRate { get; set; }
     }
 
     public class SocialLinkDto

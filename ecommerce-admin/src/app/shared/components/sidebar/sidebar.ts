@@ -8,12 +8,14 @@ import { Observable } from 'rxjs';
 
 import { HasPermissionDirective } from '../../directive/has-permission.directive';
 import { IAccountUser } from '../../interface/account.interface';
+import { ICompanyAdmin } from '../../interface/company.interface';
 import { IPermission } from '../../interface/role.interface';
 import { IValues } from '../../interface/setting.interface';
 import { ISidebar, ISidebarModel } from '../../interface/sidebar.interface';
 import { NavService } from '../../services/nav.service';
 import { GetSidebarAction } from '../../store/action/sidebar.action';
 import { AccountState } from '../../store/state/account.state';
+import { CompanyState } from '../../store/state/company.state';
 import { SettingState } from '../../store/state/setting.state';
 import { SidebarState } from '../../store/state/sidebar.state';
 
@@ -34,6 +36,7 @@ export class Sidebar {
   user$: Observable<IAccountUser> = inject(Store).select(AccountState.user);
   permissions$: Observable<IPermission[]> = inject(Store).select(AccountState.permissions);
   setting$: Observable<IValues> = inject(Store).select(SettingState.setting) as Observable<IValues>;
+  company$: Observable<ICompanyAdmin | null> = inject(Store).select(CompanyState.company);
   menu$: Observable<ISidebarModel> = inject(Store).select(SidebarState.menu);
 
   public item: ISidebar;

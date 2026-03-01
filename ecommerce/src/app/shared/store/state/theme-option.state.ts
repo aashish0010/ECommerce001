@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { catchError, forkJoin, of, tap, timeout } from 'rxjs';
 
 import { ICompanyDetailResponse } from '../../interface/company-detail.interface';
@@ -12,6 +12,8 @@ import {
   UpdateProductBoxAction,
   UpdateSessionAction,
 } from '../action/theme-option.action';
+import { SelectedCurrencyAction } from '../action/setting.action';
+import { CurrencyState } from './currency.state';
 
 @State<IThemeOptionStateModel>({
   name: 'theme_option',
@@ -27,6 +29,7 @@ import {
 export class ThemeOptionState {
   private themeOptionService = inject(ThemeOptionService);
   private companyDetailService = inject(CompanyDetailService);
+  private store = inject(Store);
 
   @Selector()
   static themeOptions(state: IThemeOptionStateModel) {
@@ -74,6 +77,16 @@ export class ThemeOptionState {
             ...state,
             theme_option: mergedOptions,
           });
+
+          // Dispatch SelectedCurrencyAction based on company default currency
+          const companyCurrencyCode = result?.company?.companyDetailRes?.companyDetail?.defaultCurrency;
+          if (companyCurrencyCode) {
+            const currencyList = this.store.selectSnapshot(CurrencyState.currency);
+            const match = currencyList?.data?.find((c: any) => c.code === companyCurrencyCode);
+            if (match) {
+              ctx.dispatch(new SelectedCurrencyAction(match));
+            }
+          }
         },
         error: err => {
           throw new Error(err?.error?.message);
@@ -127,6 +140,9 @@ export class ThemeOptionState {
         site_tagline: detail.siteTagline || detail.companyDescription || options.general?.site_tagline,
         site_url: detail.siteUrl || options.general?.site_url,
         currency: detail.defaultCurrency || options.general?.currency,
+        min_order_free_shipping: detail.minOrderFreeShipping ?? options.general?.min_order_free_shipping,
+        min_order_amount: detail.minOrderAmount ?? options.general?.min_order_amount,
+        tax_rate: detail.taxRate ?? options.general?.tax_rate,
       },
       logo: {
         ...options.logo,

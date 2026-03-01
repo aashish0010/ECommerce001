@@ -28,4 +28,9 @@ export class ThemeHomeSlider {
       return banner.status;
     });
   }
+
+  resolveUrl(imageUrl?: string): string {
+    if (!imageUrl) return '';
+    return imageUrl.startsWith('http') ? imageUrl : this.StorageURL + imageUrl;
+  }
 }

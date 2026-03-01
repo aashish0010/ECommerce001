@@ -15,4 +15,21 @@ export class AccountService {
   getUserDetails(): Observable<IAccountUser> {
     return this.http.get<IAccountUser>(`${environment.baseURL}user/me`);
   }
+
+  updateProfile(payload: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    phoneNumber: string;
+  }): Observable<any> {
+    return this.http.put(`${environment.baseURL}user/profile`, payload);
+  }
+
+  updatePassword(payload: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }): Observable<any> {
+    return this.http.put(`${environment.baseURL}user/password`, payload);
+  }
 }

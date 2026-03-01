@@ -237,6 +237,27 @@
                   <app-form-fields
                     [labelClass]="'form-label-title col-sm-3 mb-0'"
                     [gridClass]="'col-sm-9'"
+                    [label]="'tax_rate'"
+                    [for]="'tax_rate'"
+                    >
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        id="tax_rate"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="e.g. 13"
+                        formControlName="tax_rate"
+                        />
+                      <span class="input-group-text">%</span>
+                    </div>
+                    <p class="help-text">{{ '*Enter the tax percentage applied to all orders.' }}</p>
+                  </app-form-fields>
+                  <app-form-fields
+                    [labelClass]="'form-label-title col-sm-3 mb-0'"
+                    [gridClass]="'col-sm-9'"
                     [label]="'store_prefix'"
                     [for]="'store_prefix'"
                     >

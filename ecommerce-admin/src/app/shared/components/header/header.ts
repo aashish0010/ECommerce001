@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { IAccountUser } from '../../interface/account.interface';
 import { INotification } from '../../interface/notification.interface';
 import { ILanguage, IValues } from '../../interface/setting.interface';
+import { ICompanyAdmin } from '../../interface/company.interface';
 import { NavService } from '../../services/nav.service';
 import { Languages } from './widgets/languages/languages';
 import { Mode } from './widgets/mode/mode';
@@ -20,6 +21,7 @@ import { HasPermissionDirective } from '../../directive/has-permission.directive
 import { AccountState } from '../../store/state/account.state';
 import { NotificationState } from '../../store/state/notification.state';
 import { SettingState } from '../../store/state/setting.state';
+import { CompanyState } from '../../store/state/company.state';
 
 @Component({
   selector: 'app-header',
@@ -44,6 +46,7 @@ export class Header {
 
   user$: Observable<IAccountUser> = inject(Store).select(AccountState.user);
   setting$: Observable<IValues> = inject(Store).select(SettingState.setting) as Observable<IValues>;
+  company$: Observable<ICompanyAdmin | null> = inject(Store).select(CompanyState.company);
   notification$: Observable<INotification[]> = inject(Store).select(NotificationState.notification);
 
   public unreadNotificationCount: number;
@@ -81,9 +84,12 @@ export class Header {
     });
     this.setting$.subscribe(setting => {
       if (setting && setting.general) {
-        this.url = setting.general.site_url;
+        if (!this.url) this.url = setting.general.site_url;
         document.body.classList.add(setting.general.mode!);
       }
+    });
+    this.company$.subscribe(company => {
+      if (company?.site_url) this.url = company.site_url;
     });
 
     this.elem = document.documentElement;

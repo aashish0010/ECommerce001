@@ -22,5 +22,8 @@ namespace BookManagementSystem.Domain.Entities.Company
         public string? DefaultCurrency { get; set; }
         public string? SiteTagline { get; set; }
         public string? SiteUrl { get; set; }
+        public decimal? MinOrderFreeShipping { get; set; }
+        public decimal? MinOrderAmount { get; set; }
+        public decimal? TaxRate { get; set; }
     }
 }

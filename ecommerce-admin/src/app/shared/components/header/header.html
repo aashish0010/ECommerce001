@@ -3,19 +3,19 @@
     <div class="toggle-sidebar" checked="checked">
       <i (click)="sidebarToggle()" class="ri-apps-line status_toggle middle sidebar-toggle"></i>
 
-      @if((setting$ | async)?.general?.dark_logo_image){
+      @if((company$ | async)?.header_logo_url || (setting$ | async)?.general?.dark_logo_image){
       <a [routerLink]="['/dashboard']">
         <img
-          [src]="(setting$ | async)?.general?.dark_logo_image?.original_url"
+          [src]="(company$ | async)?.header_logo_url || (setting$ | async)?.general?.dark_logo_image?.original_url"
           class="img-fluid"
+          style="max-height:50px;"
           alt="header-logo"
         />
       </a>
       }@else {
       <a [routerLink]="['/dashboard']">
         <h2 class="">
-          {{(setting$ | async)?.general?.site_title ? (setting$ |
-          async)?.general?.site_title.split(' ')[0] : 'Logo Here'}}
+          {{(company$ | async)?.company_name || (setting$ | async)?.general?.site_title || 'WoWeBazaar'}}
         </h2>
       </a>
       }

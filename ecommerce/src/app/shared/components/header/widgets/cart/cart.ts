@@ -59,6 +59,9 @@ export class Cart {
     this.themeOption$.subscribe(option => {
       this.cartStyle = option?.general?.cart_style;
       this.cart = this.cartStyle;
+      // Read min_order_free_shipping from ThemeOptionState (company config overrides JSON defaults)
+      const fromTheme = (option as any)?.general?.min_order_free_shipping;
+      if (fromTheme != null) this.shippingFreeAmt = fromTheme;
 
       if (typeof window !== 'undefined') {
         if (this.cartStyle == 'cart_mini' && window.innerWidth <= 767) {
@@ -67,11 +70,15 @@ export class Cart {
       }
     });
 
+    // Fallback: read from SettingState if ThemeOptionState not yet populated
+    this.setting$.subscribe(setting => {
+      if (!this.shippingFreeAmt) {
+        this.shippingFreeAmt = setting?.general?.min_order_free_shipping ?? 0;
+      }
+    });
+
     // Calculation
     this.cartTotal$.subscribe(total => {
-      this.setting$.subscribe(
-        setting => (this.shippingFreeAmt = setting?.general?.min_order_free_shipping),
-      );
       this.cartTotal = total;
       this.shippingCal = (this.cartTotal * 100) / this.shippingFreeAmt;
       if (this.shippingCal > 100) {

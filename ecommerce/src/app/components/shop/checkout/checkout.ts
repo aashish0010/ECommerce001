@@ -42,6 +42,7 @@ import { AuthState } from '../../../shared/store/state/auth.state';
 import { CartState } from '../../../shared/store/state/cart.state';
 import { CouponState } from '../../../shared/store/state/coupon.state';
 import { SettingState } from '../../../shared/store/state/setting.state';
+import { ThemeOptionState } from '../../../shared/store/state/theme-option.state';
 
 @Component({
   selector: 'app-checkout',
@@ -81,6 +82,7 @@ export class Checkout {
   ) as Observable<String>;
   cartItem$: Observable<ICart[]> = inject(Store).select(CartState.cartItems);
   setting$: Observable<IValues> = inject(Store).select(SettingState.setting) as Observable<IValues>;
+  themeOption$: Observable<any> = inject(Store).select(ThemeOptionState.themeOptions);
   cartDigital$: Observable<boolean | number> = inject(Store).select(
     CartState.cartHasDigital,
   ) as Observable<boolean | number>;
@@ -209,6 +211,20 @@ export class Checkout {
 
   getOrderTotal(items: ICart[], applied: IApplyCouponResponse | null): number {
     return Math.max(0, this.getCartSubTotal(items) - (applied?.discount_amount ?? 0));
+  }
+
+  getTaxRate(themeOption: any): number {
+    return (themeOption?.general?.tax_rate ?? 0);
+  }
+
+  getTaxAmount(items: ICart[], applied: IApplyCouponResponse | null, themeOption: any): number {
+    const taxRate = this.getTaxRate(themeOption);
+    if (!taxRate) return 0;
+    return Math.round((this.getOrderTotal(items, applied) * taxRate / 100) * 100) / 100;
+  }
+
+  getOrderTotalWithTax(items: ICart[], applied: IApplyCouponResponse | null, themeOption: any): number {
+    return this.getOrderTotal(items, applied) + this.getTaxAmount(items, applied, themeOption);
   }
 
   // ── Coupon ──────────────────────────────────────────────────────────────────

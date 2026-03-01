@@ -198,6 +198,7 @@ export class Setting {
         company_address: new FormControl(''),
         company_description: new FormControl(''),
         default_currency: new FormControl(''),
+        tax_rate: new FormControl<number | null>(null),
       }),
       activation: new FormGroup({
         multivendor: new FormControl(true),
@@ -553,6 +554,9 @@ export class Setting {
         company_address: company.company_address ?? '',
         company_description: company.company_description ?? '',
         default_currency: company.default_currency ?? '',
+        min_order_free_shipping: company.min_order_free_shipping ?? null,
+        min_order_amount: company.min_order_amount ?? null,
+        tax_rate: company.tax_rate ?? null,
       });
       this.socialLinks = company.social_links ? [...company.social_links] : [];
     });
@@ -560,6 +564,12 @@ export class Setting {
 
   submitCompany() {
     const gen = this.form.get('general')?.value;
+    // Derive currency code from selected currency ID (if changed via dropdown)
+    const currencyList = this.store.selectSnapshot(CurrencyState.currency);
+    const selectedCurrencyId = gen.default_currency_id;
+    const matchedCurrency = currencyList?.data?.find((c: any) => c.id === +selectedCurrencyId);
+    const currencyCode = matchedCurrency?.code ?? gen.default_currency;
+
     this.store.dispatch(
       new UpdateCompanyAction(1, {
         company_name: gen.site_name || gen.site_title,
@@ -573,7 +583,10 @@ export class Setting {
         header_logo_url: gen.header_logo_url || null,
         footer_logo_url: gen.footer_logo_url || null,
         favicon_url: gen.favicon_url || null,
-        default_currency: gen.default_currency,
+        default_currency: currencyCode,
+        min_order_free_shipping: gen.min_order_free_shipping,
+        min_order_amount: gen.min_order_amount,
+        tax_rate: gen.tax_rate ?? null,
       }),
     );
   }

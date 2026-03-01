@@ -28,6 +28,9 @@ export interface ICompanyDetail {
   defaultCurrency?: string;
   siteTagline?: string;
   siteUrl?: string;
+  minOrderFreeShipping?: number;
+  minOrderAmount?: number;
+  taxRate?: number;
 }
 
 export interface ICompanyService {

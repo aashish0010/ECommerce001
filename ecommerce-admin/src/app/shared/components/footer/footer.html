@@ -3,8 +3,7 @@
     <div class="row">
       <div class="col-md-12 footer-copyright text-center">
         <p class="mb-0">
-          {{(setting$ | async )?.general?.copyright ? (setting$ | async )?.general?.copyright : '©
-          Pixelstrap'}}
+          {{(company$ | async)?.copyright_content || (setting$ | async)?.general?.copyright || '© WoWeBazaar'}}
         </p>
       </div>
     </div>
