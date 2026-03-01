@@ -103,8 +103,8 @@ if (!app.Environment.IsDevelopment())
             Path.Combine(env.WebRootPath, "admin", "index.html"));
     });
 
-    // Main ecommerce SPA: all other non-API routes → wwwroot/index.csr.html
-    app.MapFallbackToFile("index.csr.html");
+    // Main ecommerce SPA: all other non-API routes → wwwroot/index.html
+    app.MapFallbackToFile("index.html");
 }
 
 app.Run();

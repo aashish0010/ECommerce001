@@ -40,9 +40,9 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- Skip npm steps if already pre-built (e.g. in Docker) -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install"
-          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.csr.html')" />
+          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.html')" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:csr"
-          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.csr.html')" />
+          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.html')" />
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\ecommerce\browser\**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
