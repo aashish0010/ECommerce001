@@ -138,9 +138,12 @@ namespace BookManagementSystem.Service.Services
                 .ToListAsync();
         }
 
-        public async Task<AdminOrderListResponse> GetAllOrdersAsync(int page = 1, int pageSize = 15)
+        public async Task<AdminOrderListResponse> GetAllOrdersAsync(int page = 1, int pageSize = 15, string status = null)
         {
-            var query = _context.Orders.OrderByDescending(o => o.CreatedAt);
+            var baseQuery = _context.Orders.AsQueryable();
+            if (!string.IsNullOrEmpty(status))
+                baseQuery = baseQuery.Where(o => o.Status == status);
+            var query = baseQuery.OrderByDescending(o => o.CreatedAt);
             var total = await query.CountAsync();
             var orders = await query
                 .Skip((page - 1) * pageSize)

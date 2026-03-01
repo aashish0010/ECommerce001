@@ -47,9 +47,9 @@ namespace BookManagementSystem.Controller
 
         [HttpGet("admin")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllOrders([FromQuery] int page = 1, [FromQuery] int paginate = 15)
+        public async Task<IActionResult> GetAllOrders([FromQuery] int page = 1, [FromQuery] int paginate = 15, [FromQuery] string status = null)
         {
-            var result = await _unitOfWork.orderService.GetAllOrdersAsync(page, paginate);
+            var result = await _unitOfWork.orderService.GetAllOrdersAsync(page, paginate, status);
             return Ok(result);
         }
 

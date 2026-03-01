@@ -24,18 +24,6 @@ namespace BookManagementSystem.Service.Services
                     && c.CompanyInfoId == companyInfoId
                     && (c.ExpiresAt == null || c.ExpiresAt > now)
                     && (c.UsageLimit == null || c.UsageCount < c.UsageLimit))
-                .Select(c => new CouponListItemDto
-                {
-                    Id = c.Id,
-                    Code = c.Code,
-                    Title = c.Title,
-                    Description = c.Description,
-                    DiscountType = c.DiscountType,
-                    Amount = c.Amount,
-                    MinSpend = c.MinSpend,
-                    MaxSpend = c.MaxSpend,
-                    ExpiresAt = c.ExpiresAt
-                })
                 .OrderBy(c => c.Id)
                 .ToListAsync();
 
@@ -44,7 +32,7 @@ namespace BookManagementSystem.Service.Services
                 Status = Level.Success,
                 Code = 200,
                 Message = "Coupons retrieved successfully",
-                Data = coupons
+                Data = coupons.Select(MapToDto).ToList()
             };
         }
 
@@ -117,22 +105,134 @@ namespace BookManagementSystem.Service.Services
                 Status = Level.Success,
                 Code = 201,
                 Message = "Coupon created successfully",
-                Data = new List<CouponListItemDto>
-                {
-                    new CouponListItemDto
-                    {
-                        Id = coupon.Id,
-                        Code = coupon.Code,
-                        Title = coupon.Title,
-                        Description = coupon.Description,
-                        DiscountType = coupon.DiscountType,
-                        Amount = coupon.Amount,
-                        MinSpend = coupon.MinSpend,
-                        MaxSpend = coupon.MaxSpend,
-                        ExpiresAt = coupon.ExpiresAt
-                    }
-                }
+                Data = new List<CouponListItemDto> { MapToDto(coupon) }
             };
         }
+
+        public async Task<CouponListResponseDto> GetAllAdmin(int companyInfoId)
+        {
+            var coupons = await _context.Coupons
+                .Where(c => c.CompanyInfoId == companyInfoId)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupons retrieved successfully",
+                Data = coupons.Select(MapToDto).ToList()
+            };
+        }
+
+        public async Task<CouponListResponseDto> GetById(int id)
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if (coupon == null)
+                throw new Exception("Coupon not found.");
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupon retrieved successfully",
+                Data = new List<CouponListItemDto> { MapToDto(coupon) }
+            };
+        }
+
+        public async Task<CouponListResponseDto> Update(int id, UpdateCouponDto dto)
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if (coupon == null)
+                throw new Exception("Coupon not found.");
+
+            coupon.Title = dto.Title;
+            coupon.Description = dto.Description;
+            coupon.DiscountType = dto.DiscountType;
+            coupon.Amount = dto.Amount;
+            coupon.MinSpend = dto.MinSpend;
+            coupon.MaxSpend = dto.MaxSpend;
+            coupon.ExpiresAt = dto.ExpiresAt;
+            coupon.UsageLimit = dto.UsageLimit;
+            coupon.IsActive = dto.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupon updated successfully",
+                Data = new List<CouponListItemDto> { MapToDto(coupon) }
+            };
+        }
+
+        public async Task<CouponListResponseDto> UpdateStatus(int id, bool isActive)
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if (coupon == null)
+                throw new Exception("Coupon not found.");
+
+            coupon.IsActive = isActive;
+            await _context.SaveChangesAsync();
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupon status updated",
+                Data = new List<CouponListItemDto> { MapToDto(coupon) }
+            };
+        }
+
+        public async Task<CouponListResponseDto> Delete(int id)
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if (coupon == null)
+                throw new Exception("Coupon not found.");
+
+            _context.Coupons.Remove(coupon);
+            await _context.SaveChangesAsync();
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupon deleted successfully",
+                Data = new List<CouponListItemDto>()
+            };
+        }
+
+        public async Task<CouponListResponseDto> DeleteAll(List<int> ids)
+        {
+            var coupons = await _context.Coupons.Where(c => ids.Contains(c.Id)).ToListAsync();
+            _context.Coupons.RemoveRange(coupons);
+            await _context.SaveChangesAsync();
+
+            return new CouponListResponseDto
+            {
+                Status = Level.Success,
+                Code = 200,
+                Message = "Coupons deleted successfully",
+                Data = new List<CouponListItemDto>()
+            };
+        }
+
+        private static CouponListItemDto MapToDto(Coupon c) => new CouponListItemDto
+        {
+            Id = c.Id,
+            Code = c.Code,
+            Title = c.Title,
+            Description = c.Description,
+            DiscountType = c.DiscountType,
+            Amount = c.Amount,
+            MinSpend = c.MinSpend,
+            MaxSpend = c.MaxSpend,
+            ExpiresAt = c.ExpiresAt,
+            UsageLimit = c.UsageLimit,
+            UsageCount = c.UsageCount,
+            IsActive = c.IsActive,
+            CreatedAt = c.CreatedAt
+        };
     }
 }

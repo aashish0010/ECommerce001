@@ -77,21 +77,27 @@ export class CouponState {
   }
 
   @Action(CreateCouponAction)
-  create(_ctx: StateContext<CouponStateModel>, _action: CreateCouponAction) {
-    // Create coupon logic here
+  create(ctx: StateContext<CouponStateModel>, action: CreateCouponAction) {
+    return this.couponService.createCoupon(action.payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Coupon created successfully.');
+          return this.store.dispatch(new GetCouponsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to create coupon.');
+          throw new Error(err?.error?.message);
+        },
+      }),
+    );
   }
 
   @Action(EditCouponAction)
   edit(ctx: StateContext<CouponStateModel>, { id }: EditCouponAction) {
-    return this.couponService.getCoupons().pipe(
+    return this.couponService.getCouponById(id).pipe(
       tap({
-        next: results => {
-          const state = ctx.getState();
-          const result = results.data.find(coupon => coupon.id == id);
-          ctx.patchState({
-            ...state,
-            selectedCoupon: result,
-          });
+        next: result => {
+          ctx.patchState({ selectedCoupon: result });
         },
         error: err => {
           throw new Error(err?.error?.message);
@@ -101,25 +107,74 @@ export class CouponState {
   }
 
   @Action(UpdateCouponAction)
-  update(_ctx: StateContext<CouponStateModel>, { payload: _payload, id: _id }: UpdateCouponAction) {
-    // Update coupon logic here
+  update(ctx: StateContext<CouponStateModel>, { payload, id }: UpdateCouponAction) {
+    return this.couponService.updateCoupon(id, payload).pipe(
+      tap({
+        next: () => {
+          this.notificationService.showSuccess('Coupon updated successfully.');
+          return this.store.dispatch(new GetCouponsAction());
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update coupon.');
+          throw new Error(err?.error?.message);
+        },
+      }),
+    );
   }
 
   @Action(UpdateCouponStatusAction)
-  updateStatus(
-    _ctx: StateContext<CouponStateModel>,
-    { id: _id, status: _status }: UpdateCouponStatusAction,
-  ) {
-    // Update coupon status logic here
+  updateStatus(ctx: StateContext<CouponStateModel>, { id, status }: UpdateCouponStatusAction) {
+    return this.couponService.updateCouponStatus(id, status).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          const updated = state.coupon.data.map(c =>
+            c.id === id ? { ...c, status } : c,
+          );
+          ctx.patchState({ coupon: { ...state.coupon, data: updated } });
+          this.notificationService.showSuccess('Coupon status updated.');
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to update status.');
+          throw new Error(err?.error?.message);
+        },
+      }),
+    );
   }
 
   @Action(DeleteCouponAction)
-  delete(_ctx: StateContext<CouponStateModel>, { id: _id }: DeleteCouponAction) {
-    // Delete coupon logic here
+  delete(ctx: StateContext<CouponStateModel>, { id }: DeleteCouponAction) {
+    return this.couponService.deleteCoupon(id).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          const filtered = state.coupon.data.filter(c => c.id !== id);
+          ctx.patchState({ coupon: { data: filtered, total: filtered.length } });
+          this.notificationService.showSuccess('Coupon deleted successfully.');
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete coupon.');
+          throw new Error(err?.error?.message);
+        },
+      }),
+    );
   }
 
   @Action(DeleteAllCouponAction)
-  deleteAll(_ctx: StateContext<CouponStateModel>, { ids: _ids }: DeleteAllCouponAction) {
-    // Delete all coupon logic here
+  deleteAll(ctx: StateContext<CouponStateModel>, { ids }: DeleteAllCouponAction) {
+    return this.couponService.deleteAllCoupons(ids).pipe(
+      tap({
+        next: () => {
+          const state = ctx.getState();
+          const filtered = state.coupon.data.filter(c => !ids.includes(c.id));
+          ctx.patchState({ coupon: { data: filtered, total: filtered.length } });
+          this.notificationService.showSuccess('Coupons deleted successfully.');
+        },
+        error: err => {
+          this.notificationService.showError(err?.error?.message || 'Failed to delete coupons.');
+          throw new Error(err?.error?.message);
+        },
+      }),
+    );
   }
 }
