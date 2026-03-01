@@ -29,12 +29,18 @@ RUN npm ci && npm run build:csr
 WORKDIR /src/ecommerce-admin
 RUN npm ci && npm run build
 
-# Publish .NET — MSBuild targets skip npm if dist already exists, just copy files
+# Publish .NET (MSBuild targets skip npm since dist already exists)
 WORKDIR /src
 RUN dotnet publish BookManagementSystem/BookManagementSystem.csproj \
     -c Release \
     -o /app/publish \
     --no-restore
+
+# Belt-and-suspenders: explicitly copy Angular dist files into the publish output.
+# This guarantees correct placement on Linux regardless of MSBuild path-separator behaviour.
+RUN cp -r /src/ecommerce/dist/ecommerce/browser/. /app/publish/wwwroot/ \
+ && mkdir -p /app/publish/wwwroot/admin \
+ && cp -r /src/ecommerce-admin/dist/multikart-admin/browser/. /app/publish/wwwroot/admin/
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
