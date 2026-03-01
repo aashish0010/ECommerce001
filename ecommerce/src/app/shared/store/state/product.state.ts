@@ -128,63 +128,28 @@ export class ProductState {
         next: (result: IProductModel) => {
           let products = result.data || [];
 
-          if (action?.payload) {
-            if (action?.payload?.['category']) {
-              products = products.filter(
-                product =>
-                  product?.categories?.length &&
-                  product.categories.some(category =>
-                    action?.payload?.['category']?.split(',')?.includes(category.slug),
-                  ),
-              );
-              products = products.length ? products : result.data;
-            }
-
-            if (action?.payload?.['brand']) {
-              const brandSlugs: string[] = action.payload['brand'].split(',');
-              products = products.filter(
-                product => product?.brand && brandSlugs.includes(product.brand.slug),
-              );
-            }
-
-            if (action?.payload?.['color']) {
-              const colorSlugs: string[] = action.payload['color'].split(',');
-              products = products.filter(
-                product =>
-                  product?.colors?.length &&
-                  product.colors.some(color => colorSlugs.includes(color.slug)),
-              );
-            }
-
-            if (action?.payload?.['sortBy']) {
-              if (action?.payload?.['sortBy'] === 'asc') {
-                products = products.sort((a, b) => a.id - b.id);
-              } else if (action?.payload?.['sortBy'] === 'desc') {
-                products = products.sort((a, b) => b.id - a.id);
-              } else if (action?.payload?.['sortBy'] === 'a-z') {
-                products = products.sort((a, b) => a.name.localeCompare(b.name));
-              } else if (action?.payload?.['sortBy'] === 'z-a') {
-                products = products.sort((a, b) => b.name.localeCompare(a.name));
-              } else if (action?.payload?.['sortBy'] === 'low-high') {
-                products = products.sort((a, b) => (a.sale_price || a.price) - (b.sale_price || b.price));
-              } else if (action?.payload?.['sortBy'] === 'high-low') {
-                products = products.sort((a, b) => (b.sale_price || b.price) - (a.sale_price || a.price));
-              }
-            } else {
-              products = products.sort((a, b) => a.id - b.id);
-            }
-
-            if (action?.payload?.['search']) {
-              products = products.filter(product =>
-                product.name.toLowerCase().includes(action?.payload?.['search'].toLowerCase()),
-              );
+          // Category, brand, color and search filtering is handled by the backend.
+          // Only client-side sort is applied here since backend returns products ordered by createdAt.
+          if (action?.payload?.['sortBy']) {
+            if (action?.payload?.['sortBy'] === 'asc') {
+              products = [...products].sort((a, b) => a.id - b.id);
+            } else if (action?.payload?.['sortBy'] === 'desc') {
+              products = [...products].sort((a, b) => b.id - a.id);
+            } else if (action?.payload?.['sortBy'] === 'a-z') {
+              products = [...products].sort((a, b) => a.name.localeCompare(b.name));
+            } else if (action?.payload?.['sortBy'] === 'z-a') {
+              products = [...products].sort((a, b) => b.name.localeCompare(a.name));
+            } else if (action?.payload?.['sortBy'] === 'low-high') {
+              products = [...products].sort((a, b) => (a.sale_price || a.price) - (b.sale_price || b.price));
+            } else if (action?.payload?.['sortBy'] === 'high-low') {
+              products = [...products].sort((a, b) => (b.sale_price || b.price) - (a.sale_price || a.price));
             }
           }
 
           ctx.patchState({
             product: {
               data: products,
-              total: products.length ? products.length : result.data?.length || 0,
+              total: result.total || products.length,
             },
           });
         },

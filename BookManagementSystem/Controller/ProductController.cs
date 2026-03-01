@@ -20,13 +20,16 @@ namespace BookManagementSystem.Controller
         public async Task<IActionResult> GetProducts(
             [FromQuery] int companyInfoId = 1,
             [FromQuery] int? categoryId = null,
+            [FromQuery] string category = null,
             [FromQuery] string search = null,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20,
             [FromQuery] int? brandId = null,
-            [FromQuery] string colorSlugs = null)
+            [FromQuery] string brand = null,
+            [FromQuery] string colorSlugs = null,
+            [FromQuery] string color = null)
         {
-            var result = await _unitOfWork.productService.GetProducts(companyInfoId, categoryId, search, page, pageSize, brandId, colorSlugs);
+            var result = await _unitOfWork.productService.GetProducts(companyInfoId, categoryId, category, search, page, pageSize, brandId, brand, colorSlugs ?? color);
             return Ok(result);
         }
 

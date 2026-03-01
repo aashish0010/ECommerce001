@@ -81,7 +81,7 @@ namespace BookManagementSystem.Service.Services
             };
         }
 
-        public async Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string search, int page, int pageSize, int? brandId = null, string colorSlugs = null)
+        public async Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string categorySlug, string search, int page, int pageSize, int? brandId = null, string brandSlug = null, string colorSlugs = null)
         {
             var query = _context.Products
                 .Include(p => p.Category)
@@ -89,14 +89,42 @@ namespace BookManagementSystem.Service.Services
                 .Include(p => p.ProductColors).ThenInclude(pc => pc.Color)
                 .Where(p => p.IsActive && p.CompanyInfoId == companyInfoId);
 
+            // Category filtering: supports both ID and slug; includes subcategory products
             if (categoryId.HasValue)
             {
-                query = query.Where(p => p.CategoryId == categoryId.Value);
+                var subcategoryIds = await _context.Categories
+                    .Where(c => c.ParentId == categoryId.Value && c.IsActive)
+                    .Select(c => c.Id)
+                    .ToListAsync();
+                var allCategoryIds = new List<int>(subcategoryIds) { categoryId.Value };
+                query = query.Where(p => allCategoryIds.Contains(p.CategoryId));
+            }
+            else if (!string.IsNullOrWhiteSpace(categorySlug))
+            {
+                var cat = await _context.Categories
+                    .Where(c => c.Slug == categorySlug && c.IsActive && c.CompanyInfoId == companyInfoId)
+                    .FirstOrDefaultAsync();
+                if (cat != null)
+                {
+                    var subcategoryIds = await _context.Categories
+                        .Where(c => c.ParentId == cat.Id && c.IsActive)
+                        .Select(c => c.Id)
+                        .ToListAsync();
+                    var allCategoryIds = new List<int>(subcategoryIds) { cat.Id };
+                    query = query.Where(p => allCategoryIds.Contains(p.CategoryId));
+                }
             }
 
+            // Brand filtering: supports both ID and comma-separated slugs
             if (brandId.HasValue)
             {
                 query = query.Where(p => p.BrandId == brandId.Value);
+            }
+            else if (!string.IsNullOrWhiteSpace(brandSlug))
+            {
+                var slugs = brandSlug.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                if (slugs.Any())
+                    query = query.Where(p => p.Brand != null && slugs.Contains(p.Brand.Slug));
             }
 
             if (!string.IsNullOrWhiteSpace(colorSlugs))

@@ -62,9 +62,17 @@ namespace BookManagementSystem.Domain.DTO
     {
         [JsonPropertyName("data")]
         public List<ProductDetailDto> Products { get; set; } = new List<ProductDetailDto>();
+
+        [JsonPropertyName("total")]
         public int Total { get; set; }
+
+        [JsonPropertyName("page")]
         public int Page { get; set; }
+
+        [JsonPropertyName("pageSize")]
         public int PageSize { get; set; }
+
+        [JsonPropertyName("totalPages")]
         public int TotalPages { get; set; }
     }
 

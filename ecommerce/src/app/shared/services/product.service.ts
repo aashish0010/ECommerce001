@@ -19,7 +19,9 @@ export class ProductService {
   public searchSkeleton: boolean = false;
 
   getProducts(payload?: Params): Observable<IProductModel> {
-    const params = { companyInfoId: environment.companyInfoId, ...payload };
+    const { paginate, sortBy, ...rest } = (payload || {}) as any;
+    const params: any = { companyInfoId: environment.companyInfoId, ...rest };
+    if (paginate) params['pageSize'] = paginate;
     return this.http.get<any>(`${environment.baseURL}product`, { params }).pipe(
       map(res => ({
         data: (res.data || res.products || []) as IProduct[],
@@ -38,7 +40,9 @@ export class ProductService {
   }
 
   getProductBySearchList(payload?: Params): Observable<IProductModel> {
-    const params = { companyInfoId: environment.companyInfoId, ...payload };
+    const { paginate, sortBy, ...rest } = (payload || {}) as any;
+    const params: any = { companyInfoId: environment.companyInfoId, ...rest };
+    if (paginate) params['pageSize'] = paginate;
     return this.http.get<any>(`${environment.baseURL}product`, { params }).pipe(
       map(res => ({
         data: (res.data || res.products || []) as IProduct[],

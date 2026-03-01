@@ -118,11 +118,14 @@ export class CategoryState {
       tap({
         next: result => {
           if (result && result.data) {
+            const stateUpdate = {
+              data: result.data,
+              total: result?.total ? result?.total : result.data.length,
+            };
             ctx.patchState({
-              categories: {
-                data: result.data,
-                total: result?.total ? result?.total : result.data.length,
-              },
+              categories: stateUpdate,
+              // Sync to category slice so any selector reading state.category also gets data
+              category: stateUpdate,
             });
           }
         },
@@ -252,11 +255,21 @@ export class CategoryState {
       tap({
         next: results => {
           if (results && results.data) {
-            const result = results.data.find(category => category.slug == action.slug);
+            // Search top-level categories first, then subcategories
+            let result = results.data.find(category => category.slug == action.slug);
+            if (!result) {
+              for (const cat of results.data) {
+                const sub = cat.subcategories?.find(s => s.slug == action.slug);
+                if (sub) {
+                  result = sub;
+                  break;
+                }
+              }
+            }
             const state = ctx.getState();
             ctx.patchState({
               ...state,
-              selectedCategory: result,
+              selectedCategory: result ?? null,
             });
           }
         },

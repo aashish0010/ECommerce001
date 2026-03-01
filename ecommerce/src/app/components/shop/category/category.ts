@@ -108,7 +108,7 @@ export class Category {
   }
 
   public changePage(page: number) {
-    this.filter['category'] = page;
+    this.filter['page'] = page;
     this.updateFilterAndFetchProducts();
   }
 
