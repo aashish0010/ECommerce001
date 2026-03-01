@@ -40,9 +40,9 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- Skip npm steps if already pre-built (e.g. in Docker) -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install"
-          Condition="!Exists('$(SpaRoot)dist\ecommerce\browser\index.csr.html')" />
+          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.csr.html')" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:csr"
-          Condition="!Exists('$(SpaRoot)dist\ecommerce\browser\index.csr.html')" />
+          Condition="!Exists('$(SpaRoot)dist/ecommerce/browser/index.csr.html')" />
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\ecommerce\browser\**" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
@@ -57,9 +57,9 @@
   <Target Name="PublishRunWebpackAdmin" AfterTargets="PublishRunWebpack">
     <!-- Skip npm steps if already pre-built (e.g. in Docker) -->
     <Exec WorkingDirectory="$(AdminRoot)" Command="npm install"
-          Condition="!Exists('$(AdminRoot)dist\multikart-admin\browser\index.html')" />
+          Condition="!Exists('$(AdminRoot)dist/multikart-admin/browser/index.html')" />
     <Exec WorkingDirectory="$(AdminRoot)" Command="npm run build"
-          Condition="!Exists('$(AdminRoot)dist\multikart-admin\browser\index.html')" />
+          Condition="!Exists('$(AdminRoot)dist/multikart-admin/browser/index.html')" />
     <ItemGroup>
       <AdminDistFiles Include="$(AdminRoot)dist\multikart-admin\browser\**" />
       <ResolvedFileToPublish Include="@(AdminDistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
