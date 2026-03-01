@@ -46,7 +46,16 @@
       "Bash(dotnet ef migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
       "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
       "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" database update --startup-project ../BookManagementSystem)",
-      "Bash(dotnet build BookManagementSystem.sln --no-restore)"
+      "Bash(dotnet build BookManagementSystem.sln --no-restore)",
+      "Bash(npm run build)",
+      "Bash(dotnet tool list -g)",
+      "Bash(dotnet-ef migrations add ExtendCompanyDetail --startup-project ../BookManagementSystem)",
+      "Bash(/c/Users/pudas/.dotnet/tools/dotnet-ef.exe migrations add ExtendCompanyDetail --startup-project ../BookManagementSystem)",
+      "Bash(/c/Users/pudas/.dotnet/tools/dotnet-ef.exe database update --startup-project ../BookManagementSystem)",
+      "Bash(dotnet ef migrations add AddEmailMediaHomeConfigurations --startup-project ../BookManagementSystem)",
+      "Bash($env:PATH = $env:PATH + \";$env:USERPROFILE\\\\.dotnet\\\\tools\")",
+      "Bash(python3 -c \":*)",
+      "Bash(node -e \":*)"
     ]
   }
 }

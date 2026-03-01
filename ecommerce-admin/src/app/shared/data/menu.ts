@@ -125,15 +125,6 @@ export const menu: ISidebar[] = [
     level: 1,
   },
   {
-    id: 8,
-    title: 'reviews',
-    path: '/review',
-    active: false,
-    icon: 'ri-star-line',
-    type: 'sub',
-    level: 1,
-  },
-  {
     id: 9,
     title: 'settings',
     active: false,

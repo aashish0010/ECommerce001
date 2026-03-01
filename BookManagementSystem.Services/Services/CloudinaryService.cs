@@ -1,5 +1,6 @@
 using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Domain.Entities;
+using BookManagementSystem.Infrastructure;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ namespace BookManagementSystem.Service.Services
 {
     public class CloudinaryService
     {
-        private readonly Cloudinary _cloudinary;
+        private Cloudinary _cloudinary;
         private const long MaxFileSize = 5 * 1024 * 1024; // 5MB
 
         private static readonly HashSet<string> AllowedMimeTypes = new(StringComparer.OrdinalIgnoreCase)
@@ -21,11 +22,33 @@ namespace BookManagementSystem.Service.Services
             "image/svg+xml"
         };
 
-        public CloudinaryService(IConfiguration configuration)
+        public CloudinaryService(IConfiguration configuration, ApplicationDbContext? context = null)
         {
-            var cloudName = configuration["Cloudinary:CloudName"];
-            var apiKey = configuration["Cloudinary:ApiKey"];
-            var apiSecret = configuration["Cloudinary:ApiSecret"];
+            string cloudName, apiKey, apiSecret;
+
+            // Try DB config first; fall back to appsettings
+            if (context != null)
+            {
+                var dbConfig = context.MediaConfigurations.FirstOrDefault();
+                if (dbConfig != null && !string.IsNullOrEmpty(dbConfig.CloudName))
+                {
+                    cloudName = dbConfig.CloudName;
+                    apiKey = dbConfig.ApiKey;
+                    apiSecret = dbConfig.ApiSecret;
+                }
+                else
+                {
+                    cloudName = configuration["Cloudinary:CloudName"] ?? string.Empty;
+                    apiKey = configuration["Cloudinary:ApiKey"] ?? string.Empty;
+                    apiSecret = configuration["Cloudinary:ApiSecret"] ?? string.Empty;
+                }
+            }
+            else
+            {
+                cloudName = configuration["Cloudinary:CloudName"] ?? string.Empty;
+                apiKey = configuration["Cloudinary:ApiKey"] ?? string.Empty;
+                apiSecret = configuration["Cloudinary:ApiSecret"] ?? string.Empty;
+            }
 
             var account = new Account(cloudName, apiKey, apiSecret);
             _cloudinary = new Cloudinary(account);

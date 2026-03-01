@@ -22,6 +22,9 @@ namespace BookManagementSystem.Infrastructure
         public DbSet<CompanyDetail> CompanyDetails { get; set; }
         public DbSet<CompanyService> CompanyServices { get; set; }
         public DbSet<CompanySocialInfo> CompanySocialInfos { get; set; }
+        public DbSet<EmailConfiguration> EmailConfigurations { get; set; }
+        public DbSet<MediaConfiguration> MediaConfigurations { get; set; }
+        public DbSet<HomeConfiguration> HomeConfigurations { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -117,6 +120,15 @@ namespace BookManagementSystem.Infrastructure
             builder.Entity<CompanyDetail>().Property(x => x.CompanyCode)
                 .HasMaxLength(50).IsRequired();
 
+            builder.Entity<CompanyDetail>().Property(x => x.HeaderLogoUrl).HasMaxLength(1000);
+            builder.Entity<CompanyDetail>().Property(x => x.FooterLogoUrl).HasMaxLength(1000);
+            builder.Entity<CompanyDetail>().Property(x => x.FaviconUrl).HasMaxLength(1000);
+            builder.Entity<CompanyDetail>().Property(x => x.CompanyAddress).HasMaxLength(500);
+            builder.Entity<CompanyDetail>().Property(x => x.CopyrightContent).HasMaxLength(500);
+            builder.Entity<CompanyDetail>().Property(x => x.DefaultCurrency).HasMaxLength(20);
+            builder.Entity<CompanyDetail>().Property(x => x.SiteTagline).HasMaxLength(300);
+            builder.Entity<CompanyDetail>().Property(x => x.SiteUrl).HasMaxLength(500);
+
             #endregion
 
             #region Company Service
@@ -135,6 +147,54 @@ namespace BookManagementSystem.Infrastructure
             builder.Entity<CompanySocialInfo>().Property(x => x.SocialMediaName).HasMaxLength(200).IsRequired();
             builder.Entity<CompanySocialInfo>().Property(x => x.SocialMediaDesc).HasMaxLength(200);
             builder.Entity<CompanySocialInfo>().HasOne(x => x.CompanyInfo).WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Email Configuration
+
+            builder.Entity<EmailConfiguration>().HasKey(x => x.Id);
+            builder.Entity<EmailConfiguration>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<EmailConfiguration>().Property(x => x.FromEmail).HasMaxLength(200).IsRequired();
+            builder.Entity<EmailConfiguration>().Property(x => x.FromName).HasMaxLength(200).IsRequired();
+            builder.Entity<EmailConfiguration>().Property(x => x.ApiKey).HasMaxLength(500).IsRequired();
+            builder.Entity<EmailConfiguration>().HasOne(x => x.CompanyDetail).WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Media Configuration
+
+            builder.Entity<MediaConfiguration>().HasKey(x => x.Id);
+            builder.Entity<MediaConfiguration>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<MediaConfiguration>().Property(x => x.CloudName).HasMaxLength(200).IsRequired();
+            builder.Entity<MediaConfiguration>().Property(x => x.ApiKey).HasMaxLength(500).IsRequired();
+            builder.Entity<MediaConfiguration>().Property(x => x.ApiSecret).HasMaxLength(500).IsRequired();
+            builder.Entity<MediaConfiguration>().HasOne(x => x.CompanyDetail).WithMany()
+                .HasForeignKey(x => x.CompanyInfoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            #endregion
+
+            #region Home Configuration
+
+            builder.Entity<HomeConfiguration>().HasKey(x => x.Id);
+            builder.Entity<HomeConfiguration>().Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider1ImageUrl).HasMaxLength(1000);
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider1Link).HasMaxLength(500);
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider1LinkType).HasMaxLength(50);
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider2ImageUrl).HasMaxLength(1000);
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider2Link).HasMaxLength(500);
+            builder.Entity<HomeConfiguration>().Property(x => x.Slider2LinkType).HasMaxLength(50);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer1ImageUrl).HasMaxLength(1000);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer1Link).HasMaxLength(500);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer1LinkType).HasMaxLength(50);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer2ImageUrl).HasMaxLength(1000);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer2Link).HasMaxLength(500);
+            builder.Entity<HomeConfiguration>().Property(x => x.Offer2LinkType).HasMaxLength(50);
+            builder.Entity<HomeConfiguration>().HasOne(x => x.CompanyDetail).WithMany()
                 .HasForeignKey(x => x.CompanyInfoId)
                 .OnDelete(DeleteBehavior.Cascade);
 

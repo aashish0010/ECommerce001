@@ -1,7 +1,7 @@
 <!-- Home Section Start -->
 <section class="p-0">
   <div class="home-slider">
-    <app-theme-home-slider [banners]="data()?.content?.home_banner" />
+    <app-theme-home-slider [banners]="effectiveHomeBanner()" />
   </div>
 </section>
 <!-- Home Section End -->
@@ -26,10 +26,10 @@
 <section class="pb-0 ratio2_1 banner-section">
   <div class="container">
     <div class="row g-sm-4 g-3">
-      @if(data()?.content?.offer_banner?.banner_1?.status){
-      <div [ngClass]="data()?.content?.offer_banner?.banner_2?.status ? 'col-6' : 'col-md-12'">
+      @if(effectiveOfferBanner()?.banner_1?.status){
+      <div [ngClass]="effectiveOfferBanner()?.banner_2?.status ? 'col-6' : 'col-md-12'">
         <div class="position-relative">
-          <app-image-link [image]="data()?.content?.offer_banner?.banner_1"
+          <app-image-link [image]="effectiveOfferBanner()?.banner_1"
             [placeholder]="'assets/images/placeholder/two_column_banner.png'" [bgImage]="true" />
           <div class="banner-skeleton">
             <div class="skeleton-content">
@@ -45,10 +45,10 @@
           </div>
         </div>
       </div>
-      } @if(data()?.content?.offer_banner?.banner_2?.status){
-      <div [ngClass]="data()?.content?.offer_banner?.banner_1?.status ? 'col-6' : 'col-md-12'">
+      } @if(effectiveOfferBanner()?.banner_2?.status){
+      <div [ngClass]="effectiveOfferBanner()?.banner_1?.status ? 'col-6' : 'col-md-12'">
         <div class="position-relative">
-          <app-image-link [image]="data()?.content?.offer_banner?.banner_2"
+          <app-image-link [image]="effectiveOfferBanner()?.banner_2"
             [placeholder]="'assets/images/placeholder/two_column_banner.png'" [bgImage]="true" />
           <div class="banner-skeleton">
             <div class="skeleton-content">

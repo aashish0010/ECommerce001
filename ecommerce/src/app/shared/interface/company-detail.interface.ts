@@ -19,6 +19,15 @@ export interface ICompanyDetail {
   companyEmail: string;
   operationsDate: string;
   companyCode: string;
+  // Extended branding & contact fields
+  headerLogoUrl?: string;
+  footerLogoUrl?: string;
+  faviconUrl?: string;
+  companyAddress?: string;
+  copyrightContent?: string;
+  defaultCurrency?: string;
+  siteTagline?: string;
+  siteUrl?: string;
 }
 
 export interface ICompanyService {

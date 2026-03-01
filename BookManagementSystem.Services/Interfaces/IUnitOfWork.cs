@@ -22,5 +22,9 @@ namespace BookManagementSystem.Service.Interfaces
 		CloudinaryService cloudinaryService { get; }
 		DashboardService dashboardService { get; }
 		AdminUserService adminUserService { get; }
+		CompanyAdminService companyAdminService { get; }
+		EmailConfigService emailConfigService { get; }
+		MediaConfigService mediaConfigService { get; }
+		HomeConfigService homeConfigService { get; }
     }
 }

@@ -15,6 +15,7 @@ import { GetCompareAction } from './shared/store/action/compare.action';
 import { GetCountriesAction } from './shared/store/action/country.action';
 import { GetCurrenciesAction } from './shared/store/action/currency.action';
 import { GetSettingOptionAction } from './shared/store/action/setting.action';
+import { GetHomeConfigAction } from './shared/store/action/home-config.action';
 import { GetStatesAction } from './shared/store/action/state.action';
 import { GetThemesAction } from './shared/store/action/theme.action';
 import { SettingState } from './shared/store/state/setting.state';
@@ -60,6 +61,7 @@ export class App {
       this.store.dispatch(new GetThemesAction());
 
       this.store.dispatch(new GetSettingOptionAction());
+      this.store.dispatch(new GetHomeConfigAction());
       this.setting$.subscribe(option => {
         this.maintenance_mode = option && option.maintenance && option.maintenance.maintenance_mode;
         if (option?.analytics) {

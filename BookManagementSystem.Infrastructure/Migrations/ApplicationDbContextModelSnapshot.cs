@@ -30,6 +30,10 @@ namespace BookManagementSystem.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CompanyAddress")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<string>("CompanyCode")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -54,9 +58,37 @@ namespace BookManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<string>("CopyrightContent")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("DefaultCurrency")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("FaviconUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("FooterLogoUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("HeaderLogoUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
                     b.Property<string>("OperationsDate")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
+
+                    b.Property<string>("SiteTagline")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("SiteUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.HasKey("Id");
 
@@ -114,6 +146,138 @@ namespace BookManagementSystem.Infrastructure.Migrations
                     b.HasIndex("CompanyInfoId");
 
                     b.ToTable("CompanySocialInfos");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.EmailConfiguration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApiKey")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FromEmail")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("FromName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("EmailConfigurations");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.HomeConfiguration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Offer1ImageUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Offer1Link")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Offer1LinkType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Offer2ImageUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Offer2Link")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Offer2LinkType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Slider1ImageUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Slider1Link")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Slider1LinkType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Slider2ImageUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Slider2Link")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Slider2LinkType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("HomeConfigurations");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.MediaConfiguration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApiKey")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ApiSecret")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("CloudName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyInfoId");
+
+                    b.ToTable("MediaConfigurations");
                 });
 
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.CompareItem", b =>
@@ -1093,6 +1257,39 @@ namespace BookManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("CompanyInfo");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.EmailConfiguration", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyDetail")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyDetail");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.HomeConfiguration", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyDetail")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyDetail");
+                });
+
+            modelBuilder.Entity("BookManagementSystem.Domain.Entities.Company.MediaConfiguration", b =>
+                {
+                    b.HasOne("BookManagementSystem.Domain.Entities.Company.CompanyDetail", "CompanyDetail")
+                        .WithMany()
+                        .HasForeignKey("CompanyInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyDetail");
                 });
 
             modelBuilder.Entity("BookManagementSystem.Domain.Entities.CompareItem", b =>

@@ -124,7 +124,21 @@ export class ThemeOptionState {
       general: {
         ...options.general,
         site_title: detail.companyName || options.general?.site_title,
-        site_tagline: detail.companyDescription || options.general?.site_tagline,
+        site_tagline: detail.siteTagline || detail.companyDescription || options.general?.site_tagline,
+        site_url: detail.siteUrl || options.general?.site_url,
+        currency: detail.defaultCurrency || options.general?.currency,
+      },
+      logo: {
+        ...options.logo,
+        header_logo: detail.headerLogoUrl
+          ? { original_url: detail.headerLogoUrl }
+          : options.logo?.header_logo,
+        footer_logo: detail.footerLogoUrl
+          ? { original_url: detail.footerLogoUrl }
+          : options.logo?.footer_logo,
+        favicon_icon: detail.faviconUrl
+          ? { original_url: detail.faviconUrl }
+          : options.logo?.favicon_icon,
       },
       seo: {
         ...options.seo,
@@ -141,9 +155,11 @@ export class ThemeOptionState {
       footer: {
         ...options.footer,
         footer_about: detail.companyDescription || options.footer?.footer_about,
+        about_address: detail.companyAddress || options.footer?.about_address,
         about_email: detail.companyEmail || options.footer?.about_email,
         support_email: detail.companyEmail || options.footer?.support_email,
         support_number: detail.companyPhoneNumber || options.footer?.support_number,
+        copyright_content: detail.copyrightContent || options.footer?.copyright_content,
         facebook: findSocial('Facebook') || options.footer?.facebook,
         instagram: findSocial('Instagram') || options.footer?.instagram,
         twitter: findSocial('Twitter') || '',
@@ -156,6 +172,10 @@ export class ThemeOptionState {
         detail_1: {
           ...options.contact_us?.detail_1,
           text: detail.companyPhoneNumber || options.contact_us?.detail_1?.text,
+        },
+        detail_2: {
+          ...options.contact_us?.detail_2,
+          text: detail.companyAddress || options.contact_us?.detail_2?.text,
         },
         detail_3: {
           ...options.contact_us?.detail_3,

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/pipe/text-converter.pipe.ts"],
-  "sourcesContent": ["import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  name: 'textConverter',\n  standalone: true,\n})\nexport class TextConverterPipe implements PipeTransform {\n  transform(value: string) {\n    if (!value) return ''; // Handle edge cases like empty or undefined filters\n\n    return value\n      .split(/[-_]/)\n      .map(word => word.charAt(0).toUpperCase() + word.slice(1))\n      .join(' ');\n  }\n}\n"],
-  "mappings": ";;;;;;;AAMM,IAAO,oBAAP,MAAO,mBAAiB;EAC5B,UAAU,OAAa;AACrB,QAAI,CAAC;AAAO,aAAO;AAEnB,WAAO,MACJ,MAAM,MAAM,EACZ,IAAI,UAAQ,KAAK,OAAO,CAAC,EAAE,YAAW,IAAK,KAAK,MAAM,CAAC,CAAC,EACxD,KAAK,GAAG;EACb;;;uCARW,oBAAiB;IAAA;EAAA;;4FAAjB,oBAAiB,MAAA,KAAA,CAAA;EAAA;;;sEAAjB,mBAAiB,CAAA;UAJ7B;WAAK;MACJ,MAAM;MACN,YAAY;KACb;;;",
-  "names": []
-}

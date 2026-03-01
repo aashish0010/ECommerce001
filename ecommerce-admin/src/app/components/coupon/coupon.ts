@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 
 import { PageWrapper } from '../../shared/components/page-wrapper/page-wrapper';
 import { Table } from '../../shared/components/ui/table/table';
-import { HasPermissionDirective } from '../../shared/directive/has-permission.directive';
 import { ICoupon, ICouponModel } from '../../shared/interface/coupon.interface';
 import { ITableClickedAction, ITableConfig } from '../../shared/interface/table.interface';
 import {
@@ -20,7 +19,7 @@ import { CouponState } from '../../shared/store/state/coupon.state';
 
 @Component({
   selector: 'app-coupon',
-  imports: [TranslateModule, RouterModule, HasPermissionDirective, PageWrapper, Table],
+  imports: [TranslateModule, RouterModule, PageWrapper, Table],
   templateUrl: './coupon.html',
   styleUrl: './coupon.scss',
 })
@@ -34,9 +33,11 @@ export class Coupon {
     columns: [
       { title: 'title', dataField: 'title', sortable: true, sort_direction: 'desc' },
       { title: 'code', dataField: 'code', sortable: true, sort_direction: 'desc' },
+      { title: 'type', dataField: 'type' },
+      { title: 'amount', dataField: 'amount', type: 'price' },
       {
-        title: 'created_at',
-        dataField: 'created_at',
+        title: 'expires_at',
+        dataField: 'end_date',
         type: 'date',
         sortable: true,
         sort_direction: 'desc',
@@ -44,13 +45,8 @@ export class Coupon {
       { title: 'status', dataField: 'status', type: 'switch' },
     ],
     rowActions: [
-      { label: 'Edit', actionToPerform: 'edit', icon: 'ri-pencil-line', permission: 'coupon.edit' },
-      {
-        label: 'Delete',
-        actionToPerform: 'delete',
-        icon: 'ri-delete-bin-line',
-        permission: 'coupon.destroy',
-      },
+      { label: 'Edit', actionToPerform: 'edit', icon: 'ri-pencil-line' },
+      { label: 'Delete', actionToPerform: 'delete', icon: 'ri-delete-bin-line' },
     ],
     data: [] as ICoupon[],
     total: 0,

@@ -1,6 +1,6 @@
 import { AsyncPipe, isPlatformBrowser, NgClass } from '@angular/common';
-import { Component, DestroyRef, PLATFORM_ID, inject, input } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, PLATFORM_ID, computed, inject, input } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 import { Store } from '@ngxs/store';
 import { catchError, map, of, shareReplay } from 'rxjs';
@@ -10,6 +10,7 @@ import { IFashionOne } from '../../../../shared/interface/theme.interface';
 import { CompanyDetailService } from '../../../../shared/services/company-detail.service';
 import { ThemeOptionService } from '../../../../shared/services/theme-option.service';
 import { GetCategoryAction } from '../../../../shared/store/action/category.action';
+import { HomeConfigState } from '../../../../shared/store/state/home-config.state';
 import { ThemeHomeSlider } from '../../widgets/theme-home-slider/theme-home-slider';
 import { ThemeProductTabSection } from '../../widgets/theme-product-tab-section/theme-product-tab-section';
 import { ThemeSocialMedia } from '../../widgets/theme-social-media/theme-social-media';
@@ -41,6 +42,47 @@ export class Fashion1 {
 
   readonly data = input<IFashionOne>();
   readonly slug = input<string>();
+
+  private homeConfig = toSignal(this.store.select(HomeConfigState.config));
+
+  effectiveHomeBanner = computed(() => {
+    const jsonBanner = this.data()?.content?.home_banner;
+    const config = this.homeConfig();
+    if (!config || !jsonBanner) return jsonBanner;
+    const banners = [...(jsonBanner.banners ?? [])];
+    if (config.slider1_image_url && banners[0]) {
+      banners[0] = { ...banners[0], image_url: config.slider1_image_url,
+        redirect_link: { ...banners[0].redirect_link,
+          link_type: config.slider1_link_type ?? banners[0].redirect_link?.link_type,
+          link: config.slider1_link ?? banners[0].redirect_link?.link } };
+    }
+    if (config.slider2_image_url && banners[1]) {
+      banners[1] = { ...banners[1], image_url: config.slider2_image_url,
+        redirect_link: { ...banners[1].redirect_link,
+          link_type: config.slider2_link_type ?? banners[1].redirect_link?.link_type,
+          link: config.slider2_link ?? banners[1].redirect_link?.link } };
+    }
+    return { ...jsonBanner, banners };
+  });
+
+  effectiveOfferBanner = computed(() => {
+    const jsonOffer = this.data()?.content?.offer_banner;
+    const config = this.homeConfig();
+    if (!config || !jsonOffer) return jsonOffer;
+    return {
+      ...jsonOffer,
+      banner_1: config.offer1_image_url && jsonOffer.banner_1 ? {
+        ...jsonOffer.banner_1, image_url: config.offer1_image_url,
+        redirect_link: { ...jsonOffer.banner_1.redirect_link,
+          link_type: config.offer1_link_type ?? jsonOffer.banner_1.redirect_link?.link_type,
+          link: config.offer1_link ?? jsonOffer.banner_1.redirect_link?.link } } : jsonOffer.banner_1,
+      banner_2: config.offer2_image_url && jsonOffer.banner_2 ? {
+        ...jsonOffer.banner_2, image_url: config.offer2_image_url,
+        redirect_link: { ...jsonOffer.banner_2.redirect_link,
+          link_type: config.offer2_link_type ?? jsonOffer.banner_2.redirect_link?.link_type,
+          link: config.offer2_link ?? jsonOffer.banner_2.redirect_link?.link } } : jsonOffer.banner_2,
+    };
+  });
 
   public categoriesReady = false;
 

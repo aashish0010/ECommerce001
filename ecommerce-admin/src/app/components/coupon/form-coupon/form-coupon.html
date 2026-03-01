@@ -378,7 +378,7 @@
                   [gridClass]="'col-sm-9'"
                   [label]="'minimum_spend'"
                   [for]="'min_spend'"
-                  [required]="true"
+                  [required]="false"
                 >
                   <div class="input-group">
                     <span class="input-group-text">
@@ -397,10 +397,32 @@
                   <p class="help-text">
                     {{ '*Define the minimum order value needed to utilize the coupon.' }}
                   </p>
-                  @if(form?.controls['min_spend']?.touched &&
-                  form?.controls['min_spend']?.errors?.['required']){
-                  <div class="invalid-feedback">{{ 'min_spend_is_required' | translate }}</div>
-                  }
+                </app-form-fields>
+
+                <app-form-fields
+                  [labelClass]="'form-label-title col-sm-3 mb-0'"
+                  [gridClass]="'col-sm-9'"
+                  [label]="'maximum_spend'"
+                  [for]="'max_spend'"
+                  [required]="false"
+                >
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      {{(setting$ | async)?.general?.default_currency?.symbol ? (setting$ |
+                      async)?.general?.default_currency?.symbol : '$'}}
+                    </span>
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="max_spend"
+                      placeholder="{{ 'enter_maximum_spend' | translate }}"
+                      name="max_spend"
+                      formControlName="max_spend"
+                    />
+                  </div>
+                  <p class="help-text">
+                    {{ '*Define the maximum order value for this coupon to apply (leave empty for no limit).' }}
+                  </p>
                 </app-form-fields>
               </div>
             </ng-template>

@@ -48,7 +48,7 @@ namespace BookManagementSystem.Service.Services
             new UserManagementService(_userManager, _mapper,
                 tokenService, mailService, _context, _roleManager, _logger, _commonService);
 
-        public EmailManagerService mailService => new EmailManagerService(_mailSettings, _httpClientFactory);
+        public EmailManagerService mailService => new EmailManagerService(_mailSettings, _httpClientFactory, _context);
 
         public DbHelperService dbHelperService => new DbHelperService(_configuration);
 
@@ -72,10 +72,18 @@ namespace BookManagementSystem.Service.Services
 
         public CompareService compareService => new CompareService(_context);
 
-        public CloudinaryService cloudinaryService => new CloudinaryService(_configuration);
+        public CloudinaryService cloudinaryService => new CloudinaryService(_configuration, _context);
 
         public DashboardService dashboardService => new DashboardService(_context);
 
         public AdminUserService adminUserService => new AdminUserService(_context, _userManager, _roleManager, mailService, tokenService);
+
+        public CompanyAdminService companyAdminService => new CompanyAdminService(_context);
+
+        public EmailConfigService emailConfigService => new EmailConfigService(_context);
+
+        public MediaConfigService mediaConfigService => new MediaConfigService(_context);
+
+        public HomeConfigService homeConfigService => new HomeConfigService(_context);
     }
 }

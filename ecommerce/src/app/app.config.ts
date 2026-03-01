@@ -60,6 +60,7 @@ import { ThemeOptionState } from './shared/store/state/theme-option.state';
 import { ThemeState } from './shared/store/state/theme.state';
 import { WalletState } from './shared/store/state/wallet.state';
 import { WishlistState } from './shared/store/state/wishlist.state';
+import { HomeConfigState } from './shared/store/state/home-config.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -143,6 +144,7 @@ export const appConfig: ApplicationConfig = {
         ThemeState,
         WalletState,
         WishlistState,
+        HomeConfigState,
       ]),
       NgxsModule.forFeature([AuthState]),
       RouterModule.forRoot(routes, {

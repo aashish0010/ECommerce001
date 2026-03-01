@@ -29,6 +29,10 @@ import { BrandState } from './shared/store/state/brand.state';
 import { CartState } from './shared/store/state/cart.state';
 import { CategoryState } from './shared/store/state/category.state';
 import { CommissionState } from './shared/store/state/commission.state';
+import { CompanyState } from './shared/store/state/company.state';
+import { EmailConfigState } from './shared/store/state/email-config.state';
+import { MediaConfigState } from './shared/store/state/media-config.state';
+import { HomeConfigState } from './shared/store/state/home-config.state';
 import { CountryState } from './shared/store/state/country.state';
 import { CouponState } from './shared/store/state/coupon.state';
 import { CurrencyState } from './shared/store/state/currency.state';
@@ -115,6 +119,10 @@ export const appConfig: ApplicationConfig = {
         CartState,
         CategoryState,
         CommissionState,
+        CompanyState,
+        EmailConfigState,
+        MediaConfigState,
+        HomeConfigState,
         CountryState,
         CouponState,
         CurrencyState,

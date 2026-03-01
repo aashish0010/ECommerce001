@@ -12,5 +12,15 @@ namespace BookManagementSystem.Domain.Entities.Company
         public string CompanyEmail { get; set; }
         public string OperationsDate { get; set; }
         public string CompanyCode { get; set; }
+
+        // Extended branding & contact fields
+        public string? HeaderLogoUrl { get; set; }
+        public string? FooterLogoUrl { get; set; }
+        public string? FaviconUrl { get; set; }
+        public string? CompanyAddress { get; set; }
+        public string? CopyrightContent { get; set; }
+        public string? DefaultCurrency { get; set; }
+        public string? SiteTagline { get; set; }
+        public string? SiteUrl { get; set; }
     }
 }

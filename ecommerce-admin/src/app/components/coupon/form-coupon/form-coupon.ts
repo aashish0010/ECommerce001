@@ -101,7 +101,7 @@ export class FormCoupon {
       label: 'Free Shipping',
     },
     {
-      value: 'fixed',
+      value: 'flat',
       label: 'Fixed',
     },
   ];
@@ -122,15 +122,16 @@ export class FormCoupon {
       code: new FormControl('', [Validators.required]),
       type: new FormControl('', [Validators.required]),
       amount: new FormControl(''),
-      start_date: new FormControl('', [Validators.required]),
-      end_date: new FormControl('', [Validators.required]),
-      is_expired: new FormControl(1),
+      start_date: new FormControl(''),
+      end_date: new FormControl(''),
+      is_expired: new FormControl(0),
       is_first_order: new FormControl(),
       status: new FormControl(1),
-      is_apply_all: new FormControl(0),
-      products: new FormControl('', [Validators.required]),
+      is_apply_all: new FormControl(1),
+      products: new FormControl(''),
       exclude_products: new FormControl(),
-      min_spend: new FormControl('', [Validators.required]),
+      min_spend: new FormControl(''),
+      max_spend: new FormControl(''),
       is_unlimited: new FormControl(0),
       usage_per_coupon: new FormControl(),
       usage_per_customer: new FormControl(),
@@ -172,6 +173,7 @@ export class FormCoupon {
           exclude_products: coupon?.exclude_products?.map(product => product.id),
           products: coupon?.products?.map(product => product.id),
           min_spend: coupon?.min_spend,
+          max_spend: coupon?.max_spend,
           is_unlimited: coupon?.is_unlimited,
           usage_per_coupon: coupon?.usage_per_coupon,
           usage_per_customer: coupon?.usage_per_customer,
@@ -189,19 +191,17 @@ export class FormCoupon {
       });
 
     this.form.controls['is_expired'].valueChanges.subscribe(data => {
+      const startCtrl = this.form.controls['start_date'];
+      const endCtrl = this.form.controls['end_date'];
       if (!data) {
-        this.form.removeControl('start_date');
-        this.form.removeControl('end_date');
+        startCtrl?.clearValidators();
+        endCtrl?.clearValidators();
       } else {
-        this.form.setControl(
-          'start_date',
-          new FormControl(this.data ? this.data?.start_date : '', [Validators.required]),
-        );
-        this.form.setControl(
-          'end_date',
-          new FormControl(this.data ? this.data?.end_date : '', [Validators.required]),
-        );
+        startCtrl?.setValidators([Validators.required]);
+        endCtrl?.setValidators([Validators.required]);
       }
+      startCtrl?.updateValueAndValidity();
+      endCtrl?.updateValueAndValidity();
     });
 
     this.form.controls['is_apply_all'].valueChanges.subscribe(data => {

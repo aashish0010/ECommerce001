@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/home/home.routes.ts"],
-  "sourcesContent": ["import { Routes } from '@angular/router';\n\nexport const home: Routes = [\n  {\n    path: '',\n    loadComponent: () => import('./home').then(m => m.Home),\n  },\n];\n"],
-  "mappings": ";;;;;AAEO,IAAM,OAAe;EAC1B;IACE,MAAM;IACN,eAAe,MAAM,OAAO,qBAAQ,EAAE,KAAK,OAAK,EAAE,IAAI;;;",
-  "names": []
-}

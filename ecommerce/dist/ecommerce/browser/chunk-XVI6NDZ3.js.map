@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/store/action/brand.action.ts"],
-  "sourcesContent": ["import { Params } from '../../interface/core.interface';\n\nexport class GetBrandsAction {\n  static readonly type = '[Brand] Get';\n  constructor(public payload?: Params) {}\n}\n\nexport class GetBrandBySlugAction {\n  static readonly type = '[Brand] Get Brand By Slug';\n  constructor(public slug: string) {}\n}\n"],
-  "mappings": ";AAEM,IAAO,kBAAP,MAAsB;;AACV,SAAA,OAAO;EAAc;EACrC,YAAmB,SAAgB;AAAhB,SAAA,UAAA;EAAmB;;AAGlC,IAAO,uBAAP,MAA2B;;AACf,SAAA,OAAO;EAA4B;EACnD,YAAmB,MAAY;AAAZ,SAAA,OAAA;EAAe;;",
-  "names": []
-}

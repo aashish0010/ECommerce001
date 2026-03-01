@@ -47,6 +47,20 @@ namespace BookManagementSystem.Infrastructure
 
                 var company = await context.CompanyDetails.FirstAsync();
 
+                // --- 1b. Seed default Social Links ----------------------------------
+                if (!await context.CompanySocialInfos.AnyAsync(x => x.CompanyInfoId == company.Id))
+                {
+                    context.CompanySocialInfos.AddRange(new[]
+                    {
+                        new CompanySocialInfo { SocialMediaName = "Facebook",  SocialMediaLink = "https://www.facebook.com/wowebazaar",  SocialMediaDesc = "Follow us on Facebook",  CompanyInfoId = company.Id },
+                        new CompanySocialInfo { SocialMediaName = "Instagram", SocialMediaLink = "https://www.instagram.com/wowebazaar", SocialMediaDesc = "Follow us on Instagram", CompanyInfoId = company.Id },
+                        new CompanySocialInfo { SocialMediaName = "Twitter",   SocialMediaLink = "https://twitter.com/wowebazaar",       SocialMediaDesc = "Follow us on Twitter/X", CompanyInfoId = company.Id },
+                        new CompanySocialInfo { SocialMediaName = "Pinterest", SocialMediaLink = "https://www.pinterest.com/wowebazaar", SocialMediaDesc = "Follow us on Pinterest", CompanyInfoId = company.Id },
+                        new CompanySocialInfo { SocialMediaName = "Tiktok",    SocialMediaLink = "https://www.tiktok.com/@wowebazaar",   SocialMediaDesc = "Follow us on TikTok",    CompanyInfoId = company.Id },
+                    });
+                    await context.SaveChangesAsync();
+                }
+
                 // --- 2. Seed Roles --------------------------------------------------
                 string[] roles = ["Admin", "Customer"];
                 foreach (var role in roles)
@@ -85,6 +99,54 @@ namespace BookManagementSystem.Infrastructure
                         var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                         logger.LogError("Failed to seed admin user: {Errors}", errors);
                     }
+                }
+
+                // --- 1c. Seed default Email Configuration ----------------------------
+                if (!await context.EmailConfigurations.AnyAsync())
+                {
+                    context.EmailConfigurations.Add(new EmailConfiguration
+                    {
+                        CompanyInfoId = company.Id,
+                        FromEmail = "tipsandtrickofcoding@gmail.com",
+                        FromName = "WoWeBazaar",
+                        ApiKey = ""   // Admin must set the real Resend API key via admin settings
+                    });
+                    await context.SaveChangesAsync();
+                }
+
+                // --- 1d. Seed default Media Configuration ----------------------------
+                if (!await context.MediaConfigurations.AnyAsync())
+                {
+                    context.MediaConfigurations.Add(new MediaConfiguration
+                    {
+                        CompanyInfoId = company.Id,
+                        CloudName = "dgq4i5xue",
+                        ApiKey = "445879849766437",
+                        ApiSecret = "gNXRYpKSproouOiHkWkMHPsmOVc"
+                    });
+                    await context.SaveChangesAsync();
+                }
+
+                // --- 1e. Seed default Home Configuration -----------------------------
+                if (!await context.HomeConfigurations.AnyAsync())
+                {
+                    context.HomeConfigurations.Add(new HomeConfiguration
+                    {
+                        CompanyInfoId = company.Id,
+                        Slider1ImageUrl = "/images/branded/hero.png",
+                        Slider1LinkType = "external_url",
+                        Slider1Link = "",
+                        Slider2ImageUrl = "/images/branded/hero.png",
+                        Slider2LinkType = "external_url",
+                        Slider2Link = "",
+                        Offer1ImageUrl = "/images/company/flight_1.jpg",
+                        Offer1LinkType = "collection",
+                        Offer1Link = "fashion",
+                        Offer2ImageUrl = "/images/company/flight_2.jpg",
+                        Offer2LinkType = "collection",
+                        Offer2Link = "fashion"
+                    });
+                    await context.SaveChangesAsync();
                 }
 
                 // --- 4. Seed Coupons ------------------------------------------------
