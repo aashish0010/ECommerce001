@@ -8,6 +8,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { IAttributeModel } from '../../../../../shared/interface/attribute.interface';
+import { ICategory } from '../../../../../shared/interface/category.interface';
 import { AttributeService } from '../../../../../shared/services/attribute.service';
 import { GetAttributesAction } from '../../../../../shared/store/action/attribute.action';
 import { AttributeState } from '../../../../../shared/store/state/attribute.state';
@@ -18,6 +19,7 @@ import { CollectionColorFilter } from '../filter/collection-color-filter/collect
 import { CollectionFilter } from '../filter/collection-filter/collection-filter';
 import { CollectionPriceFilter } from '../filter/collection-price-filter/collection-price-filter';
 import { CollectionRatingFilter } from '../filter/collection-rating-filter/collection-rating-filter';
+import { CollectionSubcategoryFilter } from '../filter/collection-subcategory-filter/collection-subcategory-filter';
 import { SkeletonCollectionSidebar } from '../skeleton-collection-sidebar/skeleton-collection-sidebar';
 
 @Component({
@@ -32,6 +34,7 @@ import { SkeletonCollectionSidebar } from '../skeleton-collection-sidebar/skelet
     CollectionBrandFilter,
     CollectionColorFilter,
     CollectionFilter,
+    CollectionSubcategoryFilter,
     SkeletonCollectionSidebar,
     AsyncPipe,
   ],
@@ -43,6 +46,7 @@ export class Sidebar {
   attributeService = inject(AttributeService);
 
   @Input() filter: Params;
+  @Input() subcategories: ICategory[] = [];
 
   readonly sidebarPopup = input<boolean>();
   readonly hideFilter = input<string[]>([]);

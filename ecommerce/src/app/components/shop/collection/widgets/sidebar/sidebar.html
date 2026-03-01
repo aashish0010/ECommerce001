@@ -47,6 +47,20 @@
       </div>
     </div>
   </div>
+  } @if(hideFilter() && !hideFilter().includes('subcategory') && subcategories?.length){
+  <div
+    class="open"
+    [class.col-lg-3]="filter['layout'] === 'collection_top_filter'"
+    ngbAccordionItem
+    [collapsed]="false"
+  >
+    <button ngbAccordionButton>Sub Categories</button>
+    <div ngbAccordionCollapse>
+      <div ngbAccordionBody>
+        <app-collection-subcategory-filter [filter]="filter" [subcategories]="subcategories" />
+      </div>
+    </div>
+  </div>
   } @if(hideFilter() && !hideFilter().includes('color')){
   <div
     class="open"

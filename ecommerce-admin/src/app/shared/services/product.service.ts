@@ -20,6 +20,7 @@ export class ProductService {
       if (payload['page']) params['page'] = payload['page'];
       if (payload['paginate']) params['pageSize'] = payload['paginate'];
       if (payload['search']) params['search'] = payload['search'];
+      if (payload['top_selling']) params['topSelling'] = true;
       if (payload['category_ids']) {
         // Backend expects single categoryId; take first if comma-separated
         const ids = String(payload['category_ids']).split(',');

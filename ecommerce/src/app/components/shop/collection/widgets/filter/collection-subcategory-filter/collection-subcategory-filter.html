@@ -1,0 +1,19 @@
+@if(subcategories.length) {
+<ul class="shop-category-list custom-sidebar-height">
+  @for(sub of subcategories; track sub.id) {
+  <li>
+    <div class="form-check collection-filter-checkbox">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        id="subcategory-{{ sub.id }}"
+        [value]="sub.slug"
+        [checked]="checked(sub.slug!)"
+        (change)="applyFilter($event)"
+      />
+      <label class="form-check-label" for="subcategory-{{ sub.id }}">{{ sub.name }}</label>
+    </div>
+  </li>
+  }
+</ul>
+}

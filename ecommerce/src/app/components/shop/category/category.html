@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-3 collection-filter">
-          <app-collection-sidebar [filter]="filter" [hideFilter]="['category']" />
+          <app-collection-sidebar [filter]="filter" [hideFilter]="['category']" [subcategories]="category?.subcategories || []" />
         </div>
         <div class="collection-content col-lg-9">
           <div class="page-main-content">

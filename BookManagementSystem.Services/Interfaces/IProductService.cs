@@ -4,7 +4,7 @@ namespace BookManagementSystem.Service.Interfaces
 {
     public interface IProductService
     {
-        Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string categorySlug, string search, int page, int pageSize, int? brandId = null, string brandSlug = null, string colorSlugs = null);
+        Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string categorySlug, string search, int page, int pageSize, int? brandId = null, string brandSlug = null, string colorSlugs = null, string subcategorySlugs = null, bool topSelling = false);
         Task<SingleProductResponseDto> GetProductBySlug(string slug);
         Task<CategoryResponseDto> GetCategories(int companyInfoId);
         Task<SingleProductResponseDto> CreateProduct(CreateProductRequest request);

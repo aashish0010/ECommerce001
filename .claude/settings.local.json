@@ -45,7 +45,8 @@
       "Bash(npx ng build --configuration development)",
       "Bash(dotnet ef migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
       "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" migrations add AddProductImagesTable --startup-project ../BookManagementSystem)",
-      "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" database update --startup-project ../BookManagementSystem)"
+      "Bash(\"$HOME/.dotnet/tools/dotnet-ef\" database update --startup-project ../BookManagementSystem)",
+      "Bash(dotnet build BookManagementSystem.sln --no-restore)"
     ]
   }
 }

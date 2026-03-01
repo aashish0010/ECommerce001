@@ -27,9 +27,11 @@ namespace BookManagementSystem.Controller
             [FromQuery] int? brandId = null,
             [FromQuery] string brand = null,
             [FromQuery] string colorSlugs = null,
-            [FromQuery] string color = null)
+            [FromQuery] string color = null,
+            [FromQuery] string subcategorySlugs = null,
+            [FromQuery] bool topSelling = false)
         {
-            var result = await _unitOfWork.productService.GetProducts(companyInfoId, categoryId, category, search, page, pageSize, brandId, brand, colorSlugs ?? color);
+            var result = await _unitOfWork.productService.GetProducts(companyInfoId, categoryId, category, search, page, pageSize, brandId, brand, colorSlugs ?? color, subcategorySlugs, topSelling);
             return Ok(result);
         }
 

@@ -138,6 +138,12 @@ namespace BookManagementSystem.Domain.DTO
         [JsonPropertyName("image_urls")]
         public List<string> ImageUrls { get; set; } = new List<string>();
 
+        [JsonPropertyName("orders_count")]
+        public int OrdersCount { get; set; }
+
+        [JsonPropertyName("order_amount")]
+        public decimal OrderAmount { get; set; }
+
         [JsonPropertyName("created_at")]
         public string CreatedAt { get; set; }
 

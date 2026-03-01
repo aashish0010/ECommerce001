@@ -2,6 +2,7 @@ using System.Text.Json;
 using BookManagementSystem.Domain.DTO;
 using BookManagementSystem.Domain.Entities;
 using BookManagementSystem.Domain.Entities.Company;
+using BookManagementSystem.Domain.Entities.Order;
 using BookManagementSystem.Domain.Entities.Product;
 using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service.Interfaces;
@@ -81,8 +82,69 @@ namespace BookManagementSystem.Service.Services
             };
         }
 
-        public async Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string categorySlug, string search, int page, int pageSize, int? brandId = null, string brandSlug = null, string colorSlugs = null)
+        public async Task<ProductResponseDto> GetProducts(int companyInfoId, int? categoryId, string categorySlug, string search, int page, int pageSize, int? brandId = null, string brandSlug = null, string colorSlugs = null, string subcategorySlugs = null, bool topSelling = false)
         {
+            // Top-selling: join with OrderItems, compute counts, sort by orders
+            if (topSelling)
+            {
+                var topStats = await _context.OrderItems
+                    .Where(oi => oi.Product != null && oi.Product.IsActive && oi.Product.CompanyInfoId == companyInfoId)
+                    .GroupBy(oi => oi.ProductId)
+                    .Select(g => new { ProductId = g.Key, OrdersCount = g.Count(), OrderAmount = g.Sum(oi => oi.Total) })
+                    .OrderByDescending(x => x.OrdersCount)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                List<int> productIds;
+                if (topStats.Any())
+                {
+                    productIds = topStats.Select(tp => tp.ProductId).ToList();
+                }
+                else
+                {
+                    // No orders yet — fall back to most recently created products
+                    productIds = await _context.Products
+                        .Where(p => p.IsActive && p.CompanyInfoId == companyInfoId)
+                        .OrderByDescending(p => p.CreatedAt)
+                        .Take(pageSize)
+                        .Select(p => p.Id)
+                        .ToListAsync();
+                }
+
+                var topRawProducts = await _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Brand)
+                    .Include(p => p.ProductColors).ThenInclude(pc => pc.Color)
+                    .Where(p => productIds.Contains(p.Id))
+                    .ToListAsync();
+
+                var orderedProducts = productIds
+                    .Select(id => topRawProducts.FirstOrDefault(p => p.Id == id))
+                    .Where(p => p != null)
+                    .ToList();
+
+                var topProducts = orderedProducts.Select(p =>
+                {
+                    var dto = MapToDto(p);
+                    var stats = topStats.FirstOrDefault(tp => tp.ProductId == p.Id);
+                    dto.OrdersCount = stats?.OrdersCount ?? 0;
+                    dto.OrderAmount = stats?.OrderAmount ?? 0;
+                    return dto;
+                }).ToList();
+
+                return new ProductResponseDto
+                {
+                    Status = Level.Success,
+                    Code = 200,
+                    Message = "Top selling products retrieved successfully",
+                    Products = topProducts,
+                    Total = topProducts.Count,
+                    Page = 1,
+                    PageSize = pageSize,
+                    TotalPages = 1
+                };
+            }
+
             var query = _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
@@ -131,6 +193,21 @@ namespace BookManagementSystem.Service.Services
             {
                 var slugList = colorSlugs.Split(',').Select(s => s.Trim()).ToList();
                 query = query.Where(p => p.ProductColors.Any(pc => slugList.Contains(pc.Color.Slug)));
+            }
+
+            // Subcategory filter: narrows products to specific subcategory slugs
+            if (!string.IsNullOrWhiteSpace(subcategorySlugs))
+            {
+                var subSlugs = subcategorySlugs.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                if (subSlugs.Any())
+                {
+                    var subcatIds = await _context.Categories
+                        .Where(c => subSlugs.Contains(c.Slug) && c.IsActive)
+                        .Select(c => c.Id)
+                        .ToListAsync();
+                    if (subcatIds.Any())
+                        query = query.Where(p => subcatIds.Contains(p.CategoryId));
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(search))

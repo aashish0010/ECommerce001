@@ -83,6 +83,7 @@ export class Category {
                 paginate: 40,
                 status: 1,
                 category: params['category'] ? params['category'] : category,
+                subcategory: params['subcategory'] ? params['subcategory'] : '',
                 price: params['price'] ? params['price'] : '',
                 brand: params['brand'] ? params['brand'] : '',
                 tag: params['tag'] ? params['tag'] : '',
