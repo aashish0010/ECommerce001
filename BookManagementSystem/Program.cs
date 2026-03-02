@@ -2,6 +2,7 @@ using BookManagementSystem.Configuration;
 using BookManagementSystem.Infrastructure;
 using BookManagementSystem.Service;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 using System.Threading.RateLimiting;
 using DataSeeder = BookManagementSystem.Infrastructure.DataSeeder;
@@ -53,8 +54,6 @@ builder.Services.AddRateLimiter(options =>
 
 
 
-
-
 var app = builder.Build();
 
 // Seed database (runs migrations + inserts seed data)
@@ -89,17 +88,6 @@ app.UseSwaggerUi(x =>
 
 app.UseStaticFiles();
 
-// Explicitly serve admin SPA static files (workaround for subdirectory serving issues)
-var adminPhysicalPath = Path.Combine(app.Environment.WebRootPath, "admin");
-if (Directory.Exists(adminPhysicalPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(adminPhysicalPath),
-        RequestPath = "/admin"
-    });
-}
-
 app.UseRateLimiter();
 app.UseMiddleware<ErrorHandlerMiddleWare>();
 app.UseAuthentication();
@@ -128,20 +116,33 @@ app.MapGet("/api/debug/admin-files", (IWebHostEnvironment env) =>
     return Results.Ok(new { exists = true, webRootPath = env.WebRootPath, fileCount = files.Count, directories = dirs, files = files.Take(50) });
 });
 
-// Admin SPA: /admin and /admin/** → serve wwwroot/admin/index.html
-app.MapFallback("/admin", async ctx =>
+// Admin SPA: serve static files directly, fall back to index.html for SPA routes
+var contentTypeProvider = new FileExtensionContentTypeProvider();
+app.Map("/admin/{**path}", async (HttpContext ctx, IWebHostEnvironment env) =>
 {
-    var env = ctx.RequestServices.GetRequiredService<IWebHostEnvironment>();
+    var adminRoot = Path.Combine(env.WebRootPath, "admin");
+    var path = ctx.Request.RouteValues["path"] as string;
+
+    // Try to serve the requested file directly
+    if (!string.IsNullOrEmpty(path))
+    {
+        var filePath = Path.Combine(adminRoot, path.Replace('/', Path.DirectorySeparatorChar));
+        var fullPath = Path.GetFullPath(filePath);
+
+        // Security: ensure path stays within admin directory
+        if (fullPath.StartsWith(adminRoot, StringComparison.OrdinalIgnoreCase) && File.Exists(fullPath))
+        {
+            if (!contentTypeProvider.TryGetContentType(fullPath, out var contentType))
+                contentType = "application/octet-stream";
+            ctx.Response.ContentType = contentType;
+            await ctx.Response.SendFileAsync(fullPath);
+            return;
+        }
+    }
+
+    // SPA fallback: serve index.html for unmatched routes
     ctx.Response.ContentType = "text/html";
-    await ctx.Response.SendFileAsync(
-        Path.Combine(env.WebRootPath, "admin", "index.html"));
-});
-app.MapFallback("/admin/{**slug}", async ctx =>
-{
-    var env = ctx.RequestServices.GetRequiredService<IWebHostEnvironment>();
-    ctx.Response.ContentType = "text/html";
-    await ctx.Response.SendFileAsync(
-        Path.Combine(env.WebRootPath, "admin", "index.html"));
+    await ctx.Response.SendFileAsync(Path.Combine(adminRoot, "index.html"));
 });
 
 if (!app.Environment.IsDevelopment())
