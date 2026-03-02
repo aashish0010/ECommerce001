@@ -1,0 +1,1 @@
+import"./chunk-4CLCTAJ7.js";var e=[{path:"",loadComponent:()=>import("./chunk-3TIGGHFC.js").then(t=>t.Attribute)},{path:"create",loadComponent:()=>import("./chunk-CBX5U2MG.js").then(t=>t.CreateAttribute)},{path:"edit/:id",loadComponent:()=>import("./chunk-CW3NTYNS.js").then(t=>t.EditAttribute)}];export{e as attributeRoutes};

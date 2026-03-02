@@ -1,0 +1,1 @@
+import"./chunk-4CLCTAJ7.js";var o=[{path:"",loadComponent:()=>import("./chunk-7Y7XWYBB.js").then(t=>t.Menu)},{path:"edit/:id",loadComponent:()=>import("./chunk-U3NQPK3O.js").then(t=>t.EditMenu)}];export{o as MenuRoutes};

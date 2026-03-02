@@ -1,0 +1,1 @@
+import"./chunk-4CLCTAJ7.js";var o=[{path:"",loadComponent:()=>import("./chunk-MG477BLM.js").then(t=>t.Faq)},{path:"create",loadComponent:()=>import("./chunk-IFRU6ZC5.js").then(t=>t.CreateFaq)},{path:"edit/:id",loadComponent:()=>import("./chunk-VPFWJ3WP.js").then(t=>t.EditFaq)}];export{o as faqRoutes};

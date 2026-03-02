@@ -1,0 +1,1 @@
+import"./chunk-4CLCTAJ7.js";var o=[{path:"",loadComponent:()=>import("./chunk-ONAO4LJG.js").then(t=>t.Stores)},{path:"create",loadComponent:()=>import("./chunk-VZQAPOW2.js").then(t=>t.CreateStore)},{path:"edit/:id",loadComponent:()=>import("./chunk-CVRZTIE3.js").then(t=>t.EditStore)}];export{o as storeRoutes};

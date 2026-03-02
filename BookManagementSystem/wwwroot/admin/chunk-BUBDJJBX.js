@@ -1,0 +1,1 @@
+import"./chunk-4CLCTAJ7.js";var o=[{path:"",loadComponent:()=>import("./chunk-OGPBX7CO.js").then(t=>t.Tag)},{path:"create",loadComponent:()=>import("./chunk-MJITTQ2Q.js").then(t=>t.CreateTag)},{path:"edit/:id",loadComponent:()=>import("./chunk-MVA5HQTJ.js").then(t=>t.EditTag)}];export{o as tagRoutes};
