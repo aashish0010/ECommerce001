@@ -54,13 +54,28 @@ RUN mkdir -p /app/publish/wwwroot/admin \
  && test -f /app/publish/wwwroot/index.html || (echo "ERROR: ecommerce index.html missing from publish output" && exit 1) \
  && test -f /app/publish/wwwroot/admin/index.html || (echo "ERROR: admin index.html missing from publish output" && exit 1) \
  && echo "✓ ecommerce files: $(ls /app/publish/wwwroot/*.js 2>/dev/null | wc -l) JS files" \
- && echo "✓ admin files: $(ls /app/publish/wwwroot/admin/*.js 2>/dev/null | wc -l) JS files"
+ && echo "✓ admin files: $(ls /app/publish/wwwroot/admin/*.js 2>/dev/null | wc -l) JS files" \
+ && echo "✓ admin sample files:" && ls /app/publish/wwwroot/admin/main*.js /app/publish/wwwroot/admin/polyfills*.js 2>/dev/null \
+ && echo "✓ admin total: $(find /app/publish/wwwroot/admin -type f | wc -l) files"
+
+# Final verification: list everything in the runtime image
+RUN echo "=== /app/publish/wwwroot/admin/ listing ===" \
+ && ls -la /app/publish/wwwroot/admin/ | head -20
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 WORKDIR /app
 COPY --from=build /app/publish .
+
+# Guarantee Angular files in runtime image (bypasses any dotnet publish quirks)
+COPY --from=build /src/ecommerce/dist/ecommerce/browser/ ./wwwroot/
+COPY --from=build /src/ecommerce-admin/dist/multikart-admin/browser/ ./wwwroot/admin/
+
+# Runtime verification
+RUN test -f wwwroot/admin/index.html || (echo "FATAL: admin index.html missing in runtime" && exit 1) \
+ && echo "Runtime admin JS: $(ls wwwroot/admin/*.js 2>/dev/null | wc -l) files" \
+ && ls wwwroot/admin/main*.js wwwroot/admin/polyfills*.js 2>/dev/null
 
 EXPOSE 8080
 

@@ -60,6 +60,21 @@ var app = builder.Build();
 // Seed database (runs migrations + inserts seed data)
 await DataSeeder.SeedAsync(app.Services);
 
+// Debug: log admin static files at startup
+var webRoot = app.Environment.WebRootPath;
+var adminDir = Path.Combine(webRoot, "admin");
+if (Directory.Exists(adminDir))
+{
+    var jsFiles = Directory.GetFiles(adminDir, "*.js").Length;
+    var cssFiles = Directory.GetFiles(adminDir, "*.css").Length;
+    var allFiles = Directory.GetFiles(adminDir, "*", SearchOption.AllDirectories).Length;
+    Log.Information("wwwroot/admin: {JsCount} JS, {CssCount} CSS, {TotalCount} total files", jsFiles, cssFiles, allFiles);
+}
+else
+{
+    Log.Warning("wwwroot/admin directory does NOT exist! WebRootPath={WebRoot}", webRoot);
+}
+
 app.UseOpenApi();
 app.UseCors("AllowAllOrigins");
 
@@ -84,6 +99,23 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.MapFallback("/api/{**slug}", () => Results.NotFound(new { message = "API endpoint not found" }));
+
+// Diagnostic: list files in wwwroot/admin to debug static file issues
+app.MapGet("/api/debug/admin-files", (IWebHostEnvironment env) =>
+{
+    var adminPath = Path.Combine(env.WebRootPath, "admin");
+    if (!Directory.Exists(adminPath))
+        return Results.Ok(new { exists = false, webRootPath = env.WebRootPath });
+
+    var files = Directory.GetFiles(adminPath, "*", SearchOption.TopDirectoryOnly)
+        .Select(f => Path.GetFileName(f))
+        .OrderBy(f => f)
+        .ToList();
+    var dirs = Directory.GetDirectories(adminPath)
+        .Select(d => Path.GetFileName(d))
+        .ToList();
+    return Results.Ok(new { exists = true, webRootPath = env.WebRootPath, fileCount = files.Count, directories = dirs, files = files.Take(50) });
+});
 
 // Admin SPA: /admin and /admin/** → serve wwwroot/admin/index.html
 app.MapFallback("/admin", async ctx =>
