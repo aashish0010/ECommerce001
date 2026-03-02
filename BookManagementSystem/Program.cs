@@ -89,6 +89,17 @@ app.UseSwaggerUi(x =>
 
 app.UseStaticFiles();
 
+// Explicitly serve admin SPA static files (workaround for subdirectory serving issues)
+var adminPhysicalPath = Path.Combine(app.Environment.WebRootPath, "admin");
+if (Directory.Exists(adminPhysicalPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(adminPhysicalPath),
+        RequestPath = "/admin"
+    });
+}
+
 app.UseRateLimiter();
 app.UseMiddleware<ErrorHandlerMiddleWare>();
 app.UseAuthentication();
