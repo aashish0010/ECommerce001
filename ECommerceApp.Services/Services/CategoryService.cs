@@ -11,12 +11,14 @@ namespace ECommerceApp.Service.Services
     {
         private readonly ApplicationDbContext _context;
 
+        protected CategoryService() { }
+
         public CategoryService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<CategoryResponseDto> GetCategories(int companyInfoId)
+        public virtual async Task<CategoryResponseDto> GetCategories(int companyInfoId)
         {
             var categories = await _context.Categories
                 .Where(c => c.IsActive && c.CompanyInfoId == companyInfoId && c.ParentId == null)
@@ -58,7 +60,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<CategoryDetailDto> GetCategoryById(int id)
+        public virtual async Task<CategoryDetailDto> GetCategoryById(int id)
         {
             var category = await _context.Categories
                 .Where(c => c.Id == id)
@@ -180,7 +182,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<CategoryResponseDto> DeleteCategory(int id)
+        public virtual async Task<CategoryResponseDto> DeleteCategory(int id)
         {
             var category = await _context.Categories
                 .Include(c => c.SubCategories)

@@ -11,12 +11,14 @@ namespace ECommerceApp.Service.Services
     {
         private readonly ApplicationDbContext _context;
 
+        protected BrandService() { }
+
         public BrandService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<BrandResponseDto> GetBrands(int companyInfoId)
+        public virtual async Task<BrandResponseDto> GetBrands(int companyInfoId)
         {
             var brands = await _context.Brands
                 .Where(b => b.IsActive && b.CompanyInfoId == companyInfoId)
@@ -42,7 +44,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<BrandDetailDto> GetBrandBySlug(string slug, int companyInfoId)
+        public virtual async Task<BrandDetailDto> GetBrandBySlug(string slug, int companyInfoId)
         {
             var brand = await _context.Brands
                 .Where(b => b.Slug == slug && b.IsActive && b.CompanyInfoId == companyInfoId)
@@ -61,7 +63,7 @@ namespace ECommerceApp.Service.Services
             return brand;
         }
 
-        public async Task<BrandResponseDto> CreateBrand(CreateBrandRequest request)
+        public virtual async Task<BrandResponseDto> CreateBrand(CreateBrandRequest request)
         {
             var slug = request.Name.ToLower().Replace(" ", "-").Replace("'", "").Replace("\"", "");
 

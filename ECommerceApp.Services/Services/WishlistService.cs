@@ -10,12 +10,14 @@ namespace ECommerceApp.Service.Services
     {
         private readonly ApplicationDbContext _context;
 
+        protected WishlistService() { }
+
         public WishlistService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<WishlistResponseDto> GetUserWishlistAsync(string userName)
+        public virtual async Task<WishlistResponseDto> GetUserWishlistAsync(string userName)
         {
             var items = await _context.WishlistItems
                 .Where(w => w.UserName == userName)
@@ -37,7 +39,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<bool> AddToWishlistAsync(string userName, int productId)
+        public virtual async Task<bool> AddToWishlistAsync(string userName, int productId)
         {
             var exists = await _context.WishlistItems
                 .AnyAsync(w => w.UserName == userName && w.ProductId == productId);
@@ -58,7 +60,7 @@ namespace ECommerceApp.Service.Services
             return true;
         }
 
-        public async Task<bool> RemoveFromWishlistAsync(string userName, int productId)
+        public virtual async Task<bool> RemoveFromWishlistAsync(string userName, int productId)
         {
             var item = await _context.WishlistItems
                 .FirstOrDefaultAsync(w => w.UserName == userName && w.ProductId == productId);

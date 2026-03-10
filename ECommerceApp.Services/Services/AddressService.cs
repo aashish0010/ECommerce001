@@ -10,12 +10,14 @@ namespace ECommerceApp.Service.Services
     {
         private readonly ApplicationDbContext _context;
 
+        protected AddressService() { }
+
         public AddressService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<AddressResponseDto>> GetUserAddressesAsync(string userName)
+        public virtual async Task<List<AddressResponseDto>> GetUserAddressesAsync(string userName)
         {
             return await _context.UserAddresses
                 .Where(a => a.UserName == userName)
@@ -39,7 +41,7 @@ namespace ECommerceApp.Service.Services
                 .ToListAsync();
         }
 
-        public async Task<AddressResponseDto> CreateAddressAsync(string userName, CreateAddressDto dto)
+        public virtual async Task<AddressResponseDto> CreateAddressAsync(string userName, CreateAddressDto dto)
         {
             if (dto.IsDefault)
             {
@@ -86,7 +88,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<AddressResponseDto> UpdateAddressAsync(string userName, int id, CreateAddressDto dto)
+        public virtual async Task<AddressResponseDto> UpdateAddressAsync(string userName, int id, CreateAddressDto dto)
         {
             var address = await _context.UserAddresses
                 .FirstOrDefaultAsync(a => a.Id == id && a.UserName == userName);
@@ -132,7 +134,7 @@ namespace ECommerceApp.Service.Services
             };
         }
 
-        public async Task<bool> DeleteAddressAsync(string userName, int id)
+        public virtual async Task<bool> DeleteAddressAsync(string userName, int id)
         {
             var address = await _context.UserAddresses
                 .FirstOrDefaultAsync(a => a.Id == id && a.UserName == userName);
