@@ -48,18 +48,27 @@ options.IgnoredPaths.Add("/css");
 				};
 			});
 
-			services.AddAuthentication().AddCookie()
-				.AddFacebook(facebookOptions =>
-			{
-				facebookOptions.AppId = configuration["FacebookAuthencation:AppId"];
-				facebookOptions.AppSecret = configuration["FacebookAuthencation:AppSecret"];
+			var authBuilder = services.AddAuthentication().AddCookie();
 
-
-			}).AddGoogle(googleOptions =>
+			var fbAppId = configuration["FacebookAuthencation:AppId"];
+			if (!string.IsNullOrEmpty(fbAppId))
 			{
-				googleOptions.ClientId = configuration["GoogleAuthencation:ClientId"];
-				googleOptions.ClientSecret = configuration["GoogleAuthencation:ClientSecret"];
-			});
+				authBuilder.AddFacebook(facebookOptions =>
+				{
+					facebookOptions.AppId = fbAppId;
+					facebookOptions.AppSecret = configuration["FacebookAuthencation:AppSecret"];
+				});
+			}
+
+			var googleClientId = configuration["GoogleAuthencation:ClientId"];
+			if (!string.IsNullOrEmpty(googleClientId))
+			{
+				authBuilder.AddGoogle(googleOptions =>
+				{
+					googleOptions.ClientId = googleClientId;
+					googleOptions.ClientSecret = configuration["GoogleAuthencation:ClientSecret"];
+				});
+			}
 
 
 			services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
