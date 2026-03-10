@@ -54,25 +54,34 @@ ecommerce/                       # Angular 21 customer frontend
 ecommerce-admin/                 # Angular 21 admin panel
 ```
 
-## Quick Start (Docker)
+## 5-Minute Quick Start (Docker)
 
 ```bash
 # 1. Clone the repository
 git clone <repo-url> && cd ECommerceApp
 
-# 2. Create environment file
+# 2. Create environment file with dev-ready defaults
 cp .env.example .env
-# Edit .env with your values (JWT_KEY, database password, etc.)
 
-# 3. Start all services
+# 3. Set the only required variable (everything else has working defaults)
+#    Linux/macOS:
+echo 'JWT_KEY=DevOnlyKey_ChangeInProduction_AtLeast32Chars!' >> .env
+echo 'POSTGRES_PASSWORD=postgres' >> .env
+#    Windows PowerShell:
+#    Add-Content .env "JWT_KEY=DevOnlyKey_ChangeInProduction_AtLeast32Chars!"
+#    Add-Content .env "POSTGRES_PASSWORD=postgres"
+
+# 4. Start all services
 docker-compose up -d
 
-# 4. Access the application
+# 5. Access the application
 # API:      http://localhost:8080/api/v1/auth/getecho
 # Frontend: http://localhost:8080
 # Admin:    http://localhost:8080/admin
-# pgAdmin:  http://localhost:5050
+# pgAdmin:  http://localhost:5050 (admin@ecommerce.com / admin)
 ```
+
+> **Note:** The database is auto-migrated and seeded on first run with demo data (admin user, demo customer, 15 products, categories, brands, colors, and coupons). See [Default Accounts](#default-accounts) below.
 
 ## Manual Setup
 
@@ -153,7 +162,7 @@ All endpoints are versioned under `/api/v1/`. Authentication uses Bearer JWT tok
 | PATCH | `/api/v1/product/{id}/status` | Toggle product status |
 | DELETE | `/api/v1/product/{id}` | Delete product |
 | POST | `/api/v1/product/with-image` | Create product with image upload |
-| POST | `/api/v1/product/seed` | Seed demo data |
+| POST | `/api/v1/product/seed` | Seed demo data (Admin) |
 
 **Product query parameters:** `category`, `brand`, `color`, `colorSlugs`, `subcategorySlugs`, `search`, `page`, `pageSize`, `topSelling`
 
@@ -285,6 +294,42 @@ docker-compose down
 # Stop and remove data
 docker-compose down -v
 ```
+
+## Default Accounts
+
+The data seeder creates these accounts on first run:
+
+| Role | Phone (username) | Password | Email |
+|------|-----------------|----------|-------|
+| Admin | `9770000000` | `Admin@2026!` | admin@ecommerceapp.com |
+| Customer | `9841234567` | `Customer@123` | customer@example.com |
+
+> Change these passwords immediately in production.
+
+## Important Notes
+
+### Payment Gateway
+
+This template **does not include a payment gateway integration** (Stripe, PayPal, Razorpay, etc.). Orders can be placed with Cash on Delivery (COD). Adding a payment provider is straightforward — implement it in `OrderService.PlaceOrderAsync()` and add the provider's SDK to the project.
+
+### CORS in Production
+
+The `AllowedOrigins` array in `appsettings.Production.json` is empty by default. You **must** set your frontend domain(s) via environment variables, otherwise CORS will block all browser requests:
+
+```bash
+ALLOWED_ORIGIN_0=https://yourdomain.com
+ALLOWED_ORIGIN_1=https://admin.yourdomain.com
+```
+
+### What's Not Included
+
+- Payment gateway integration (Stripe, PayPal, etc.)
+- Real-time notifications (WebSockets/SignalR)
+- Multi-language / i18n
+- Wallet and loyalty points system
+- Download / digital product delivery
+
+These can be added as needed for your specific use case.
 
 ## License
 
