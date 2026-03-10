@@ -1,0 +1,21 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace ECommerceApp.Infrastructure
+{
+	public static class InfrastructureCollectionServices
+	{
+		public static IServiceCollection InfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.AddDbContext<ApplicationDbContext>(options =>
+					options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+			services.AddIdentityCore<User>().AddRoles<IdentityRole>()
+			.AddEntityFrameworkStores<ApplicationDbContext>()
+			.AddDefaultTokenProviders();
+
+			return services;
+		}
+	}
+}

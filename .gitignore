@@ -361,6 +361,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-# Angular admin build outputs
+# Angular build outputs
+ecommerce/dist/
+ecommerce/.angular/
 ecommerce-admin/dist/
 ecommerce-admin/.angular/
+
+# Environment files
+**/.env
+.env
+.env.*
+!.env.example
+
+# Node modules (all projects)
+**/node_modules/

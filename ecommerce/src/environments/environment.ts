@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseURL: '/api/',
+  baseURL: '/api/v1/',
   siteURL: '/',
   URL: '/assets/data',
   storageURL: '/assets',

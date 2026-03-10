@@ -5,9 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Full-stack e-commerce application with:
-- **Backend**: ASP.NET Core 8 Web API (`BookManagementSystem/`)
+- **Backend**: ASP.NET Core 8 Web API (`ECommerceApp/`)
 - **Frontend**: Angular 21 standalone app (`ecommerce/`)
-- **Database**: SQL Server (EF Core 8, database name: `WOWCommerce`)
+- **Admin**: Angular 21 standalone app (`ecommerce-admin/`)
+- **Database**: PostgreSQL (EF Core 8, database name: `ecommerce_db`)
 
 ## Commands
 
@@ -15,29 +16,27 @@ Full-stack e-commerce application with:
 
 ```bash
 # Build
-dotnet build BookManagementSystem.sln
+dotnet build ECommerceApp.sln
 
-# Run (from BookManagementSystem/ directory)
+# Run (from ECommerceApp/ directory)
 dotnet run --launch-profile http        # http://localhost:5241
 dotnet run --launch-profile https       # https://localhost:7141
 
 # Run tests
-cd BookManagementSystem.Test
-dotnet test
+dotnet test ECommerceApp.Test/ECommerceApp.Test.csproj
 
 # Add EF migration
-cd BookManagementSystem.Infrastructure
-dotnet ef migrations add <MigrationName> --startup-project ../BookManagementSystem
+cd ECommerceApp.Infrastructure
+dotnet ef migrations add <MigrationName> --startup-project ../ECommerceApp
 
 # Apply migration
-dotnet ef database update --startup-project ../BookManagementSystem
+dotnet ef database update --startup-project ../ECommerceApp
 ```
 
 ### Frontend (Angular)
 
 ```bash
 cd ecommerce
-
 npm install          # Install dependencies
 npm start            # Dev server at http://localhost:4200
 npm run build        # Production build (SSR)
@@ -48,24 +47,48 @@ npm run lint:fix     # ESLint auto-fix
 npm run format       # Prettier formatting
 ```
 
+### Admin (Angular)
+
+```bash
+cd ecommerce-admin
+npm install          # Install dependencies
+npm start            # Dev server at http://localhost:4300
+npm run build        # Production build
+```
+
+### Docker
+
+```bash
+cp .env.example .env   # Configure environment
+docker-compose up -d   # Start all services (API + PostgreSQL + pgAdmin)
+```
+
 ## Architecture
 
 ### Backend — Layered
 
 ```
-BookManagementSystem/           ← API: controllers, middleware, Program.cs
-BookManagementSystem.Entities/  ← Domain: entities, DTOs (no dependencies)
-BookManagementSystem.Infrastructure/ ← Data: EF Core, migrations, ApplicationDbContext
-BookManagementSystem.Services/  ← Business logic: services, interfaces, AutoMapper profiles
-BookManagementSystem.Test/      ← XUnit + Moq + FluentAssertions
+ECommerceApp/                ← API: controllers, middleware, validators, Program.cs
+ECommerceApp.Entities/       ← Domain: entities, DTOs (no dependencies)
+ECommerceApp.Infrastructure/ ← Data: EF Core, migrations, ApplicationDbContext, DataSeeder
+ECommerceApp.Services/       ← Business logic: services, interfaces, AutoMapper profiles
+ECommerceApp.Test/           ← xUnit + Moq + FluentAssertions (15 tests)
 ```
 
 **Key patterns:**
+- API versioning: all routes use `/api/v1/` prefix (Asp.Versioning)
 - Services are registered via `UnitOfWork`, not individually via DI
+- Service methods are `virtual` to enable Moq testing
+- Services have `protected` parameterless constructors for Moq proxy creation
 - AutoMapper maps between entities and DTOs
 - `ApplicationDbContext` extends `IdentityDbContext<User>` — the `User` class is at the bottom of that file
-- Errors handled by `ErrorHandlerMiddleWare`; logging via Serilog to `/logs/`
+- Errors handled by `ErrorHandlerMiddleWare` using ProblemDetails (RFC 9110)
+- FluentValidation auto-validates requests (validators in `ECommerceApp/Validators/`)
 - Rate limiting: 5 req/min sliding window on auth endpoints (returns 429)
+- Logging via Serilog to `/logs/`
+- Security headers: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy
+- CORS: config-driven origin whitelist via `AllowedOrigins` in appsettings
+- Secrets: stored via environment variables, not in appsettings.json (see `.env.example`)
 
 ### Frontend — NGXS + Standalone
 
@@ -98,20 +121,37 @@ ecommerce/src/app/
 2. Register: splits `name` into `firstName/middleName/lastName`, sets `userName = phone`
 3. OTP email verification required before registration completes
 4. JWT stored in NGXS `auth.access_token` (60-min expiry)
-5. `AuthInterceptor` attaches `Bearer` token; public endpoints listed in `publicEndpoints` array in that file
+5. Refresh tokens supported via `POST /api/v1/auth/refresh`
+6. `AuthInterceptor` attaches `Bearer` token; public endpoints listed in `publicEndpoints` array in that file
 
 ### Database Schema (EF Core)
 
-Core tables managed by migrations in `BookManagementSystem.Infrastructure/Migrations/`:
+Core tables managed by migrations in `ECommerceApp.Infrastructure/Migrations/`:
 - `AspNetUsers` (Identity) + custom fields: `FirstName`, `MiddleName`, `LastName`
-- `Products`, `Categories`, `Brands`, `Colors`, `ProductColors` (junction)
-- `Orders`, `OrderItems`, `UserAddresses`
+- `Products`, `Categories`, `Brands`, `Colors`, `ProductColors` (junction), `ProductImages`
+- `Orders`, `OrderItems`, `UserAddresses`, `Coupons`
 - `CompanyDetails`, `CompanyServices`, `CompanySocialInfos`
-- `OtpHandlers`, `ThirdPartyAuths`
+- `EmailConfigurations`, `MediaConfigurations`, `HomeConfigurations`
+- `WishlistItems`, `CompareItems`
+- `OtpHandlers`, `ThirdPartyAuths`, `RefreshTokens`
+
+### Data Seeder
+
+`DataSeeder.SeedAsync()` runs on startup and seeds:
+- Company + social links
+- Admin user (phone: `9770000000`, password: `Admin@2026!`)
+- Demo customer (phone: `9841234567`, password: `Customer@123`)
+- 9 brands, 10 colors, 14 categories (4 parent + 10 subcategories)
+- 15 demo products with color assignments
+- 4 coupons (WELCOME10, SAVE50, MEGA20, FLAT100)
+- Email, media, and home configuration defaults
 
 ## Key Conventions
 
+- **API versioning**: `/api/v1/[controller]` — all endpoints versioned
 - **Action naming**: `[StateName] Action Verb` — e.g., `[Account] User Get`, `[Product] Product Load`
-- **API base URL**: `/api/` (resolved via Angular environment `baseURL`)
+- **API base URL**: `/api/v1/` (resolved via Angular environment `baseURL`)
 - **Country code default**: 977 (Nepal) on phone fields
 - **`tokenService.UserName`** returns value of JWT `name` claim, which equals the phone number (username)
+- **JSON naming**: Backend DTOs use `[JsonPropertyName("snake_case")]` to match frontend interfaces
+- **Testing**: Use `DefaultValue.Mock` + `Mock.Get()` pattern for mocking services through IUnitOfWork

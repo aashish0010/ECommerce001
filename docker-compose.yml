@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce-api
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-ecommerce_db};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER:-ECommerceApp}
+      - Jwt__Audience=${JWT_AUDIENCE:-ECommerceApp}
+      - Jwt__ExpiryMinutes=${JWT_EXPIRY_MINUTES:-60}
+      - AllowedOrigins__0=${ALLOWED_ORIGIN_0:-http://localhost:4200}
+      - AllowedOrigins__1=${ALLOWED_ORIGIN_1:-http://localhost:4300}
+      - Cloudinary__CloudName=${CLOUDINARY_CLOUD_NAME}
+      - Cloudinary__ApiKey=${CLOUDINARY_API_KEY}
+      - Cloudinary__ApiSecret=${CLOUDINARY_API_SECRET}
+      - MailSettings__Mail=${MAIL_ADDRESS}
+      - MailSettings__Password=${MAIL_PASSWORD}
+      - MailSettings__DisplayName=${MAIL_DISPLAY_NAME:-ECommerceApp}
+      - MailSettings__Host=${MAIL_HOST:-smtp.gmail.com}
+      - MailSettings__Port=${MAIL_PORT:-587}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - app-logs:/logs
+
+  db:
+    image: postgres:16-alpine
+    container_name: ecommerce-db
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-ecommerce_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ecommerce-pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@ecommerce.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  app-logs:

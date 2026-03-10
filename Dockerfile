@@ -9,14 +9,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 WORKDIR /src
 
 # Copy solution + project files first (layer caching)
-COPY BookManagementSystem.sln ./
-COPY BookManagementSystem/BookManagementSystem.csproj                               BookManagementSystem/
-COPY BookManagementSystem.Entities/BookManagementSystem.Domain.csproj               BookManagementSystem.Entities/
-COPY BookManagementSystem.Infrastructure/BookManagementSystem.Infrastructure.csproj BookManagementSystem.Infrastructure/
-COPY BookManagementSystem.Services/BookManagementSystem.Service.csproj              BookManagementSystem.Services/
-COPY BookManagementSystem.Test/BookManagementSystem.Test.csproj                     BookManagementSystem.Test/
+COPY ECommerceApp.sln ./
+COPY ECommerceApp/ECommerceApp.csproj                               ECommerceApp/
+COPY ECommerceApp.Entities/ECommerceApp.Domain.csproj               ECommerceApp.Entities/
+COPY ECommerceApp.Infrastructure/ECommerceApp.Infrastructure.csproj ECommerceApp.Infrastructure/
+COPY ECommerceApp.Services/ECommerceApp.Service.csproj              ECommerceApp.Services/
+COPY ECommerceApp.Test/ECommerceApp.Test.csproj                     ECommerceApp.Test/
 
-RUN dotnet restore BookManagementSystem.sln
+RUN dotnet restore ECommerceApp.sln
 
 # Copy the rest of the source
 COPY . .
@@ -35,12 +35,12 @@ RUN npm ci && npm run build \
 # ASP.NET Core's publish always includes the source wwwroot/ as static content,
 # so this is 100% reliable regardless of MSBuild ItemGroup path-separator behaviour.
 WORKDIR /src
-RUN cp -r ecommerce/dist/ecommerce/browser/. BookManagementSystem/wwwroot/ \
- && mkdir -p BookManagementSystem/wwwroot/admin \
- && cp -r ecommerce-admin/dist/multikart-admin/browser/. BookManagementSystem/wwwroot/admin/
+RUN cp -r ecommerce/dist/ecommerce/browser/. ECommerceApp/wwwroot/ \
+ && mkdir -p ECommerceApp/wwwroot/admin \
+ && cp -r ecommerce-admin/dist/multikart-admin/browser/. ECommerceApp/wwwroot/admin/
 
 # Publish .NET (MSBuild targets skip npm since dist already exists)
-RUN dotnet publish BookManagementSystem/BookManagementSystem.csproj \
+RUN dotnet publish ECommerceApp/ECommerceApp.csproj \
     -c Release \
     -o /app/publish \
     --no-restore
@@ -80,4 +80,4 @@ RUN test -f wwwroot/admin/index.html || (echo "FATAL: admin index.html missing i
 EXPOSE 8080
 
 # Use shell form CMD so $PORT is expanded at runtime from Railway's injected env var
-CMD ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet BookManagementSystem.dll
+CMD ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet ECommerceApp.dll

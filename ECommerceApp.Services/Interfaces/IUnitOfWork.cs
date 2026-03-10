@@ -1,0 +1,30 @@
+﻿using ECommerceApp.Infrastructure;
+using ECommerceApp.Service.Services;
+
+namespace ECommerceApp.Service.Interfaces
+{
+	public interface IUnitOfWork
+	{
+		UserManagementService userManagementService { get; }
+		TokenService tokenService { get; }
+		EmailManagerService mailService { get; }
+        DbHelperService dbHelperService { get; }
+		CommonService commonService { get; }
+		ProductService productService { get; }
+		BrandService brandService { get; }
+		CategoryService categoryService { get; }
+		ColorService colorService { get; }
+		OrderService orderService { get; }
+		AddressService addressService { get; }
+		CouponService couponService { get; }
+		WishlistService wishlistService { get; }
+		CompareService compareService { get; }
+		CloudinaryService cloudinaryService { get; }
+		DashboardService dashboardService { get; }
+		AdminUserService adminUserService { get; }
+		CompanyAdminService companyAdminService { get; }
+		EmailConfigService emailConfigService { get; }
+		MediaConfigService mediaConfigService { get; }
+		HomeConfigService homeConfigService { get; }
+    }
+}

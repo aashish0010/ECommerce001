@@ -1,0 +1,571 @@
+{
+  "info": {
+    "name": "ECommerceApp API",
+    "description": "Complete API collection for ECommerceApp — ASP.NET Core 8 e-commerce backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5241/api/v1" },
+    { "key": "token", "value": "" },
+    { "key": "refreshToken", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"9841234567\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password@123\",\n  \"companyCode\": \"WOW001\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }",
+                  "if (json.refresh_token) { pm.collectionVariables.set('refreshToken', json.refresh_token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"9841234567\",\n  \"password\": \"Password@123\",\n  \"companyCode\": \"WOW001\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }",
+                  "if (json.refresh_token) { pm.collectionVariables.set('refreshToken', json.refresh_token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/admin-login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"admin\",\n  \"password\": \"Admin@123\",\n  \"companyCode\": \"WOW001\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accessToken\": \"{{token}}\",\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Send OTP (Forgot Password)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/sendopt?email=john@example.com", "host": ["{{baseUrl}}"], "path": ["auth", "sendopt"], "query": [{ "key": "email", "value": "john@example.com" }] }
+          }
+        },
+        {
+          "name": "Send Email OTP (Registration)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/sendemailotp?email=john@example.com", "host": ["{{baseUrl}}"], "path": ["auth", "sendemailotp"], "query": [{ "key": "email", "value": "john@example.com" }] }
+          }
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/verifyemail",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"john@example.com\",\n  \"otp\": \"123456\"\n}" }
+          }
+        },
+        {
+          "name": "Verify OTP + Reset Password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/verifyopt",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"john@example.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"NewPassword@123\",\n  \"confirmPassword\": \"NewPassword@123\"\n}" }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/getecho" }
+        },
+        {
+          "name": "Get Company Details",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/companydetails?companyCode=WOW001", "host": ["{{baseUrl}}"], "path": ["auth", "companydetails"], "query": [{ "key": "companyCode", "value": "WOW001" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/product?page=1&pageSize=20", "host": ["{{baseUrl}}"], "path": ["product"], "query": [{ "key": "page", "value": "1" }, { "key": "pageSize", "value": "20" }, { "key": "category", "value": "", "disabled": true }, { "key": "brand", "value": "", "disabled": true }, { "key": "color", "value": "", "disabled": true }, { "key": "search", "value": "", "disabled": true }, { "key": "topSelling", "value": "false", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Get Product by Slug",
+          "request": { "method": "GET", "url": "{{baseUrl}}/product/test-product" }
+        },
+        {
+          "name": "Get Categories",
+          "request": { "method": "GET", "url": "{{baseUrl}}/product/categories" }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/product",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Product\",\n  \"description\": \"Product description\",\n  \"price\": 99.99,\n  \"quantity\": 10,\n  \"categoryId\": 1,\n  \"companyInfoId\": 1\n}" }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/product/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Product\",\n  \"price\": 149.99\n}" }
+          }
+        },
+        {
+          "name": "Toggle Product Status",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/product/1/status",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": true\n}" }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/product/1" }
+        },
+        {
+          "name": "Seed Demo Data",
+          "request": { "method": "POST", "url": "{{baseUrl}}/product/seed" }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": { "method": "GET", "url": "{{baseUrl}}/category" }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": { "method": "GET", "url": "{{baseUrl}}/category/1" }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/category",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Category\",\n  \"companyInfoId\": 1\n}" }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/category/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Category\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/category/1" }
+        }
+      ]
+    },
+    {
+      "name": "Brands",
+      "item": [
+        {
+          "name": "List Brands",
+          "request": { "method": "GET", "url": "{{baseUrl}}/brand" }
+        },
+        {
+          "name": "Get Brand by Slug",
+          "request": { "method": "GET", "url": "{{baseUrl}}/brand/nike" }
+        },
+        {
+          "name": "Create Brand",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/brand",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Brand\",\n  \"companyInfoId\": 1\n}" }
+          }
+        },
+        {
+          "name": "Update Brand",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/brand/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Brand\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Brand",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/brand/1" }
+        }
+      ]
+    },
+    {
+      "name": "Colors",
+      "item": [
+        {
+          "name": "List Colors",
+          "request": { "method": "GET", "url": "{{baseUrl}}/color" }
+        },
+        {
+          "name": "Create Color",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/color",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Red\",\n  \"hexCode\": \"#FF0000\",\n  \"companyInfoId\": 1\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/order",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"products\": [\n    { \"productId\": 1, \"quantity\": 2 }\n  ],\n  \"paymentMethod\": \"cod\",\n  \"shippingAddress\": {\n    \"title\": \"Home\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Kathmandu\"\n  }\n}" }
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": { "method": "GET", "url": "{{baseUrl}}/order" }
+        },
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/order/admin?page=1&paginate=15", "host": ["{{baseUrl}}"], "path": ["order", "admin"], "query": [{ "key": "page", "value": "1" }, { "key": "paginate", "value": "15" }, { "key": "status", "value": "", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/order/admin/1/status",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"processing\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": { "method": "GET", "url": "{{baseUrl}}/user/me" }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"John\",\n  \"middleName\": \"\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"9841234567\"\n}" }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Password@123\",\n  \"newPassword\": \"NewPassword@123\",\n  \"confirmPassword\": \"NewPassword@123\"\n}" }
+          }
+        },
+        {
+          "name": "List Users (Admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/user/admin" }
+        },
+        {
+          "name": "Get Roles (Admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/user/roles" }
+        }
+      ]
+    },
+    {
+      "name": "Wishlist",
+      "item": [
+        {
+          "name": "Get Wishlist",
+          "request": { "method": "GET", "url": "{{baseUrl}}/wishlist" }
+        },
+        {
+          "name": "Add to Wishlist",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/wishlist",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 1\n}" }
+          }
+        },
+        {
+          "name": "Remove from Wishlist",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/wishlist/1" }
+        }
+      ]
+    },
+    {
+      "name": "Compare",
+      "item": [
+        {
+          "name": "Get Compare List",
+          "request": { "method": "GET", "url": "{{baseUrl}}/compare" }
+        },
+        {
+          "name": "Add to Compare",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/compare",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 1\n}" }
+          }
+        },
+        {
+          "name": "Remove from Compare",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/compare/1" }
+        }
+      ]
+    },
+    {
+      "name": "Address",
+      "item": [
+        {
+          "name": "Get Addresses",
+          "request": { "method": "GET", "url": "{{baseUrl}}/address" }
+        },
+        {
+          "name": "Add Address",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/address",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Home\",\n  \"street\": \"123 Main St\",\n  \"city\": \"Kathmandu\",\n  \"state_name\": \"Bagmati\",\n  \"country_name\": \"Nepal\",\n  \"pincode\": \"44600\",\n  \"phone\": \"9841234567\",\n  \"is_default\": true\n}" }
+          }
+        },
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/address/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Office\",\n  \"street\": \"456 Business Rd\",\n  \"city\": \"Lalitpur\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Address",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/address/1" }
+        }
+      ]
+    },
+    {
+      "name": "Coupons",
+      "item": [
+        {
+          "name": "List Active Coupons",
+          "request": { "method": "GET", "url": "{{baseUrl}}/coupon" }
+        },
+        {
+          "name": "Apply Coupon",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/coupon/apply",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"WELCOME10\",\n  \"subtotal\": 1000,\n  \"companyInfoId\": 1\n}" }
+          }
+        },
+        {
+          "name": "List All Coupons (Admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/coupon/admin" }
+        },
+        {
+          "name": "Create Coupon",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/coupon",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"SUMMER20\",\n  \"discountType\": \"percentage\",\n  \"amount\": 20,\n  \"minPurchase\": 500,\n  \"maxDiscount\": 200,\n  \"expiresAt\": \"2026-12-31T00:00:00Z\",\n  \"companyInfoId\": 1\n}" }
+          }
+        },
+        {
+          "name": "Update Coupon",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/coupon/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 25\n}" }
+          }
+        },
+        {
+          "name": "Delete Coupon",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/coupon/1" }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Statistics",
+          "request": { "method": "GET", "url": "{{baseUrl}}/dashboard/statistics" }
+        },
+        {
+          "name": "Get Chart Data",
+          "request": { "method": "GET", "url": "{{baseUrl}}/dashboard/chart" }
+        }
+      ]
+    },
+    {
+      "name": "Admin Config",
+      "item": [
+        {
+          "name": "Get Company",
+          "request": { "method": "GET", "url": "{{baseUrl}}/company" }
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/company/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"companyName\": \"My Store\",\n  \"siteTagline\": \"Best prices online\"\n}" }
+          }
+        },
+        {
+          "name": "Update Social Links",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/company/1/social-links",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"facebook\": \"https://facebook.com/mystore\",\n  \"instagram\": \"https://instagram.com/mystore\"\n}" }
+          }
+        },
+        {
+          "name": "Get Email Config",
+          "request": { "method": "GET", "url": "{{baseUrl}}/email-config" }
+        },
+        {
+          "name": "Update Email Config",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/email-config/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fromEmail\": \"noreply@mystore.com\",\n  \"fromName\": \"My Store\",\n  \"apiKey\": \"re_xxx\"\n}" }
+          }
+        },
+        {
+          "name": "Get Media Config",
+          "request": { "method": "GET", "url": "{{baseUrl}}/media-config" }
+        },
+        {
+          "name": "Update Media Config",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/media-config/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"cloudName\": \"my-cloud\",\n  \"apiKey\": \"123456\",\n  \"apiSecret\": \"secret\"\n}" }
+          }
+        },
+        {
+          "name": "Get Home Config",
+          "request": { "method": "GET", "url": "{{baseUrl}}/home-config" }
+        },
+        {
+          "name": "Update Home Config",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/home-config/1",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"slider1ImageUrl\": \"https://example.com/banner1.jpg\",\n  \"slider1RedirectLink\": \"/category/fashion\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Image",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/image/upload",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "folder", "value": "products", "type": "text" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Image",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/image/products/sample-image" }
+        }
+      ]
+    }
+  ]
+}

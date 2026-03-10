@@ -3,7 +3,7 @@
 ## Overview
 This document describes the implementation of linking AspNetUser with Company using CompanyCode in both registration and login flows.
 
-## Backend Changes (BookManagementSystem)
+## Backend Changes (ECommerceApp)
 
 ### 1. Database Schema
 - **AspNetUsers Table**: Already has `CompanyInfoId` column (nullable, integer)
