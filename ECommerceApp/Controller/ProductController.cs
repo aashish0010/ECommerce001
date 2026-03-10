@@ -121,6 +121,7 @@ namespace ECommerceApp.Controller
         }
 
         [HttpPost("seed")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SeedData([FromQuery] int companyInfoId = 1)
         {
             var result = await _unitOfWork.productService.SeedCategories(companyInfoId);

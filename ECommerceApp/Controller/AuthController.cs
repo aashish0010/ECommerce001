@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using StackExchange.Profiling;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
@@ -29,14 +28,11 @@ namespace ECommerceApp.Controller
         [EnableRateLimiting("auth")]
         public async Task<IActionResult> Register(RegisterRequest register)
         {
-            using (MiniProfiler.Current.Step("Test2"))
-            {
-                var result = await _unitOfWork.userManagementService.Register(register);
-                if (result.Status == Level.Success)
-                    return Ok(result);
+            var result = await _unitOfWork.userManagementService.Register(register);
+            if (result.Status == Level.Success)
+                return Ok(result);
 
-                return BadRequest(result);
-            }
+            return BadRequest(result);
         }
 
         [HttpPost("login")]
@@ -209,12 +205,6 @@ namespace ECommerceApp.Controller
             auth.Provider = "Facebook";
             auth.UserEmail = auth.Username;
             return Ok(await _unitOfWork.userManagementService.ThirdPartyUserManager(auth));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UserEdit()
-        {
-            return Ok();
         }
 
         [HttpGet("companydetails")]
